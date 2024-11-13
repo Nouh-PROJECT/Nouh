@@ -112,7 +112,7 @@ def board_detail(idx: str):
 
 @bp.route("/edit/<idx>", methods=['GET', 'POST'])
 @login_required
-@check_board_owner``
+@check_board_owner
 def board_edit(idx: int):
     if request.method == 'POST':
         title = request.form.get('title')

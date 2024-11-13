@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 목록</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">게시글 목록</h1>
+        <ul class="list-group">
+            {% for board in boards %}
+                <li class="list-group-item">
+                    <h5>{{ board.title }}</h5>
+                    <p>{{ board.content }}</p>
+                    <a href="/list/{{ board.id }}" class="btn btn-info">상세보기</a>
+                </li>
+            {% else %}
+                <li class="list-group-item">게시글이 없습니다.</li>
+            {% endfor %}
+        </ul>
+        <a href="/add" class="btn btn-primary mt-3">글 작성하기</a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

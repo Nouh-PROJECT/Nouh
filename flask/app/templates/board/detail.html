@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 보기</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">{{ board.title }}</h1> <!-- 제목 -->
+        <p class="text-muted">작성자: {{ board.writer }} | 작성일: {{ board.created_at }}</p> <!-- 작성자 및 작성일 -->
+        
+        <div class="mt-4">
+            <h5>내용</h5>
+            <p>{{ board.content }}</p> <!-- 내용 -->
+        </div>
+        <!-- 파일 다운로드 링크 --><!-- yfile  board의 id 가 있으면 불러오고 아니면 X-->
+        <!-- {% if yfile.b_id == board.id %} 
+        <div class="mt-4">
+            <h5>첨부파일</h5>
+            <a href="{{ yfile.file_url }}" class="btn btn-secondary" download>파일 다운로드</a> 
+        </div>
+        {% endif %} -->
+        <form action="/edit/{{ board.id }}" method="POST">
+            <button type="submit" class="btn btn-primary">수정</button>
+        </form>
+        <form action="/delete" method="POST">
+            <button type="submit" class="btn btn-primary">삭제</button>
+        </form>
+        <div class="mt-4">
+            <a href="/list" class="btn btn-primary">게시판으로 돌아가기</a> <!-- 게시판 목록으로 돌아가기 -->
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
