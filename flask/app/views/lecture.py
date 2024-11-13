@@ -53,7 +53,7 @@ def lecture_add():
         else:
             flash('모든 필드를 입력해 주세요.', 'danger')
 
-    return render_template('lectureAdd.html', subjects=subjects)
+    return render_template('/lecture/lectureAdd.html', subjects=subjects)
 
 @bp.route('/list', methods=['GET'])
 @login_required
@@ -64,4 +64,4 @@ def lecture_list():
     except (FileNotFoundError, json.JSONDecodeError):
         lectures = []
 
-    return render_template('lectureList.html', lectures=lectures)
+    return render_template('/lecture/lectureList.html', lectures=lectures)
