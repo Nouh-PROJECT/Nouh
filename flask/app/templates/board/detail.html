@@ -22,14 +22,14 @@
             <a href="{{ yfile.file_url }}" class="btn btn-secondary" download>파일 다운로드</a> 
         </div>
         {% endif %} -->
-        <form action="/edit/{{ board.id }}" method="POST">
+        <form action="/board/edit/{{ board.id }}" method="POST">
             <button type="submit" class="btn btn-primary">수정</button>
         </form>
-        <form action="/delete" method="POST">
+        <form action="/board/delete" method="POST">
             <button type="submit" class="btn btn-primary">삭제</button>
         </form>
         <div class="mt-4">
-            <a href="/list" class="btn btn-primary">게시판으로 돌아가기</a> <!-- 게시판 목록으로 돌아가기 -->
+            <a href="/board/list" class="btn btn-primary">게시판으로 돌아가기</a> <!-- 게시판 목록으로 돌아가기 -->
         </div>
     </div>
 
