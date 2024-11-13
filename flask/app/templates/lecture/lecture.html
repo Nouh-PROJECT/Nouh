@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link href="{{ url_for('static', filename='css/form.css') }}" rel="stylesheet" />
+
+<style>
+    body { background-color: #424D83; }
+    iframe {
+        width: 100%;
+        height: 500px;
+        border: none;
+    }
+</style>
+{% endblock %}
+
+{% block title %}강의 보기{% endblock %}
+
+{% block content %}
+{% include "nav.html" %}
+<div class="form-wrapper form-lecture-detail">
+    <div class="form-template lecture-detail">
+        <h1 class="form-title">{{ lecture.subject_name }} - {{ lecture.lecture_name }}</h1>
+        <div class="lecture-content">
+            <iframe src="{{ lecture.lec_url }}" allowfullscreen></iframe>
+        </div>
+        <div class="button-area">
+            <a class="button" href="{{ url_for('lecture.lecture_list') }}">목록으로</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

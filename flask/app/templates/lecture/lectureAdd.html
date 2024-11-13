@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link href="{{ url_for('static', filename='css/form.css') }}" rel="stylesheet" />
+
+<style>
+    body { background-color: #424D83; }
+</style>
+{% endblock %}
+
+{% block title %}강의 추가{% endblock %}
+
+{% block content %}
+{% include "nav.html" %}
+
+<div class="form-wrapper">
+    <form class="form-template lecture-add" method="post">
+        <h1 class="form-title">강의 추가</h1>
+    
+        <hr>
+    
+        <div class="form-content">
+            <div class="form-row row-1">
+                <div class="form-column header">과목</div>
+                <div class="form-column">
+                    <select name="lecture-s">
+                        <option value="0">과목을 선택해주세요.</option>
+                        {% for subject in subjects %}
+                        <option value="{{ subject.id }}">{{ subject.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-row row-2">
+                <div class="form-column header">강의 이름</div>
+                <div class="form-column"><textarea class="user-input" name="lecture-name"></textarea></div>
+            </div>
+    
+            <div class="form-row row-2">
+                <div class="form-column header">강의 영상 링크</div>
+                <div class="form-column">
+                    <input type="url" class="user-input" name="video-link" placeholder="동영상 링크를 입력하세요" required>
+                </div>
+            </div>
+    
+        <hr>
+    
+        <div class="button-area">
+            <button class="button" type="submit">추가</button>
+            <a class="button" href="/">메인으로</a>
+        </div>
+    </form>
+</div>
+<script>
+
+</script>
+{% endblock %}
