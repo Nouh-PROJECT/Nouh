@@ -74,8 +74,8 @@
 
         <h1 class="mt-5">게시글 작성 완료</h1>
         <p>게시글이 성공적으로 작성되었습니다!</p>
-        <a href="/write" class="rewrite-button">다시 작성하기</a>
-        <a href="/posts" class="gotolist-button">게시글 목록 보기</a>
+        <a href="{{ url_for('board.post_form') }}" class="rewrite-button">다시 작성하기</a>
+        <a href="{{ url_for('board.post_list') }}" class="gotolist-button">게시글 목록 보기</a>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

@@ -9,6 +9,13 @@ bp = Blueprint('board', __name__)
 
 
 @bp.route("/list", methods=['GET', "POST"])
-@login_required
 def post_list():
     return render_template("board/post_list.html")
+
+@bp.route("/form", methods=['GET', "POST"])
+def post_form():
+    return render_template("board/post_form.html")
+
+@bp.route("/success", methods=['GET', "POST"])
+def post_success():
+    return render_template("board/post_success.html")

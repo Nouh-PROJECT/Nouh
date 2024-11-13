@@ -94,7 +94,7 @@
                 <input type="file" class="form-control" id="file" name="file">
                 <img id="file-preview" class="file-preview" src="" alt="" style="display: none;">
             </div>
-            <a href="#" button type="submit" class="submit-button">제출</a>
+            <a href="{{ url_for('board.post_success') }}" button type="submit" class="submit-button">제출</a>
         </form>
         
     </div>
