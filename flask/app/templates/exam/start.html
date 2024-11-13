@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link href="{{ url_for('static', filename='css/form.css') }}" rel="stylesheet" />
+
+{% endblock %}
+
+{% block title %}문제 목록{% endblock %}
+
+
+{% block content %}
+{% include "nav.html" %}
+
+<style>
+    .form-template.exam {
+        min-height: 380px;
+        padding: 30px;
+        border: 2px solid #424D83;
+    }
+
+    .form-template.exam .form-title {
+        margin-bottom: 50px;
+        text-align: left;
+        font-size: 20px;
+    }
+
+    .form-template.exam .form-content {
+        flex: 1;
+        margin: 0;
+    }
+
+    .form-template.exam .form-row {
+        flex-direction: column;
+        align-items: start;
+    }
+
+    .form-template.exam .form-row pre {
+        margin-bottom: 10px;
+        white-space: pre-wrap;
+        word-break: keep-all;
+        line-height: 18px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .form-template.exam .form-row label {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        margin-top: 10px;
+        font-size: 14px;
+    }
+
+    .form-template.exam .button-area {
+        justify-content: end;
+    }
+
+    .form-template.exam .button-area .button {
+        width: 80px;
+        height: 34px;
+        margin: 0 0 0 10px;
+    }
+</style>
+
+<div class="form-wrapper">
+    <form class="form-template exam">
+        <h1 class="form-title">{{ workbook[0].s }}</h1>
+        <div class="form-content">
+            {% for quiz in workbook %}
+            {% if loop.index == 1 %}
+            <div id="{{ 'q-' + loop.index|string }}" class="form-row">
+            {% else %}
+            <div id="{{ 'q-' + loop.index|string }}" class="form-row" style="display: none;">
+            {% endif %}
+                <pre class="quiestion">{{ loop.index|string + ". " + quiz.q }}</pre>
+                <label><input type="radio" name="{{ 'q-' + loop.index|string }}" value="1">{{ quiz.o1 }}</label>
+                <label><input type="radio" name="{{ 'q-' + loop.index|string }}" value="2">{{ quiz.o2 }}</label>
+                <label><input type="radio" name="{{ 'q-' + loop.index|string }}" value="3">{{ quiz.o3 }}</label>
+                <label><input type="radio" name="{{ 'q-' + loop.index|string }}" value="4">{{ quiz.o4 }}</label>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="button-area">
+            {% if workbook|length > 1 %}
+            <button class="button prev" type="button" onclick="ShowPrevQuiz()" style="display: none;">이전</button>
+            <button class="button next" type="button" onclick="ShowNextQuiz()">다음</button>
+            <button class="button submit" type="button" onclick="SubmitExam()" style="display: none;">제출</button>
+            {% else %}
+            <button class="button prev" type="button" onclick="ShowPrevQuiz()" style="display: none;">이전</button>
+            <button class="button next" type="button" onclick="ShowNextQuiz()" style="display: none;">다음</button>
+            <button class="button submit" type="button" onclick="SubmitExam()">제출</button>
+            {% endif %}
+        </div>
+    </form>
+</div>
+
+<script>
+    window.onload = () => {
+        // 뒤로가기 방지
+        history.pushState(null, null, location.href); 
+        window.onpopstate = function() { history.go(1); }
+        
+        // 새로고침 방지
+        document.onkeydown = function() {
+            if ( (event.ctrlKey == true && (event.keyCode == 78 || event.keyCode == 82)) || (event.keyCode == 116) ) {
+                event.keyCode = 0;
+                event.cancelBubble = true;
+                event.returnValue = false;
+            } 
+        };
+    }
+    
+    const numOfQuizzes = document.querySelectorAll('.form-row').length;
+    let displayedQuiz = 1;
+
+    function ShowButtons() {
+        if (displayedQuiz == 1) {
+            document.querySelector('.button.prev').style.display = "none";
+            document.querySelector('.button.next').style.display = "";
+            document.querySelector('.button.submit').style.display = "none";
+        } else if (displayedQuiz == numOfQuizzes) {
+            document.querySelector('.button.prev').style.display = "";
+            document.querySelector('.button.next').style.display = "none";
+            document.querySelector('.button.submit').style.display = "";
+        } else {
+            document.querySelector('.button.prev').style.display = "";
+            document.querySelector('.button.next').style.display = "";
+            document.querySelector('.button.submit').style.display = "none";
+        }
+    }
+
+    function ShowPrevQuiz() {
+        if (displayedQuiz > 1) {
+            document.getElementById('q-'+displayedQuiz).style.display = "none";
+            displayedQuiz--;
+            document.getElementById('q-'+displayedQuiz).style.display = "";
+            ShowButtons();
+        }
+    }
+
+    function ShowNextQuiz() {
+        if (displayedQuiz < numOfQuizzes) {
+            document.getElementById('q-'+displayedQuiz).style.display = "none";
+            displayedQuiz++;
+            document.getElementById('q-'+displayedQuiz).style.display = "";
+            ShowButtons();
+        }
+    }
+
+    function SubmitExam() {
+        let userChoice = [];
+        for (let i = 1; i <= numOfQuizzes; ++i) {
+            let target = document.querySelector("input[name='q-"+i+"']:checked");
+            userChoice.push(target ? target.value : "0");
+        }
+
+        const userChoiceData = document.createElement("input");
+        userChoiceData.setAttribute("type", "hidden");
+        userChoiceData.setAttribute("name", "userChoice");
+        userChoiceData.setAttribute("value", JSON.stringify(userChoice));
+
+        const submitForm = document.createElement("form");
+        submitForm.setAttribute("charset", "UTF-8");
+        submitForm.setAttribute("method", "POST");
+        submitForm.setAttribute("action", "/exam/submit");
+        submitForm.appendChild(userChoiceData)
+
+        document.body.appendChild(submitForm);
+
+        alert("제출되었습니다.")
+        submitForm.submit();
+    }
+</script>
+{% endblock %}

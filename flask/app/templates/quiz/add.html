@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link href="{{ url_for('static', filename='css/form.css') }}" rel="stylesheet" />
+
+<style>
+    body { background-color: #424D83; }
+</style>
+{% endblock %}
+
+{% block title %}문제 추가{% endblock %}
+
+{% block content %}
+{% include "nav.html" %}
+
+<div class="form-wrapper">
+    <form class="form-template quiz-add" method="post">
+        <h1 class="form-title">문제 추가</h1>
+    
+        <hr>
+    
+        <div class="form-content">
+            <div class="form-row row-1">
+                <div class="form-column header">과목</div>
+                <div class="form-column">
+                    <select name="quiz-s">
+                        <option value="0">과목을 선택해주세요.</option>
+                        {% for id, name in subjects %}
+                        <option value="{{ id }}">{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+    
+            <div class="form-row row-2">
+                <div class="form-column header">문제</div>
+                <div class="form-column"><textarea class="user-input" name="quiz-q"></textarea></div>
+            </div>
+    
+            <div class="form-row row-3">
+                <div class="form-column header">정답</div>
+                <div class="form-column"><input class="user-input" type="text" name="quiz-a" placeholder="정답"></div>
+            </div>
+    
+            <div class="form-row row-4">
+                <div class="form-column header">선택지</div>
+                <div class="form-column">
+                    <input class="user-input" type="text" name="quiz-o1" placeholder="선택지">
+                    <input class="user-input" type="text" name="quiz-o2" placeholder="선택지">
+                    <input class="user-input" type="text" name="quiz-o3" placeholder="선택지">
+                </div>
+            </div>
+
+            <div class="form-row row-5">
+                <div class="form-column header">해설</div>
+                <div class="form-column"><textarea class="user-input" name="quiz-c"></textarea></div>
+            </div>
+        </div>
+    
+        <hr>
+    
+        <div class="button-area">
+            <button class="button" type="button" onclick="OpenQuizParser()">입력 도우미</button>
+            <button class="button" type="submit">추가</button>
+            <a class="button" href="/">메인으로</a>
+        </div>
+    </form>
+</div>
+
+<div class="wrapper parser"  style="display: none;">
+    <div class="quiz-parser">
+        <h1 class="title">입력 도우미</h1>
+        <textarea></textarea>
+        <div class="button-area">
+            <button class="button" type="button" onclick="ParsingQuiz()">입력</button>
+            <button class="button" type="button" onclick="CloseQuizParser()">닫기</button>
+        </div>
+    </div>
+</div>
+
+<script>
+
+</script>
+{% endblock %}

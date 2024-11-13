@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block head %}
+<style>
+    .form-template, .form-template * { box-sizing: border-box; margin: 0; padding: 0; font-size: 0; }
+    .form-template, .form-template .row, .form-template .column, .form-template .button-area { display: flex;  }
+    .form-template .button { cursor: pointer; }
+    .form-template hr { height: 1px; border: none; background-color: #000; }
+
+    .form-template.upload_excel { justify-content: center; padding-top: 120px; color: #424d83; }
+    .form-template.upload_excel .frame { width: 600px; padding: 30px; border: 2px solid #424d83; border-radius: 10px; }
+    .form-template.upload_excel .title { margin-bottom: 20px; font-size: 36px; text-align: center; }
+    .form-template.upload_excel .content { margin: 50px 0; }
+    .form-template.upload_excel .row { margin-bottom: 10px; }
+    .form-template.upload_excel .content .row .column { width: 100%; font-size: 14px; }
+    .form-template.upload_excel .row-1 { justify-content: start; margin-bottom: 50px; }
+    .form-template.upload_excel .content .row-1 .column-1 { justify-content: center; align-items: center; flex-shrink: 0; width: 100px; font-size: 14px; font-weight: bold; }
+    .form-template.upload_excel .content .row-1 .column-2 { width: 100%; padding-left: 30px; }
+    .form-template.upload_excel .row-2 { margin: 20px 0 40px 0; }
+    .form-template.upload_excel .content .row-2 .column-1 { justify-content: center; width: 100%; font-size: 18px; font-weight: bold; }
+    .form-template.upload_excel .row-3 { margin: 0; }
+    .form-template.upload_excel .content .row-3 .column { justify-content: center; padding: 5px 0; border: 1px solid #424d83; }
+
+    .form-template.upload_excel .button-area { margin-top: 20px; }
+    .form-template.upload_excel .button-area .row-1 { justify-content: center; width: 100%; }
+    .form-template.upload_excel .button { width: 80px; height: 30px; margin: 0 5px; border: none; border-radius: 5px; background-color: #424d83; font-size: 14px; font-weight: bold; color: #FFF; }
+    .form-template.upload_excel .button:hover { background-color: #A1B0FC; }
+    .form-template.upload_excel hr{ height: 2px; background-color: #424d83; }
+    .form-template.upload_excel input { width: 100%; font-size: 14px; }
+</style>
+{% endblock %}
+
+{% block title %}엑셀로 업로드{% endblock %}
+
+
+{% block content %}
+{% include "nav.html" %}
+
+<div class="form-template upload_excel">
+    <form class="frame">
+        <h1 class="title">문제 업로드</h1>
+
+        <hr>
+
+        <div class="content">
+            <div class="row row-1">
+                <div class="column column-1">파일 추가</div>
+                <div class="column column-2"><input type="file" name="file"></div>
+            </div>
+
+            <hr>
+
+            <div class="row row-2">
+                <div class="column column-1">Excel 양식</div>
+            </div>
+
+            <div class="row row-3">
+                <div class="column column-1">A1</div>
+                <div class="column column-2">B1</div>
+                <div class="column column-3">C1</div>
+                <div class="column column-4">D1</div>
+            </div>
+
+            <div class="row row-3">
+                <div class="column column-1">과목</div>
+                <div class="column column-2">문제</div>
+                <div class="column column-3">정답</div>
+                <div class="column column-4">해설</div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="button-area">
+            <div class="row row-1">
+                <div class="column column-1">
+                    <button class="button" type="button" onclick="UploadQuizToExcel()">업로드</button>
+                    <button class="button" type="button" onclick=location.href='/'>취소</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    function UploadQuizToExcel() {
+        const target = document.querySelector(".upload_excel input[type=file]");
+        const file = target.files[0]
+
+        if (!file) {
+            alert("파일을 선택해주세요.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        fetch("{{url_for('quiz.api_upload_excel')}}", {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert(data.message);
+                location.reload(true);
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => { console.error('ERROR: ', error); });
+
+        return false;
+    }
+</script>
+{% endblock %}

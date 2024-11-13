@@ -1,0 +1,192 @@
+/* Font Size */
+.fs-11 { font-size: 11px; }
+.fs-12 { font-size: 12px; }
+.fs-14 { font-size: 14px; }
+.fs-16 { font-size: 16px; }
+.fs-18 { font-size: 18px; }
+.fs-20 { font-size: 20px; }
+.fs-22 { font-size: 22px; }
+.fs-24 { font-size: 24px; }
+
+
+/* Flex Style */
+.row { display: flex; flex-direction: row; }
+.flex-r { display: flex; flex-direction: row; }
+.flex-c { display: flex; flex-direction: column; }
+.flex-r.v-center { align-items: center; }
+.flex-c.v-center { justify-content: center; }
+.flex-r.h-center { justify-content: center; }
+.flex-c.h-center { align-items: center; }
+.flex-r.vh-center,
+.flex-c.vh-center {
+    align-items: center;
+    justify-content: center; 
+}
+
+
+body {
+    user-select: none;
+}
+
+@media only screen and (max-width: 1260px) {
+    .row {
+        padding: 0 30px;
+    }
+
+    #page-container > .page > .row {
+        margin-top: 120px;
+    }
+}
+
+
+/* Navigation */
+#top-nav {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 80px;
+    background-color: #424D83;
+    z-index: 1000;
+}
+
+#top-nav > .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+    font-weight: bold;
+    width: 1200px;
+}
+
+#top-nav > .row a {
+    cursor: pointer;
+    padding: 4px 0;
+    text-decoration: none;
+}
+
+#top-nav > .row > .logo {
+    font-size: 28px;
+    color: white;
+}
+
+#top-nav > .row > .menu-area {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: end;
+}
+
+#top-nav > .row > .menu-area > a {
+    font-size: 16px;
+    color: white;
+}
+
+#top-nav > .row > .menu-area > a:hover {
+    color: #A1B0FC;
+}
+
+#top-nav .v-line {
+    display: flex;
+    justify-content: center;
+    width: 30px;
+    height: 18px;
+}
+
+#top-nav .v-line::after {
+    content: "";
+    display: block;
+    height: 100%;
+    border-right: 2px solid white;
+}
+
+/* Form */
+#modal-background {
+    position: fixed;
+    box-sizing: border-box;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+    z-index: 1001;
+}
+
+@keyframes animatezoom {
+    from {transform: scale(0)} 
+    to {transform: scale(1)}
+}
+
+#register-form,
+#login-form {
+    box-sizing: border-box;
+    width: 400px;
+    min-height: 200px;
+    background-color: white;
+    border: 1px solid #CCC;
+    border-radius: 10px;
+    animation: animatezoom 0.6s
+}
+
+#register-form input,
+#login-form input {
+    box-sizing: border-box;
+    margin-top: 5px;
+    padding-left: 5px;
+    width: 250px;
+    height: 40px;
+    border: 1px solid #CCC;
+    border-radius: 5px;
+}
+
+#register-form .button,
+#login-form .button {
+    cursor: pointer;
+    box-sizing: border-box;
+    margin-top: 15px;
+    width: 250px;
+    height: 40px;
+    background-color: #424D83;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+}
+
+#register-form > div:first-child,
+#login-form > div:first-child {
+    flex-basis: 80px;
+    flex-shrink: 0;
+    color: #424D83;
+}
+
+#register-form > div:first-child > span,
+#login-form > div:first-child > span {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+#register-form > div:last-child,
+#login-form > div:last-child {
+    width: 250px;
+    flex-basis: 60px;
+    flex-shrink: 0;
+    padding: 0 10px 10px 0;
+    justify-content: end;
+}
+
+#register-form > div:last-child,
+#login-form > div:last-child > a {
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    color: #424D83;
+}
+
+#register-form > div:last-child > a:hover,
+#login-form > div:last-child > a:hover {
+    color: #A1B0FC;
+}
+

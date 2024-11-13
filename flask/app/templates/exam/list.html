@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link href="{{ url_for('static', filename='css/form.css') }}" rel="stylesheet" />
+
+{% endblock %}
+
+{% block title %}문제 목록{% endblock %}
+
+
+{% block content %}
+{% include "nav.html" %}
+<style>
+    .form-template.exam-list {
+        flex-shrink: 0;
+        width: 800px;
+        border: 2px solid #424D83;
+        color: #424D83;
+    }
+
+    .form-template.exam-list .form-row {
+        margin-bottom: 0;
+        border-left: none;
+        border-bottom: 1px solid #424D83;
+    }
+
+    .form-template.exam-list .form-row.header {
+        border-top: 2px solid #424D83;
+        border-bottom: 2px solid #424D83;
+    }
+
+    .form-template.exam-list .form-row .form-column {
+        display: flex;
+        align-items: center;
+        height: 30px;
+        font-size: 14px;
+    }
+
+    .form-template.exam-list .form-row.header .form-column {
+        font-weight: bold  !important;
+        justify-content: center !important;
+    }
+
+    .form-template.exam-list .form-row .form-column.column-1 {
+        flex: 1;
+        border-right: 1px solid #424D83;
+    }
+
+    .form-template.exam-list .form-row .form-column.column-1 a {
+        width: 100%;
+        padding: 5px 0 5px 10px;
+        color: #424D83;
+        font-size: 14px;
+        text-decoration: none;
+    }
+
+    .form-template.exam-list .form-row .form-column.column-1 a:hover {
+        font-weight: bold;
+    }
+
+    .form-template.exam-list .form-row .form-column.column-2 {
+        flex-shrink: 0;
+        justify-content: center;
+        width: 200px;
+    }
+
+    .form-template.exam-list .form-pagination {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .form-template.exam-list .form-pagination > * {
+        margin-right: 5px;
+        font-size: 14px !important;
+        color: #000;
+        text-decoration: none;
+    }
+
+    .form-template.exam-list .form-pagination > *:last-child {
+        margin-right: 0;
+    }
+    
+    .form-template.exam-list .button-area {
+        justify-content: end;
+    }
+
+    .form-template.exam-list .button-area > button {
+        border: none;
+    }
+
+</style>
+
+<div class="form-wrapper form-exam-list">
+    <div class="form-template exam-list">
+        <h1 class="form-title">시험 목록</h1>
+        <div class="form-content">
+            <div class="form-row header">
+                <div class="form-column column-1">과목</div>
+                <div class="form-column column-2">총 문제</div>
+            </div>
+            {% if exams | length == 0 %}
+                <div class="form-row">
+                    <div class="form-column" style="margin: 0 auto;">데이터가 없습니다.</div>
+                </div>
+            {% else %}
+                {% for exam in exams %}
+                    <div class="form-row">
+                        <div class="form-column column-1"><a href="{{ url_for('exam.exam_setting', s_id=exam.s_id)}}">{{ exam.s_name }}</a></div>
+                        <div class="form-column column-2">{{ exam.count }}</div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="form-pagination">
+            {% for p in range(start_page, end_page + 1) %}
+                {% if p == page %}
+                    <strong>{{ p }}</strong>
+                {% else %}
+                    <a href="{{ url_for('quiz.quiz_list', page=p, type=type)}}">{{ p }}</a>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <div class="button-area">
+            <button class="button" type="button" onclick="location.href='/'">메인으로</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function Search() {
+        let keyword = document.querySelector("input[name='keyword']");
+
+        if (keyword) {
+            location.href = "{{ url_for('exam.exam_list') }}" + "?keyword=" + keyword.value;
+        }
+
+        return false;
+    }
+</script>
+{% endblock %}

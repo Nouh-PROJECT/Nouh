@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link href="{{ url_for('static', filename='css/form.css') }}" rel="stylesheet" />
+
+<style>
+    body { overflow: auto; }
+</style>
+{% endblock %}
+
+{% block title %}환경 설정{% endblock %}
+
+
+{% block content %}
+{% include "nav.html" %}
+
+<style>
+    .form-template.exam-setting {
+        box-sizing: border-box;
+        border: 2px solid #424D83;
+        color: #424D83;
+    }
+
+    .form-template.exam-setting .row-1 {
+        padding: 10px 0;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .form-template.exam-setting .row-1 .form-column > * {
+        box-sizing: border-box;
+        font-size: 14px;
+    }
+
+    .form-template.exam-setting .row-1 .column-1 input {
+        width: 250px;
+        height: 30px;
+        margin-right: 20px;
+    }
+
+    .form-template.exam-setting .row-1 .column-2 input {
+        width: 80px;
+        height: 30px;
+        margin-right: 15px;
+    }
+
+    .form-template.exam-setting .row-1 .column-3 {
+        margin-right: 5px;
+    }
+
+    .form-template.exam-setting .row-1 label {
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .form-template.exam-setting .button-area {
+        margin-top: 0;
+        justify-content: end;
+    }
+</style>
+
+<div class="form-wrapper">
+    <form class="form-template exam-setting" method="post">
+        <h1 class="form-title">환경 설정</h1>
+    
+        <div class="form-content">
+            <div class="form-row row-1">
+                <div class="form-column column-1"><input type="text" value="{{ subject.name }}" data-id="{{ subject.id }}" disabled></div>
+                <div class="form-column column-2"><input type="number" name="count" min="0" max="{{ subject.count }}" value="{{ subject.count }}"></div>
+                <div class="form-column column-3"><label><input type="radio" name="exam-type" value="1" checked>최신</label></div>
+                <div class="form-column column-4"><label><input type="radio" name="exam-type" value="2">랜덤</label></div>
+            </div>
+        </div>
+    
+        <div class="button-area">
+            <button class="button" type="button" onclick="StartExam()">시험 시작</button>
+            <a class="button" href="{{ url_for('exam.exam_list') }}">취소</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    function StartExam() {
+        let target = document.querySelector('.column-1 input');
+        let sID = target.dataset.id;
+
+        target = document.querySelector('.column-2 input');
+        let count = target.value;
+
+        target = document.querySelector('.column-3 input');
+        let examType = target.checked ? 1 : 2;
+
+        settingData = JSON.stringify({'s_id':sID, 'count':count, 'exam_type':examType});
+        
+        const jsonData = document.createElement("input");
+        jsonData.setAttribute("type", "hidden");
+        jsonData.setAttribute("name", "settingData");
+        jsonData.setAttribute("value", settingData);
+
+        const settingForm = document.createElement("form");
+        settingForm.setAttribute("charset", "UTF-8");
+        settingForm.setAttribute("method", "post");
+        settingForm.setAttribute("action", "/exam/start");
+        settingForm.appendChild(jsonData);
+
+        document.body.appendChild(settingForm);
+
+        settingForm.submit();
+    }
+</script>
+{% endblock %}

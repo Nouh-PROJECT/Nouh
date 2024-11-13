@@ -1,0 +1,55 @@
+<nav id="top-nav" class="">
+    <div id="" class="row">
+        <a id="" class="logo" href="/">SSR21</a>
+        <div  id="" class="menu-area">
+            {% if current_user.is_authenticated %}
+            <a id="" class="" href="{{ url_for('auth.mypage') }}">{{ current_user.name }} 님</a>
+            <div id="" class="v-line"></div>
+            <a id="" class="profile-btn" onclick="Logout()"><i class="fa-solid fa-right-from-bracket fa-lg"></i> Logout</a>
+            {% else %}
+            <a id="" class="login-btn" onclick="ShowLoginForm()"><i class="fa-solid fa-right-to-bracket fa-lg"></i> Login</a>
+            {% endif %}
+        </div>
+    </div>
+ </nav>
+
+ 
+<div id="modal-background" class="flex-r vh-center" style="display: none;" onclick="HideModalForm()">
+    <!-- Login Form -->
+    <form id="login-form" class="flex-c h-center" onclick="event.stopPropagation()" onsubmit="return Login();">
+        <div id="" class="flex-r vh-center">
+            <span>SSR21</span>
+        </div>
+
+        <div id="" class="flex-c">
+            <input class="" type="text" name="login-user-id" placeholder="이름 또는 아이디" required>
+            <input class="" type="password" name="login-user-pw" placeholder="비밀번호" required>
+            <button id="" class="button" type="submit">로그인</button>
+        </div>
+
+        <div id="" class="flex-r v-center">
+            <a id="" class="fs-14" onclick="ShowRegisterForm()">회원가입</a>
+        </div>
+    </form>
+    
+    <!-- Register Form -->
+    <form id="register-form" class="flex-c h-center" onclick="event.stopPropagation()" onsubmit="return Register();">
+        <div id="" class="flex-r vh-center">
+            <span>SSR21</span>
+        </div>
+
+        <div id="" class="flex-c">
+            <input class="" type="text" name="register-user-name" placeholder="이름" required>
+            <input class="" type="text" name="register-user-id" placeholder="아이디" required>
+            <input class="" type="password" name="register-user-pw" placeholder="비밀번호" required>
+            <input class="" type="password" name="register-check-pw" placeholder="비밀번호 확인" required>
+            <input class="" type="email" name="register-user-email" placeholder="이메일">
+            <input class="" type="tel" name="register-user-phone" placeholder="연락처">
+            <button class="button" type="submit">회원 가입</button>
+        </div>
+
+        <div id="" class="flex-r v-center">
+            <a id="" class="fs-14" onclick="ShowLoginForm()">로그인</a>
+        </div>
+    </form>
+</div>

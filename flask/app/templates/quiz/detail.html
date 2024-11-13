@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link href="{{ url_for('static', filename='css/form.css') }}" rel="stylesheet" />
+
+<style>
+    body { background-color: #424D83; }
+</style>
+{% endblock %}
+
+{% block title %}상세 보기{% endblock %}
+
+{% block content %}
+{% include "nav.html" %}
+<div class="form-wrapper">
+    <form class="form-template quiz-detail" method="post">
+        <h1 class="form-title">상세 보기</h1>
+    
+        <hr>
+    
+        <div class="form-content">
+            <div class="form-row row-1">
+                <div class="form-column header">과목</div>
+                <div class="form-column">
+                    <select name="quiz-s" disabled>
+                        <option value="{{ quiz.s_id }}" selected>{{ quiz.s_name }}</option>
+                    </select>
+                </div>
+            </div>
+    
+            <div class="form-row row-2">
+                <div class="form-column header">문제</div>
+                <div class="form-column"><textarea name="quiz-q" disabled>{{ quiz.q }}</textarea></div>
+            </div>
+    
+            <div class="form-row row-3">
+                <div class="form-column header">정답</div>
+                <div class="form-column"><input type="text" name="quiz-a" placeholder="정답" value="{{ quiz.a }}" disabled></div>
+            </div>
+    
+            <div class="form-row row-4">
+                <div class="form-column header">선택지</div>
+                <div class="form-column">
+                    <input type="text" name="quiz-o1" placeholder="선택지" value="{{ quiz.o1 }}" disabled>
+                    <input type="text" name="quiz-o2" placeholder="선택지" value="{{ quiz.o2 }}" disabled>
+                    <input type="text" name="quiz-o3" placeholder="선택지" value="{{ quiz.o3 }}" disabled>
+                </div>
+            </div>
+
+            <div class="form-row row-5">
+                <div class="form-column header">해설</div>
+                <div class="form-column"><textarea name="quiz-c" disabled>{{ quiz.c }}</textarea></div>
+            </div>
+        </div>
+    
+        <hr>
+    
+        <div class="button-area">
+            <a class="button" href="/quiz/list?type=all">돌아가기</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

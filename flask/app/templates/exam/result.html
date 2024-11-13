@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block head %}
+<style>
+    .form-template, .form-template * { box-sizing: border-box; margin: 0; padding: 0; font-size: 0; }
+    .form-template, .form-template .row, .form-template .column, .form-template .button-area { display: flex;  }
+    .form-template .button { cursor: pointer; }
+    .form-template hr { height: 1px; border: none; background-color: #000; }
+
+    .form-template.exam-result { justify-content: center; padding-top: 120px; color: #424d83; }
+    .form-template.exam-result .frame { width: 600px; padding: 30px; border: 2px solid #424d83; border-radius: 10px; }
+    .form-template.exam-result .title { margin-bottom: 20px; font-size: 36px; text-align: center; }
+    .form-template.exam-result .content { margin: 50px 0; }
+    .form-template.exam-result .content .column-1 { flex: 1; justify-content: center; font-size: 14px; }
+    .form-template.exam-result .button-area { justify-content: center; margin-top: 20px; }
+    .form-template.exam-result .button { width: 80px; height: 30px; margin: 0 5px; border: none; border-radius: 5px; background-color: #424d83; font-size: 14px; font-weight: bold; color: #FFF; }
+    .form-template.exam-result .button:hover { background-color: #A1B0FC; }
+    .form-template.exam-result hr{ height: 2px; background-color: #424d83; }
+</style>
+{% endblock %}
+
+{% block title %}문제 목록{% endblock %}
+
+
+{% block content %}
+{% include "nav.html" %}
+
+<div class="form-template exam-result">
+    <form class="frame">
+        <h1 class="title">시험 결과</h1>
+
+        <hr>
+
+        <div class="content">
+            <div class="row row-1">
+                <div class="column column-1">총 {{ num_of_quizzes }}문제 중 {{ correct_answer }}문제 맞추셨습니다.</div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="button-area">
+            <button class="button" type="button" onclick=location.href='{{ url_for("exam.exam_download_result") }}'>다운로드</button>
+            <button class="button" type="button" onclick=location.href='{{ url_for("main.index") }}'>메인화면</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

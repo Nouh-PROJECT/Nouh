@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block head %}
+<style>
+    .form-template, .form-template * { box-sizing: border-box; margin: 0; padding: 0; font-size: 0; }
+    .form-template, .form-template .row, .form-template .column, .form-template .button-area { display: flex;  }
+    .form-template .button { cursor: pointer; }
+    .form-template hr { height: 1px; border: none; background-color: #000; }
+
+    .form-template.mypage { justify-content: center; padding-top: 120px; color: #424d83; }
+    .form-template.mypage .frame { width: 600px; padding: 30px; border: 2px solid #424d83; border-radius: 10px; }
+    .form-template.mypage .title { margin-bottom: 20px; font-size: 36px; text-align: center; }
+    .form-template.mypage .content { margin: 50px 0; }
+    .form-template.mypage .row { justify-content: center; margin-bottom: 10px; }
+    .form-template.mypage .content .column-1 { align-items: center; flex-shrink: 0; width: 150px; font-size: 14px; font-weight: bold; }
+    .form-template.mypage .button-area { margin-top: 20px; }
+    .form-template.mypage .button-area .row-1 { justify-content: space-between; width: 100%; }
+    .form-template.mypage .button { width: 80px; height: 30px; margin: 0 5px; border: none; border-radius: 5px; background-color: #424d83; font-size: 14px; font-weight: bold; color: #FFF; }
+    .form-template.mypage .button:hover { background-color: #A1B0FC; }
+    .form-template.mypage hr{ height: 2px; background-color: #424d83; }
+    .form-template.mypage input { font-size: 14px; }
+    .form-template.mypage input[type=text] { width: 200px; height: 30px; padding-left: 5px; }
+    .form-template.mypage input[type=password] { width: 200px; height: 30px; padding-left: 5px; }
+</style>
+{% endblock %}
+
+{% block title %}문제 목록{% endblock %}
+
+
+{% block content %}
+{% include "nav.html" %}
+
+<div class="form-template mypage">
+    <form class="frame">
+        <h1 class="title">My Page</h1>
+
+        <hr>
+
+        <div class="content">
+            <div class="row row-1">
+                <div class="column column-1">이름</div>
+                <div class="column column-2"><input type="text" name="user-name" value="{{user.name}}" disabled></div>
+            </div>
+
+            <div class="row row-2">
+                <div class="column column-1">아이디</div>
+                <div class="column column-2"><input type="text" name="user-id" value="{{user.user_id}}" disabled></div>
+            </div>
+
+            <div class="row row-3">
+                <div class="column column-1">현재 비밀번호</div>
+                <div class="column column-2"><input type="password" name="user-cpw" value="" placeholder="현재 비밀번호"></div>
+            </div>
+
+            <div class="row row-4">
+                <div class="column column-1">새 비밀번호</div>
+                <div class="column column-2"><input type="password" name="user-npw" placeholder="비밀번호"></div>
+            </div>
+
+            <div class="row row-5">
+                <div class="column column-1">새 비밀번호 확인</div>
+                <div class="column column-2"><input type="password" name="user-npw-check" placeholder="비밀번호 확인"></div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="button-area">
+            <div class="row row-1">
+                <div class="column column-1">
+                    <button class="button" type="button" onclick="">회원 탈퇴</button>
+                </div>
+                <div class="column column-2">
+                    <button class="button" type="button" onclick="UpdateMyPage()">수정</button>
+                    <button class="button" type="button" onclick=location.href='/'>취소</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    function UpdateMyPage() {
+        const formData = new FormData(document.querySelector(".mypage > .frame"));
+
+        fetch("{{url_for('auth.update_mypage')}}", {
+            method: 'POST',
+            body: new URLSearchParams(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert(data.message);
+                location.reload(true);
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => { console.error('ERROR: ', error); });
+
+        return false;
+    }
+</script>
+{% endblock %}
