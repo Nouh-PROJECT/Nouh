@@ -6,10 +6,10 @@ def register_routes(app):
     from .auth import bp as auth_bp
     from .quiz import bp as quiz_bp
     from .exam import bp as exam_bp
-    from .test import bp as test_bp
+    from .board import bp as board_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
-    app.register_blueprint(test_bp)
+    app.register_blueprint(board_bp, url_prefix='/board')
     app.register_blueprint(quiz_bp, url_prefix='/quiz')
     app.register_blueprint(exam_bp, url_prefix='/exam')
