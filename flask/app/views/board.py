@@ -83,10 +83,14 @@ def board_add():
         writer = current_user.id
         title = request.form.get('title')
         content = request.form.get('content')
-
-        if s != '0':
+        #file = request.form.get('file')
+        if title:
             query = r"INSERT INTO board VALUES (NULL, %s, %s, %s, NOW())"
             execute_query(query, (writer, title, content), True)
+        #if file:
+
+
+            # 등록 시 등록 성공 같은 메세지
         
         return render_template("board/add.html")
 
@@ -108,35 +112,29 @@ def board_detail(idx: str):
 
 @bp.route("/edit/<idx>", methods=['GET', 'POST'])
 @login_required
-@check_board_owner
+@check_board_owner``
 def board_edit(idx: int):
     if request.method == 'POST':
-        s = request.form.get('quiz-s')
-        q = request.form.get('quiz-q')
-        a = request.form.get('quiz-a')
-        o1 = request.form.get('quiz-o1')
-        o2 = request.form.get('quiz-o2')
-        o3 = request.form.get('quiz-o3')
-        c = request.form.get('quiz-c')
+        title = request.form.get('title')
+        content = request.form.get('content')
 
-        query = r"UPDATE board SET s_id=%s, question=%s, answer=%s,"
-        query += r"opt1=%s, opt2=%s, opt3=%s, comment=%s WHERE id=%s"
-        param = (s, q, a, o1, o2, o3, c, idx)
+        query = r"UPDATE board SET title=%s, content=%s, WHERE id=%s"
+        param = (title, content, idx)
         execute_query(query, param, True)
 
     # Quiz Info   
-    query = r"SELECT id, u_id, s_id, question q, answer a, opt1 o1, opt2 o2, opt3 o3, comment c FROM board WHERE id=%s"
+    query = r"SELECT id, title, content, created_at FROM board WHERE id=%s"
     rows = execute_query(query, (idx))
     board = rows[0] if rows else []
 
     if not board:
         return redirect("/")
 
-    # Subject Info
-    rows = execute_query(r"SELECT id, name FROM subjects")
-    subjects = [(row['id'], row['name']) for row in rows] if rows else []
+    # # Subject Info
+    # rows = execute_query(r"SELECT id, name FROM subjects")
+    # subjects = [(row['id'], row['name']) for row in rows] if rows else []
 
-    return render_template("board/edit.html", board=board, subjects=subjects)
+    return render_template("board/edit.html", board=board)
 
 
 @bp.route("/delete/<idx>", methods=['GET'])
@@ -146,77 +144,3 @@ def board_delete(idx: str):
     query = r"DELETE FROM board WHERE id=%s"
     execute_query(query, (idx), True)
     return redirect(url_for('board.board_list'))
-
-
-@bp.route("/upload_excel", methods=['GET'])
-@login_required
-def board_upload_to_excel():
-    return render_template("board/upload_excel.html")
-
-
-# @bp.route("/api/upload_excel", methods=['POST'])
-# @login_required
-# def api_upload_excel():
-#     file = request.files.get("file")
-
-#     if not (file and file.filename):
-#         return json.dumps({'status':'failed', 'message':'업로드 된 파일이 없습니다.'})
-
-#     # 파일 저장
-#     filepath = os.path.join(os.getcwd(), "app", "tmp", file.filename)
-#     file.save(filepath)
-
-#     rows = execute_query(r"SELECT id, name FROM subjects")
-#     subjects = {subject["name"]: subject["id"] for subject in rows} if rows else {}
-    
-#     workbook = load_workbook(filename=filepath)
-#     sheets = workbook.sheetnames
-
-#     for sheet_name in sheets:
-#         error = False
-#         boardes = []
-
-#         sheet = workbook[sheet_name]
-#         rows = execute_query(r"SELECT u_id FROM users WHERE name=%s", (sheet_name))
-#         u_id = rows[0] if rows else ""
-
-#         for i, row in enumerate(sheet.iter_rows(max_col=4, values_only=True)):
-#             lines = [line for line in str(row[1]).split("\n") if line.strip() != ""]
-            
-#             if not str(row[2]).isdigit():
-#                 error = True
-#                 print(i, row)
-#                 break
-
-#             if row[2] != "1":
-#                 lines[-4], lines[int(row[2]) - 5] = lines[int(row[2]) - 5], lines[-4]
-
-#             board = {
-#                 's': subjects[row[0]],
-#                 'q': "\n".join(lines[0:-4]) if len(lines) > 5 else lines[0],
-#                 'a': re.sub(r"^(\d|\W)[\S]*[\s]", "", lines[-4]).strip(),
-#                 'o1': re.sub(r"^(\d|\W)[\S]*[\s]", "", lines[-3]).strip(),
-#                 'o2': re.sub(r"^(\d|\W)[\S]*[\s]", "", lines[-2]).strip(),
-#                 'o3': re.sub(r"^(\d|\W)[\S]*[\s]", "", lines[-1]).strip(),
-#                 'c': row[3] if row[3] else "",
-#             }
-
-#             boardes.append(board)
-
-#         # 에러 발생 시 예외 처리
-#         if error:
-#             workbook.close()
-#             return json.dumps({'status':'failed', 'message':'문제 업로드 실패!'})
-
-#         # DB에 퀴즈 추가
-#         # u_id = current_user.id
-#         rows = execute_query(r"SELECT u_id FROM users WHERE name=%s", (sheet.title))
-#         u_id = int(rows[0]) if rows else 1
-#         for quiz in boardes:
-#             query = r"INSERT INTO board VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, NULL)"
-#             data = (u_id, quiz['s'], quiz['q'], quiz['a'], quiz['o1'], quiz['o2'], quiz['o3'], quiz['c'])
-#             execute_query(query, data, True)
-
-#     workbook.close()
-#     return json.dumps({'status':'success', 'message':'문제 업로드 완료!'})
-
