@@ -14,3 +14,21 @@ def test01():
     session["data"] = current_user.name
         
     return render_template("test/testpage01.html")
+
+@bp.route("/test", methods=["GET", "POST"])
+def test():
+    return render_template("subscribe.html")
+
+
+@bp.route("/subscribe", methods=['GET', 'POST'])
+def test1():
+    temp = { "id":"1", "name":"홍길동", "email":"guest@guest.com", "phone":"01011112222" }
+
+    return render_template('payment.html', user=temp)
+
+@bp.route("/popup", methods=['GET', 'POST'])
+def test2():
+    temp = { "id":"1", "name":"홍길동", "email":"guest@guest.com", "phone":"01011112222" }
+
+    return render_template('paymentPopup.html', user=temp)
+
