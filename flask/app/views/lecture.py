@@ -20,7 +20,7 @@ def lecture_add():
         {"id": 8, "name": "클라우드 보안 컨설팅 실무"}
     ]
 
-    json_file_path = 'lectures.json'
+    json_file_path = os.path.join(os.path.dirname(__file__), 'lectures.json')
 
     # JSON 파일이 없으면 빈 파일 생성
     if not os.path.exists(json_file_path):
