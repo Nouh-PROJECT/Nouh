@@ -10,7 +10,7 @@
 .form-template {
     display: flex;
     flex-direction: column;
-    width: 1000px;
+    width: 800px;
     box-sizing: border-box;
     padding: 50px;
     border: 2px solid #424D83; /* 테두리 색을 어두운 파란색으로 */

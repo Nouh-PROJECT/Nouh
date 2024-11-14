@@ -246,16 +246,31 @@
 .form-template.quiz-list .form-row .form-column.title {
     flex-shrink: 0;
     justify-content: center;
-    width: 100px;
+    width: 300px;
+    font-size: 14px;
+    border-right: 1px solid #424D83;
+}
+.form-template.quiz-list .form-row .form-column.title a {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    text-decoration: none;
+    color: #000;
+    padding: 5px 0;
+}
+
+.form-template.quiz-list .form-row .form-column.user_name {
+    flex-shrink: 0;
+    justify-content: center;
+    width: 150px;
     border-right: 1px solid #424D83;
 }
 
-
-
-.form-template.quiz-list .form-row .form-column.question {
-    flex: 1;
-    padding-left: 10px;
-    min-width: 0;
+.form-template.quiz-list .form-row .form-column.time {
+    flex-shrink: 0;
+    justify-content: center;
+    width: 145px;
 }
 
 .form-template.quiz-list .form-row .form-column.question a {

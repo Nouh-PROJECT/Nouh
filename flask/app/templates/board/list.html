@@ -35,28 +35,23 @@
         </form>
         <div class="form-content">
             <div class="form-row header">
-                <div class="form-column subject">글번호</div>
+                <div class="form-column number">글번호</div>
                 <div class="form-column title">제목</div>
                 <div class="form-column user_name">작성자</div>
                 <div class="form-column time">작성일</div>
             </div>
-            {% if quizzes | length == 0 %}
+            {% if boards | length == 0 %}
                 <div class="form-row">
                     <div class="form-column" style="margin: 0 auto;">데이터가 없습니다.</div>
                 </div>
             {% else %}
-                {% for quiz in quizzes %}
-                    {% if quiz.u_id == current_user.id or current_user.id == 1 %}
+                {% for board in boards %}
                         <div class="form-row">
-                            <div class="form-column subject">{{ quiz.s }}</div>
-                            <div class="form-column question"><a href="{{ url_for('quiz.quiz_edit', idx=quiz.id)}}">{{ quiz.q }}</a></div>
+                            <div class="form-column number">{{ board.id }}</div>
+                            <div class="form-column title"><a href="{{ url_for('board.board_detail', idx=board.id)}}">{{ board.title }}</a></div>
+                            <div class="form-column user_name">{{ board.uname }}</div>
+                            <div class="form-column time">{{ board.created_at }}</div>
                         </div>
-                    {% else %}
-                        <div class="form-row">
-                            <div class="form-column subject">{{ quiz.s }}</div>
-                            <div class="form-column question"><a href="{{ url_for('quiz.quiz_detail', idx=quiz.id)}}">{{ quiz.q }}</a></div>
-                        </div>
-                    {% endif %}
                 {% endfor %}
             {% endif %}
         </div>
@@ -66,13 +61,13 @@
             {% if p == page %}
             <strong>{{ p }}</strong>
             {% else %}
-            <a href="{{ url_for('quiz.quiz_list', page=p, type=type)}}">{{ p }}</a>
+            <a href="{{ url_for('board.board_list', page=p, type=type)}}">{{ p }}</a>
             {% endif %}
             {% endfor %}
         </div>
 
         <div class="button-area">
-            <button class="button" type="button" onclick="location.href='/quiz/add'">추가</button>
+            <button class="button" type="button" onclick="location.href='/board/add'">글 작성</button>
             <button class="button" type="button" onclick="location.href='/'">메인으로</button>
         </div>
     </div>
@@ -83,7 +78,7 @@
         let keyword = document.querySelector("input[name='keyword']");
 
         if (keyword) {
-            location.href = "{{ url_for('quiz.quiz_list', type=type) }}" + "&keyword=" + keyword.value;
+            location.href = "{{ url_for('board.board_list', type=type) }}" + "&keyword=" + keyword.value;
         }
 
         return false;

@@ -1,63 +1,46 @@
-{% extends "base.html" %}
-
-{% block head %}
-<link href="{{ url_for('static', filename='css/form.css') }}" rel="stylesheet" />
-
-<style>
-    body { background-color: #424D83; }
-</style>
-{% endblock %}
-
-{% block title %}게시 글{% endblock %}
-
-{% block content %}
-{% include "nav.html" %}
-<div class="form-wrapper">
-    <form class="form-template quiz-detail" method="post">
-        <h1 class="form-title">상세 보기</h1>
-    
-        <hr>
-    
-        <div class="form-content">
-            <div class="form-row row-1">
-                <div class="form-column header">과목</div>
-                <div class="form-column">
-                    <select name="quiz-s" disabled>
-                        <option value="{{ quiz.s_id }}" selected>{{ quiz.s_name }}</option>
-                    </select>
-                </div>
-            </div>
-    
-            <div class="form-row row-2">
-                <div class="form-column header">문제</div>
-                <div class="form-column"><textarea name="quiz-q" disabled>{{ quiz.q }}</textarea></div>
-            </div>
-    
-            <div class="form-row row-3">
-                <div class="form-column header">정답</div>
-                <div class="form-column"><input type="text" name="quiz-a" placeholder="정답" value="{{ quiz.a }}" disabled></div>
-            </div>
-    
-            <div class="form-row row-4">
-                <div class="form-column header">선택지</div>
-                <div class="form-column">
-                    <input type="text" name="quiz-o1" placeholder="선택지" value="{{ quiz.o1 }}" disabled>
-                    <input type="text" name="quiz-o2" placeholder="선택지" value="{{ quiz.o2 }}" disabled>
-                    <input type="text" name="quiz-o3" placeholder="선택지" value="{{ quiz.o3 }}" disabled>
-                </div>
-            </div>
-
-            <div class="form-row row-5">
-                <div class="form-column header">해설</div>
-                <div class="form-column"><textarea name="quiz-c" disabled>{{ quiz.c }}</textarea></div>
-            </div>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 보기</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">{{ board.title }}</h1> <!-- 제목 -->
+        <p class="text-muted">작성자: {{ board.uname }} | 작성일: {{ board.created_at }}</p> <!-- 작성자 및 작성일 -->
+        
+        <div class="mt-4">
+            <h5>내용</h5>
+            <p>{{ board.content }}</p> <!-- 내용 -->
         </div>
-    
-        <hr>
-    
-        <div class="button-area">
-            <a class="button" href="/quiz/list?type=all">돌아가기</a>
+        <form action="/board/edit/{{ board.id }}" method="POST">
+            <button type="submit" class="btn btn-primary">수정</button>
+        </form>
+        <form action="/board/delete/{{ board.id }}" method="GET">
+            <button type="submit" class="btn btn-primary">삭제</button>
+        </form>
+        <div class="mt-4">
+            <a href="/board/list" class="btn btn-primary">게시판으로 돌아가기</a> <!-- 게시판 목록으로 돌아가기 -->
         </div>
-    </form>
-</div>
-{% endblock %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function deletePost(postId) {
+            if (confirm("정말 삭제하시겠습니까?")) {
+                fetch(`/board/delete/${postId}`, { method: "GET" })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message);  // 글이 삭제되었습니다 메시지 표시
+                        window.location.href = "/board/list";  // 목록으로 리다이렉트
+                    })
+                    .catch(error => console.error("Error:", error));
+            }
+        }
+    </script>
+</body>
+</html>
