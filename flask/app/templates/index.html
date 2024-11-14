@@ -337,6 +337,18 @@
                     <div class="icon"><i class="fa-solid fa-scroll"></i></div>
                     <p class="menu">시험 보기</p>
                 </a>
+                
+                {% if session["subscribe"] == 1 %}
+                <a class="card" href="{{ url_for('lecture.lecture_list') }}">
+                    <div class="icon"><i class="fa-solid fa-video"></i></div>
+                    <p class="menu">강의 보기</p>
+                </a>
+                {% else %}
+                <a class="card" onclick="alert('구독자만 볼 수 있습니다.')">
+                    <div class="icon"><i class="fa-solid fa-video"></i></div>
+                    <p class="menu">강의 보기</p>
+                </a>
+                {% endif %}
 
                 <a class="card" href="{{ url_for('board.post_list') }}">
                     <div class="icon"><i class="fa-regular fa-clipboard"></i></div>
