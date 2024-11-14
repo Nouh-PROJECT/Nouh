@@ -1,9 +1,7 @@
 from flask import Flask, render_template,jsonify,request, current_app
-# from flask_cors import CORS
 from flask import Blueprint
 import requests,openai,os
 from dotenv.main import load_dotenv
-#from langchain.llms import OpenAI
 from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationChain
@@ -11,8 +9,7 @@ from langchain.memory import ConversationSummaryBufferMemory
 
 bp = Blueprint('chatbot', __name__)
 
-# CORS(app)
-load_dotenv()
+# load_dotenv()
 # OPENAI_API_KEY=os.environ.get('OPENAI_API_KEY')
 # os.getenv('OPENAI_API_KEY')
 
