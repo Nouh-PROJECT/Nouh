@@ -63,15 +63,11 @@
     <script>
     document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('pay').addEventListener('click', function () {
-            //window.opener.펑션명();
-            //window.close();
-            console.log('결제')
+            window.location.href = "{{ url_for('test.test3')}}"
         });
 
         document.getElementById('no').addEventListener('click', function () {
-            // window.opener.no();
-            // window.close();
-            console.log('취소')
+            window.close();
         });
 
         function updateAgreeAllCheckbox() {

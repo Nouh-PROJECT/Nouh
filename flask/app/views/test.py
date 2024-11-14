@@ -32,3 +32,8 @@ def test2():
 
     return render_template('paymentPopup.html', user=temp)
 
+
+@bp.route("/popup/complete", methods=['GET', 'POST'])
+def test3():
+    return render_template("paymentComplete.html")
+
