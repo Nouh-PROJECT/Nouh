@@ -1,5 +1,6 @@
 import json
 import os
+import re
 from flask import Blueprint, render_template, request, redirect, flash, url_for
 from flask_login import login_required
 
@@ -103,6 +104,7 @@ def lecture_list():
 
 
 
+
 @bp.route('/lecture/<int:id>', methods=['GET'])
 def lecture_detail(id):
     try:
@@ -114,5 +116,12 @@ def lecture_detail(id):
 
     if not lecture:
         return "강의를 찾을 수 없습니다.", 404
+
+    # 유튜브 URL을 embed URL로 변환
+    youtube_url_pattern = r"(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})"
+    match = re.search(youtube_url_pattern, lecture['lec_url'])
+    if match:
+        video_id = match.group(1)
+        lecture['lec_url'] = f"https://www.youtube.com/embed/{video_id}"
 
     return render_template('/lecture/lecture.html', lecture=lecture)
