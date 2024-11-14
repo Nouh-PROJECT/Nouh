@@ -1,4 +1,5 @@
 import json
+import os
 from flask import Blueprint, render_template, request, redirect, flash, url_for
 from flask_login import login_required
 
@@ -19,6 +20,13 @@ def lecture_add():
         {"id": 8, "name": "클라우드 보안 컨설팅 실무"}
     ]
 
+    json_file_path = 'lectures.json'
+
+    # JSON 파일이 없으면 빈 파일 생성
+    if not os.path.exists(json_file_path):
+        with open(json_file_path, 'w', encoding='utf-8') as file:
+            json.dump([], file, ensure_ascii=False, indent=4)
+
     if request.method == 'POST':
         subject_id = int(request.form.get('lecture-s'))
         lecture_name = request.form.get('lecture-name')
@@ -37,15 +45,14 @@ def lecture_add():
 
             # JSON 파일에 저장
             try:
-                with open('lectures.json', 'r+', encoding='utf-8') as file:
+                with open(json_file_path, 'r+', encoding='utf-8') as file:
                     lectures = json.load(file)
                     lectures.append(new_lecture)
                     file.seek(0)
                     json.dump(lectures, file, ensure_ascii=False, indent=4)
                 flash('강의가 성공적으로 추가되었습니다!', 'success')
             except (FileNotFoundError, json.JSONDecodeError):
-                # 파일이 없거나 JSON 형식에 문제가 있는 경우
-                with open('lectures.json', 'w', encoding='utf-8') as file:
+                with open(json_file_path, 'w', encoding='utf-8') as file:
                     json.dump([new_lecture], file, ensure_ascii=False, indent=4)
                 flash('강의가 성공적으로 추가되었습니다!', 'success')
             
