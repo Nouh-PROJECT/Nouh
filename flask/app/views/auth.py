@@ -62,7 +62,6 @@ def login():
             'status': 'success',
             'message': f"{user['name']}님 환영합니다!"
         }
-        print(subscribeResult)
         session['subscribe'] = subscribeResult
     else:
         data = {
