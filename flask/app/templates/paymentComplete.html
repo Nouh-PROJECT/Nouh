@@ -43,13 +43,7 @@
         </div>
         <script>
             document.getElementById('home').addEventListener('click', function() {
-                console.log('dd');
                 window.opener.location.href = "{{ url_for('main.index')}}";
-                if (window.opener && !window.opener.closed) {
-                    
-                    window.opener.location.href = "{{ url_for('main.index') }}";
-                }
-        
                 window.close();
             });
         </script>
