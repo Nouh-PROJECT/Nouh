@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>결제 완료</title>
+    <script>
+        function currentDate() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = ('0' + (today.getMonth() + 1)).slice(-2);
+            const day = ('0' + today.getDate()).slice(-2);
+            const dateString = year + '-' + month + '-' + day;
+            document.getElementById('currentDate').value = dateString;
+        }
+        window.onload = currentDate;
+    </script>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 500px;
+            padding: 20px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        /* 완료 메시지 */
+        h2 {
+            color: #22408f;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        h4 {
+            color: #555;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        /* 이미지 */
+        .image-container img {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .info {
+            font-size: 16px;
+            color: #333;
+            margin: 15px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #22408f;
+        }
+
+        .info input {
+            width: 100%;
+            max-width: 250px;
+            padding: 8px;
+            font-size: 16px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            margin-bottom: 15px;
+        }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+        #home {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #22408f;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #home:hover {
+            background-color: #1a326b;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>결제 완료</h2>
+        <h4>구독 서비스 결제가 완료되었습니다.</h4>
+
+        <!-- 완료 이미지 -->
+        <div class="image-container">
+            <img src="{{ url_for('static', filename='img/chatbot.png') }}" alt="결제 완료 이미지">
+        </div>
+
+        <!-- 결제 정보 -->
+        <div class="info">
+            <label>결제 금액</label>
+            <input type="text" value="20,000원 / 월" readonly>
+        </div>
+
+        <div class="info">
+            <label>서비스 신청 날짜</label>
+            <input type="text" id="currentDate" readonly>
+        </div>
+
+        <!-- 홈으로 버튼 -->
+        <div class="button-container">
+            <button id="home">홈으로</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('home').addEventListener('click', function() {
+            if (window.opener && !window.opener.closed) {
+                window.opener.location.href = "{{ url_for('main.index') }}";
+            }
+            window.close();
+        });
+    </script>
+</body>
+</html>

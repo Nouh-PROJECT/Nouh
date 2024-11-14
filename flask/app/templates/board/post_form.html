@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 작성</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+    /* 컨테이너 */
+    .container {
+        margin: 50px auto;
+        padding: 50px;
+        background-color: #f5f5f5;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 90%;
+        max-width: 1200px;
+        text-align: center;
+        box-sizing: border-box;
+    }  
+
+    /* 헤더 */
+    .header {
+        margin-top: 10px;
+        margin-bottom: 100px;
+        font-size: 30px;
+        font-weight: bold;
+        color: #333;
+        text-align: left;
+    }
+
+    /* 글 항목 */
+    .form-group {
+        text-align: left;
+    }
+
+    /* 남은 글자 수 */
+    .char-counter {
+        font-size: 12px;
+        color: #888;
+        text-align: right;
+        margin-top: 5px;
+    }
+
+    /* 파일 미리보기 */
+    .file-preview {
+        margin-top: 10px;
+        max-height: 100px;
+    }
+
+
+    /* 제출 버튼 */
+    .submit-button {
+        width: 60px;
+        height: 40px;
+        background: #22408f;
+        color: #fff;
+        font-size: 16px;
+        line-height: 40px;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        margin-left: 20px;
+        display: inline-block;
+    }
+
+   </style>
+
+
+</head>
+<body>
+    <div class="container">
+
+        <!-- 헤더 -->
+        <div class="header">게시글 작성</div>
+
+        <form action="/write" method="POST">
+            <div class="form-group">
+                <label for="title">제목</label>
+                <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+            <div class="form-group">
+                <label for="title">작성자</label>
+                <input type="text" class="form-control" id="writer" name="writer" value="{{ current_user.username }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="content">내용</label>
+                <textarea class="form-control" id="content" name="content" rows="5" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="file">파일 업로드</label>
+                <input type="file" class="form-control" id="file" name="file">
+                <img id="file-preview" class="file-preview" src="" alt="" style="display: none;">
+            </div>
+            <a href="{{ url_for('board.post_success') }}" button type="submit" class="submit-button">제출</a>
+        </form>
+        
+    </div>
+
+    <script>
+    // 파일 미리보기 기능
+        document.getElementById('file').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('file-preview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                document.getElementById('file-preview').style.display = 'none';
+            }
+        });
+    </script>
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 목록</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <style>
+    /* 컨테이너 */
+    .container {
+        margin: 50px auto;
+        padding: 50px;
+        background-color: #f5f5f5;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 90%;
+        max-width: 1200px;
+        text-align: center;
+        box-sizing: border-box;
+    }  
+
+    /* 헤더 */
+    .header {
+        margin-top: 10px;
+        margin-bottom: 100px;
+        font-size: 30px;
+        font-weight: bold;
+        color: #333;
+        text-align: left;
+    }
+
+    /* 검색창 */
+    .search-box {
+        margin: 0 auto 15px;
+        padding: 10px 15px;
+        border-radius: 20px;
+        background-color: #e0e0e0;
+        display: flex;
+        align-items: center;
+        width: 80%;
+        max-width: 500px;
+        box-sizing: border-box;
+        position: relative;
+    }
+    
+    .search-box input {
+        border: none;
+        outline: none;
+        background: none;
+        font-size: 16px;
+        width: 100%;
+        padding-right: 35px;
+    }
+
+    .search-box input::placeholder {
+        color: #888;
+    }
+
+    /* 검색 아이콘 */
+    .search-box::after {
+        content: "";
+        background-image: url('flask/app/static/img/magnifying-glass.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        right: 15px;
+        cursor: pointer;
+    }
+
+    /* 표 스타일 */
+    .board-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background-color: #f9f9f9;
+        margin-bottom: 20px;
+    }
+
+    .board-table th, .board-table td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        text-align: center;
+    }
+
+    .board-table th {
+        background-color: #f0f0f0;
+        font-weight: bold;
+    }
+
+    .board-table tr:hover {
+        background-color: #f9f9f9;
+    }
+
+    
+    /* 버튼과 페이지 번호 행 */
+    .button-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    /* 페이지 번호 스타일 */
+    .page-numbers {
+        flex-grow: 1;
+        text-align: center;
+    }
+
+    .page-numbers span {
+        margin: 0 5px;
+        cursor: pointer;
+        padding: 5px 10px;
+        border-radius: 5px;
+        color: #333;
+    }
+
+    .page-numbers span.active {
+        background-color: #22408f;
+        color: #fff;
+    }
+
+    /* 글 작성 버튼 */
+    .newtext-button {
+        width: 100px;
+        height: 40px;
+        background: #22408f;
+        color: #fff;
+        font-size: 16px;
+        line-height: 40px;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        margin-left: 20px;
+        display: inline-block;
+    }
+
+   
+    .post-content {
+        font-size: 1rem;
+        color: #6c757d;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    </style>
+</head>
+
+
+<body>
+    <div class="container">
+
+        <!-- 헤더 -->
+        <div class="header">자유게시판</div>
+
+        <!-- 검색창 -->
+        <div class="search-box">
+            <input type="text" placeholder="검색어를 입력하세요">
+        </div>
+
+        <ul class="list-group">
+            {% for post in posts %}
+                <li class="list-group-item mb-3 shadow-sm">
+                    <!-- 게시판 목록 테이블 -->
+                    <table class="board-table">
+                        <thead>
+                            <tr>
+                                <th>글번호</th>
+                                <th>제목</th>
+                                <th>작성자</th>
+                                <th>작성일</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>첫 번째 게시글</td>
+                                <td>admin</td>
+                                <td>2024-11-13</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>두 번째 게시글</td>
+                                <td>testid</td>
+                                <td>2024-11-12</td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                </li>
+            {% else %}
+                <li class="list-group-item text-center">게시글이 없습니다.</li>
+            {% endfor %}
+        </ul>
+
+        <!-- 페이지 번호와 글 작성 버튼 -->
+        <div class="button-row">
+            <div class="page-numbers" id="page-numbers">
+                <span>1</span>
+                <span>2</span>
+                <span>3</span>
+                <span>...</span>
+                <span>10</span>
+            </div>
+            <a href="{{ url_for('board.post_form') }}" class="newtext-button">글 등록</a>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block head %}
+<style>
+    /* 컨테이너 */
+    .container {
+        margin: 0 auto;
+        padding: 50px;
+        background-color: #f5f5f5;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 90%;
+        max-width: 1200px;
+        text-align: center;
+        box-sizing: border-box;
+    }  
+
+    /* 헤더 */
+    .header {
+        margin-top: 50px;
+        margin-bottom: 40px;
+        font-size: 36px;
+        font-weight: bold;
+        color: #333;
+        text-align: left;
+    }        
+
+    /* 정보 섹션 스타일 */
+    .section {
+        margin: 40px 0;
+        text-align: left;
+    }
+    .section h2 {
+        margin: 5px 0;
+        font-size: 24px;
+        color: #22408f;
+        margin-bottom: 10px;
+    }
+    .section p {
+        font-size: 18px;
+        margin: 20px 0;
+        color: #555;
+    }
+
+
+
+    /* 결제 버튼 */
+    .pay-button {
+        width: 120px;
+        height: 45px;
+        background: #22408f;
+        color: #fff;
+        font-size: 18px;
+        line-height: 45px;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        display: inline-block;
+        cursor: pointer;
+        margin-top: 30px;
+    }
+
+    .pay-button:hover {
+        background-color: #1a326b;
+    }
+</style>
+{% endblock %}
+
+{% block title %}결제 상세 정보{% endblock %}
+
+{% block content %}
+{% include "nav.html" %}
+
+<div style="height: 150px;"></div>
+<div class="container">
+    <div class="header">결제</div>
+    <div class="section">
+        <h2>주문자정보</h2>
+        <p>이름 : {{ user["name"] }}</p>
+        <p>이메일 : {{ user["email"] }}</p>
+        <p>연락처 : {{ user["phone"] }}</p>
+    </div>
+    <div class="section">
+        <h2>결제정보</h2>
+        <p>결제 방법 : SSRCPay</p>
+        <p>최종 결제 금액 : {{ payment_amount }}</p>
+    </div>
+    <a class="pay-button" onclick="showPopup()">결제</a>
+</div>
+
+<script>
+    function showPopup(){
+        window.open("{{url_for('subscribe.paymentPopup')}}", "popup", "width=700, height=400, left=100, top=50");
+    }
+</script>
+{% endblock %}
