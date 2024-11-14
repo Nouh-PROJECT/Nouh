@@ -52,6 +52,16 @@
                 {% endfor %}
             {% endif %}
         </div>
+        
+        <div class="form-pagination">
+            {% for p in range(start_page, end_page + 1) %}
+            {% if p == page %}
+            <strong>{{ p }}</strong>
+            {% else %}
+            <a href="{{ url_for('lecture.lecture_list', page=p, type=type)}}">{{ p }}</a>
+            {% endif %}
+            {% endfor %}
+        </div>
 
         <div class="button-area">
             {% if current_user.name == 'admin' %}
