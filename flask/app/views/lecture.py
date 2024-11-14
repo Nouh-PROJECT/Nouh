@@ -65,3 +65,18 @@ def lecture_list():
         lectures = []
 
     return render_template('/lecture/lectureList.html', lectures=lectures)
+
+
+@bp.route('/lecture/<int:id>', methods=['GET'])
+def lecture_detail(id):
+    try:
+        with open('lectures.json', 'r', encoding='utf-8') as file:
+            lectures = json.load(file)
+            lecture = lectures[id] if id < len(lectures) else None
+    except (FileNotFoundError, json.JSONDecodeError, IndexError):
+        lecture = None
+
+    if not lecture:
+        return "강의를 찾을 수 없습니다.", 404
+
+    return render_template('lecture.html', lecture=lecture)
