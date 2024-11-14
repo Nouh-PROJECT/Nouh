@@ -39,7 +39,7 @@
                             <a href="{{ url_for('lecture.lecture_detail', id=loop.index0) }}">{{ lecture.lecture_name }}</a>
                         </div>
                         <div class="form-column actions">
-                            {% if current_user.id == 'admin' %}
+                            {% if current_user.name == 'admin' %}
                                 <form action="{{ url_for('lecture.lecture_edit', id=loop.index0) }}" method="get" style="display:inline;">
                                     <button class="button" type="submit">수정</button>
                                 </form>
@@ -54,7 +54,7 @@
         </div>
 
         <div class="button-area">
-            {% if current_user.id == 'admin' %}
+            {% if current_user.name == 'admin' %}
                 <a class="button" type="button" onclick="location.href='/add'">추가</a>
             {% endif %}
             <a class="button" type="button" onclick="location.href='/'">메인으로</a>
