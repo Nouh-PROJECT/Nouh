@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>결제 상세 정보</title>
+    <script>
+        function showPopup(){
+            const isSubscribed = {{ user["isSubscribe"] }};
+            if (isSubscribed == "1"){
+                alert('이미 구독하였습니다.');
+            }else{
+                window.open("{{url_for('test.test2')}}", "popup", "width=1200, height=800, left=100, top=50");
+            }
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <h1>결제</h1>
+    </div>
+    <div>
+        <h2>주문자정보</h2>
+        <p>이름 : {{ user["name"] }}</p>
+        <p>이메일 : {{ user["email"] }}</p>
+        <p>연락처 : {{ user["phone"] }}</p>
+    </div>
+    <div>
+        <h2>결제정보</h2>
+    </div>
+    <div>
+        <span>결제방법 SSRCPay</span>
+    </div>
+    <div>
+        <span>최종 결제금액 20,000원 / 월</span>
+    </div>
+    <div>
+        <input type="button" value="결제" onclick="showPopup()">
+    </div>
+</body>
+</html>
