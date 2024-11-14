@@ -34,7 +34,7 @@
                             <a href="{{ url_for('lecture.lecture_detail', id=loop.index0) }}">{{ lecture.lecture_name }}</a>
                         </div>
                         <div class="form-column actions">
-                            <a class="button" href="{{ url_for('lecture.lecture_edit', id=loop.index0) }}">수정</a>
+                            <button class="button" href="{{ url_for('lecture.lecture_edit', id=loop.index0) }}">수정</button>
                             <form action="{{ url_for('lecture.lecture_delete', id=loop.index0) }}" method="post" style="display:inline;">
                                 <button class="button" type="submit" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
                             </form>
