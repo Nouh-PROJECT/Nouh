@@ -46,13 +46,14 @@
 
         <div class="form-pagination">
             {% for p in range(start_page, end_page + 1) %}
-            {% if p == page %}
-            <strong>{{ p }}</strong>
-            {% else %}
-            <a href="{{ url_for('lecture.lecture_list', page=p, type=type)}}">{{ p }}</a>
-            {% endif %}
+                {% if p == page %}
+                    <strong>{{ p }}</strong>
+                {% else %}
+                    <a href="{{ url_for('lecture.lecture_list', page=p) }}">{{ p }}</a>
+                {% endif %}
             {% endfor %}
         </div>
+        
 
         <div class="button-area">
             <a class="button" type="button" onclick="location.href='/add'">추가</a>

@@ -69,13 +69,38 @@ def lecture_list():
     try:
         with open(json_file_path, 'r', encoding='utf-8') as file:
             lectures = json.load(file)
-            # 디버깅용 출력
-            print("Loaded lectures:", lectures)
+            print("Loaded lectures:", lectures)  # 디버깅용 출력
     except (FileNotFoundError, json.JSONDecodeError) as e:
         print(f"Error reading JSON: {e}")
         lectures = []
 
-    return render_template('/lecture/lectureList.html', lectures=lectures)
+    # 페이지네이션 설정
+    page = request.args.get("page", 1, type=int)
+    per_page = 10  # 페이지당 항목 수
+    total_lectures = len(lectures)
+    total_pages = (total_lectures + per_page - 1) // per_page
+
+    start_page = max(page - 2, 1)
+    end_page = min(page + 2, total_pages)
+
+    # 페이지에 해당하는 강의 슬라이싱
+    offset = (page - 1) * per_page
+    paginated_lectures = lectures[offset:offset + per_page]
+
+    # 검색 기능 처리
+    keyword = request.args.get('keyword', type=str)
+    if keyword:
+        paginated_lectures = [lecture for lecture in paginated_lectures if keyword.lower() in lecture['lecture_name'].lower()]
+
+    return render_template(
+        'lecture/lectureList.html',
+        lectures=paginated_lectures,
+        page=page,
+        total_pages=total_pages,
+        start_page=start_page,
+        end_page=end_page
+    )
+
 
 
 @bp.route('/lecture/<int:id>', methods=['GET'])
