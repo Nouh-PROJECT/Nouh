@@ -6,7 +6,12 @@
     <title>결제 상세 정보</title>
     <script>
         function showPopup(){
-            window.open("{{url_for('test.test2')}}", "popup", "width=1200, height=800, left=100, top=50");
+            const isSubscribed = {{ user["isSubscribe"] }};
+            if (isSubscribed == "1"){
+                alert('이미 구독하였습니다.');
+            }else{
+                window.open("{{url_for('test.test2')}}", "popup", "width=1200, height=800, left=100, top=50");
+            }
         }
     </script>
 </head>
