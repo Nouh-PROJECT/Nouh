@@ -191,6 +191,27 @@
             justify-content: center;
         }
     }
+    /* css 수정부분 - chatbot */
+    .chatbot__icon {
+        width: 100px; /* 버튼 안에서 이미지의 크기를 조정 */
+        height: 100px;
+        object-fit: contain;
+    }
+    .chatbot__redirect-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+
+        border: none;
+        border-radius: 16px;
+        background: royalblue;
+        color: white;
+        padding: 15px;
+        font-weight: bold;
+        box-shadow: 0px 5px 10px gray;
+        cursor: pointer;
+    }
+
 </style>
 {% endblock %}
 
@@ -240,6 +261,15 @@
             </div>
         </div>
     </section>
+    <a href="{{ url_for('chatbot.index') }}" target="_blank" class="chatbot__redirect-button">
+        <picture>
+          <img
+              src="static/img/chatbot_icon.webp"
+            alt="챗봇 아이콘"
+            class="chatbot__icon"
+          />
+        </picture>
+    </a>
 </main>
 <div id="pagination-container" class=""></div>
 <script>
