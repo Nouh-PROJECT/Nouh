@@ -10,7 +10,7 @@ bp = Blueprint('subscribe', __name__)
 
 @bp.route("/payment", methods=['GET', "POST"])
 def payment():
-    user = {"name":"홍길동", "email":"guest@guest.com", "phone":"01011112222" }
+    user = {"name":"홍길동", "email":"guest@guest.com", "phone":"01011112222", "isSubscribe":"0" }
     return render_template("subscribe/payment.html", user=user)
 
 @bp.route("/popup", methods=['GET', "POST"])
