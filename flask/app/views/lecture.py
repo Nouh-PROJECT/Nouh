@@ -106,7 +106,7 @@ def lecture_list():
 @bp.route('/lecture/<int:id>', methods=['GET'])
 def lecture_detail(id):
     try:
-        with open('lectures.json', 'r', encoding='utf-8') as file:
+        with open(json_file_path, 'r', encoding='utf-8') as file:
             lectures = json.load(file)
             lecture = lectures[id] if id < len(lectures) else None
     except (FileNotFoundError, json.JSONDecodeError, IndexError):
