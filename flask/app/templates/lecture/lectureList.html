@@ -12,14 +12,14 @@
 
 {% block content %}
 {% include "nav.html" %}
-<div class="form-wrapper form-lecture-list">
-    <div class="form-template lecture-list">
+<div class="form-wrapper form-quiz-list">
+    <div class="form-template quiz-list">
         <h1 class="form-title">강의 목록</h1>
 
         <div class="form-content">
             <div class="form-row header">
                 <div class="form-column subject">과목</div>
-                <div class="form-column lecture-name">강의 이름</div>
+                <div class="form-column question">강의 이름</div>
                 <div class="form-column actions">수정 / 삭제</div>
             </div>
             {% if lectures | length == 0 %}
@@ -30,7 +30,7 @@
                 {% for lecture in lectures %}
                     <div class="form-row">
                         <div class="form-column subject">{{ lecture.subject_name }}</div>
-                        <div class="form-column lecture-name">
+                        <div class="form-column question">
                             <a href="{{ url_for('lecture.lecture_detail', id=loop.index0) }}">{{ lecture.lecture_name }}</a>
                         </div>
                         <div class="form-column actions">
