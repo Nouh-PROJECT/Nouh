@@ -100,7 +100,7 @@ def board_add():
 @bp.route("/detail/<idx>", methods=['GET'])
 @login_required
 def board_detail(idx: str):
-    query = r"SELECT id, u_id, title, content, created_at FROM board WHERE id=%s;"
+    query = r"SELECT id, (select name from users where id = u_id) as uname, title, content, created_at FROM board WHERE id=%s"
     rows = execute_query(query, (idx))
     board = rows[0] if rows else []
 
@@ -122,8 +122,7 @@ def board_edit(idx: int):
         param = (title, content, idx)
         execute_query(query, param, True)
 
-    # Quiz Info   
-    query = r"SELECT id, title, content, created_at FROM board WHERE id=%s"
+    query = r"SELECT id, (select name from users where id = u_id) as uname, title, content, created_at FROM board WHERE id=%s"
     rows = execute_query(query, (idx))
     board = rows[0] if rows else []
 
