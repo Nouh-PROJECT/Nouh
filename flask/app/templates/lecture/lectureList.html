@@ -12,21 +12,15 @@
 
 {% block content %}
 {% include "nav.html" %}
-<div class="form-wrapper form-quiz-list">
-    <div class="form-template quiz-list">
+<div class="form-wrapper form-lecture-list">
+    <div class="form-template lecture-list">
         <h1 class="form-title">강의 목록</h1>
 
-        <form class="search-area" onsubmit="return Search()">
-            <div>
-                <input type="search" name="keyword">
-                <button class="button" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-            </div>
-        </form>
-        
         <div class="form-content">
             <div class="form-row header">
                 <div class="form-column subject">과목</div>
-                <div class="form-column question">강의 이름</div>
+                <div class="form-column lecture-name">강의 이름</div>
+                <div class="form-column actions">수정 / 삭제</div>
             </div>
             {% if lectures | length == 0 %}
                 <div class="form-row">
@@ -36,24 +30,19 @@
                 {% for lecture in lectures %}
                     <div class="form-row">
                         <div class="form-column subject">{{ lecture.subject_name }}</div>
-                        <div class="form-column question">
+                        <div class="form-column lecture-name">
                             <a href="{{ url_for('lecture.lecture_detail', id=loop.index0) }}">{{ lecture.lecture_name }}</a>
+                        </div>
+                        <div class="form-column actions">
+                            <a class="button" href="{{ url_for('lecture.lecture_edit', id=loop.index0) }}">수정</a>
+                            <form action="{{ url_for('lecture.lecture_delete', id=loop.index0) }}" method="post" style="display:inline;">
+                                <button class="button" type="submit" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
+                            </form>
                         </div>
                     </div>
                 {% endfor %}
             {% endif %}
         </div>
-
-        <div class="form-pagination">
-            {% for p in range(start_page, end_page + 1) %}
-                {% if p == page %}
-                    <strong>{{ p }}</strong>
-                {% else %}
-                    <a href="{{ url_for('lecture.lecture_list', page=p) }}">{{ p }}</a>
-                {% endif %}
-            {% endfor %}
-        </div>
-        
 
         <div class="button-area">
             <a class="button" type="button" onclick="location.href='/add'">추가</a>

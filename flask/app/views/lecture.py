@@ -11,6 +11,7 @@ json_file_path = os.path.join(os.path.dirname(__file__), 'lectures.json')
 @login_required
 def lecture_add():
     # 하드코딩된 과목 데이터
+    global subjects
     subjects = [
         {"id": 1, "name": "인프라 활용을 위한 파이썬"},
         {"id": 2, "name": "애플리케이션 보안"},
@@ -125,3 +126,63 @@ def lecture_detail(id):
         lecture['lec_url'] = f"https://www.youtube.com/embed/{video_id}"
 
     return render_template('/lecture/lecture.html', lecture=lecture)
+
+
+@bp.route('/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+def lecture_edit(id):
+    try:
+        with open(json_file_path, 'r', encoding='utf-8') as file:
+            lectures = json.load(file)
+            lecture = lectures[id] if id < len(lectures) else None
+    except (FileNotFoundError, json.JSONDecodeError, IndexError):
+        lecture = None
+
+    if not lecture:
+        return "강의를 찾을 수 없습니다.", 404
+
+    if request.method == 'POST':
+        subject_id = int(request.form.get('lecture-s'))
+        lecture_name = request.form.get('lecture-name')
+        video_link = request.form.get('video-link')
+
+        if subject_id != 0 and lecture_name and video_link:
+            # 수정된 강의 정보 업데이트
+            lecture['subject_id'] = subject_id
+            lecture['subject_name'] = next((sub['name'] for sub in subjects if sub['id'] == subject_id), None)
+            lecture['lecture_name'] = lecture_name
+            lecture['lec_url'] = video_link
+
+            # JSON 파일 업데이트
+            try:
+                with open(json_file_path, 'w', encoding='utf-8') as file:
+                    json.dump(lectures, file, ensure_ascii=False, indent=4)
+                flash('강의가 성공적으로 수정되었습니다!', 'success')
+            except Exception as e:
+                flash(f'강의 수정 중 오류가 발생했습니다: {e}', 'danger')
+
+            return redirect(url_for('lecture.lecture_list'))
+        else:
+            flash('모든 필드를 입력해 주세요.', 'danger')
+
+    return render_template('/lecture/lectureEdit.html', lecture=lecture, subjects=subjects)
+
+
+@bp.route('/delete/<int:id>', methods=['POST'])
+@login_required
+def lecture_delete(id):
+    try:
+        with open(json_file_path, 'r', encoding='utf-8') as file:
+            lectures = json.load(file)
+        
+        if id < len(lectures):
+            deleted_lecture = lectures.pop(id)
+            with open(json_file_path, 'w', encoding='utf-8') as file:
+                json.dump(lectures, file, ensure_ascii=False, indent=4)
+            flash(f'강의 "{deleted_lecture["lecture_name"]}"가 삭제되었습니다.', 'success')
+        else:
+            flash('강의를 찾을 수 없습니다.', 'danger')
+    except (FileNotFoundError, json.JSONDecodeError, IndexError) as e:
+        flash(f'강의 삭제 중 오류가 발생했습니다: {e}', 'danger')
+
+    return redirect(url_for('lecture.lecture_list'))
