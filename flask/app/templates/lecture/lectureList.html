@@ -15,12 +15,17 @@
 <div class="form-wrapper form-quiz-list">
     <div class="form-template quiz-list">
         <h1 class="form-title">강의 목록</h1>
-
+        <form class="search-area" onsubmit="return Search()">
+            <div>
+                <input type="search" name="keyword">
+                <button class="button" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+        </form>
         <div class="form-content">
             <div class="form-row header">
                 <div class="form-column subject">과목</div>
                 <div class="form-column question">강의 이름</div>
-                <div class="form-column actions">수정 / 삭제</div>
+                <div class="form-column actions"></div>
             </div>
             {% if lectures | length == 0 %}
                 <div class="form-row">
