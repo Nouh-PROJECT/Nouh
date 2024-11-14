@@ -69,10 +69,13 @@ def lecture_list():
     try:
         with open(json_file_path, 'r', encoding='utf-8') as file:
             lectures = json.load(file)
-    except (FileNotFoundError, json.JSONDecodeError):
+            # 디버깅용 출력
+            print("Loaded lectures:", lectures)
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        print(f"Error reading JSON: {e}")
         lectures = []
 
-    return render_template('/lecture/lectureList.html', lectures=lectures)
+    return render_template('lectureList.html', lectures=lectures)
 
 
 @bp.route('/lecture/<int:id>', methods=['GET'])
