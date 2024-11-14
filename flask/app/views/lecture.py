@@ -75,7 +75,7 @@ def lecture_list():
         print(f"Error reading JSON: {e}")
         lectures = []
 
-    return render_template('lectureList.html', lectures=lectures)
+    return render_template('/lecture/lectureList.html', lectures=lectures)
 
 
 @bp.route('/lecture/<int:id>', methods=['GET'])
@@ -90,4 +90,4 @@ def lecture_detail(id):
     if not lecture:
         return "강의를 찾을 수 없습니다.", 404
 
-    return render_template('lecture.html', lecture=lecture)
+    return render_template('/lecture/lecture.html', lecture=lecture)
