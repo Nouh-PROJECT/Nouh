@@ -25,4 +25,4 @@ def paymentComplete():
         query = "UPDATE membership SET subscribe = '1' WHERE u_id = %s"
         execute_query(query, (u_id,))
 
-    return render_template("paymentComplete.html")
+    return render_template("subscribe/paymentComplete.html")
