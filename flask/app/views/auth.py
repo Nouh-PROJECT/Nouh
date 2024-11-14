@@ -46,6 +46,8 @@ def login():
     user_pw = request.form.get('login-user-pw')
 
     result = execute_query(r"SELECT * FROM users WHERE login_id=%s", (user_id,))
+    subscribeResult = execute_query(r"SELECT subscribe FROM membership WHERE u_id=%s", (user_id,))
+
     if not result:
         data = {
             'status': 'failed',
@@ -60,6 +62,7 @@ def login():
             'status': 'success',
             'message': f"{user['name']}님 환영합니다!"
         }
+        session['subscribe'] = subscribeResult
     else:
         data = {
             'status': 'failed',
