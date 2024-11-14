@@ -1,30 +1,87 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>게시글 목록</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
-    <div class="container">
-        <h1 class="mt-5">게시글 목록</h1>
-        <ul class="list-group">
-            {% for board in boards %}
-                <li class="list-group-item">
-                    <h5>{{ board.title }}</h5>
-                    <p>{{ board.content }}</p>
-                    <a href="/board/detail/{{ board.id }}" class="btn btn-info">상세보기</a>
-                </li>
-            {% else %}
-                <li class="list-group-item">게시글이 없습니다.</li>
-            {% endfor %}
-        </ul>
-        <a href="/board/add" class="btn btn-primary mt-3">글 작성하기</a>
-    </div>
+{% extends "base.html" %}
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+{% block head %}
+<link href="{{ url_for('static', filename='css/boardlist.css') }}" rel="stylesheet" />
+
+{% endblock %}
+
+{% block title %}게시판 목록{% endblock %}
+
+
+{% block content %}
+{% include "nav.html" %}
+<div class="form-wrapper form-quiz-list">
+    <div class="form-template quiz-list">
+        <h1 class="form-title">게시판 목록</h1>
+    
+        <form class="search-area" onsubmit="return Search()">
+            <!-- <div>
+                <div>
+                    <select class="filter" name="">
+                        <option value="0">전체</option>
+                    </select>
+                </div>
+                <div>
+                    <select class="filter" name="">
+                        <option value="0">최신순</option>
+                        <option value="1">오래된 순</option>
+                    </select>
+                </div>
+            </div> -->
+            <div>
+                <input type="search" name="keyword">
+                <button class="button" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+        </form>
+        <div class="form-content">
+            <div class="form-row header">
+                <div class="form-column number">글번호</div>
+                <div class="form-column title">제목</div>
+                <div class="form-column user_name">작성자</div>
+                <div class="form-column time">작성일</div>
+            </div>
+            {% if boards | length == 0 %}
+                <div class="form-row">
+                    <div class="form-column" style="margin: 0 auto;">데이터가 없습니다.</div>
+                </div>
+            {% else %}
+                {% for board in boards %}
+                        <div class="form-row">
+                            <div class="form-column number">{{ board.id }}</div>
+                            <div class="form-column title"><a href="{{ url_for('board.board_detail', idx=board.id)}}">{{ board.title }}</a></div>
+                            <div class="form-column user_name">{{ board.uname }}</div>
+                            <div class="form-column time">{{ board.created_at }}</div>
+                        </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="form-pagination">
+            {% for p in range(start_page, end_page + 1) %}
+            {% if p == page %}
+            <strong>{{ p }}</strong>
+            {% else %}
+            <a href="{{ url_for('board.board_list', page=p, type=type)}}">{{ p }}</a>
+            {% endif %}
+            {% endfor %}
+        </div>
+
+        <div class="button-area">
+            <button class="button" type="button" onclick="location.href='/board/add'">글 작성</button>
+            <button class="button" type="button" onclick="location.href='/'">메인으로</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function Search() {
+        let keyword = document.querySelector("input[name='keyword']");
+
+        if (keyword) {
+            location.href = "{{ url_for('board.board_list', type=type) }}" + "&keyword=" + keyword.value;
+        }
+
+        return false;
+    }
+</script>
+{% endblock %}

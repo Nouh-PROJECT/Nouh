@@ -1,29 +1,44 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>게시글 작성</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
-    <div class="container">
-        <h1 class="mt-5">게시글 작성</h1>
-        <form action="/board/add" method="POST">
-            <div class="form-group">
-                <label for="title">제목</label>
+{% extends "base.html" %}
+
+{% block head %}
+<link href="{{ url_for('static', filename='css/board.css') }}" rel="stylesheet" />
+
+{% endblock %}
+
+{% block title %}게시글 작성{% endblock %}
+
+{% block content %}
+{% include "nav.html" %}
+
+<div class="form-wrapper">
+    <form class="form-template quiz-add" method="post">
+        <h1 class="form-title">게시글 작성</h1>
+    
+        <hr>
+    
+        <div class="form-content">
+    
+            <div class="form-row row-1">
+                <div class="form-column header">제목</div>
                 <input type="text" class="form-control" id="title" name="title" required>
             </div>
-            <div class="form-group">
-                <label for="content">내용</label>
-                <textarea class="form-control" id="content" name="content" rows="5" required></textarea>
+    
+            <div class="form-row row-2">
+                <div class="form-column header">내용</div>
+                <textarea class="form-control" id="content" name="content" rows="15" required></textarea>
             </div>
-            <button type="submit" class="btn btn-primary">제출</button>
-        </form>
-    </div>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+            <div class="button-area">
+                <label for="file">파일 업로드</label>
+                <input type="file" class="form-control" id="file" name="file">
+                <img id="file-preview" class="file-preview" src="" alt="" style="display: none;">
+            </div>
+        </div>
+    
+    
+        <div class="button-area">
+            <button class="button" type="submit">글 작성</button>
+            <a class="button" href="/board/list">메인으로</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

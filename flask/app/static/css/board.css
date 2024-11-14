@@ -1,0 +1,251 @@
+/* 전체 폼 배경을 밝은 색으로 */
+.form-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 120px 0 125px 0;
+    background-color: #F0F0F0; /* 배경색을 밝은 회색으로 */
+}
+
+/* Form Template */
+.form-template {
+    display: flex;
+    flex-direction: column;
+    width: 800px;
+    box-sizing: border-box;
+    padding: 40px;
+    border: 2px solid #424D83; /* 테두리 색을 어두운 파란색으로 */
+    border-radius: 10px;
+    background-color: #FFF; /* 배경색을 흰색으로 */
+    height: 100%;
+}
+
+.form-template .form-title {
+    font-size: 36px;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #424D83; /* 텍스트 색상을 어두운 파란색으로 */
+}
+
+.form-template .form-content {
+    margin: 30px 0;
+}
+
+.form-template hr {
+    width: 100%;
+    height: 0;
+    border: none;
+    border-bottom: 2px solid #424D83; /* hr 선 색을 어두운 파란색으로 */
+}
+
+.form-template .button-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.form-template .button-area > .button {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 40px;
+    box-sizing: border-box;
+    margin-right: 10px;
+    padding: 0;
+    border: 2px solid #424D83; /* 테두리 색을 어두운 파란색으로 */
+    border-radius: 5px;
+    background-color: #FFF; /* 버튼 배경을 흰색으로 */
+    color: #424D83; /* 버튼 텍스트 색을 어두운 파란색으로 */
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.form-template .button-area > .button:hover {
+    background-color: #A1B0FC; /* 버튼 호버 색상은 밝은 파란색으로 */
+}
+
+.form-template .button-area > .button:last-child {
+    margin-right: 0;
+}
+
+/* Form Content */
+.form-template .form-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.form-template .form-row:last-child {
+    margin-bottom: 0;
+}
+
+.form-template .form-column.header {
+    flex-shrink: 0;
+    width: 100px;
+    box-sizing: border-box;
+    padding: 10px 0;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    color: #424D83; /* 텍스트 색을 어두운 파란색으로 */
+}
+
+/* Gate Form */
+.form-wrapper.form-gate {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 0;
+}
+
+.form-template.gate {
+    width: 400px;
+    color: #424D83; /* 텍스트 색을 어두운 파란색으로 */
+    padding: 30px 0px 40px 0;
+    background-color: #FFF; /* 배경을 흰색으로 */
+}
+
+.form-template.gate hr {
+    width: 85%;
+    border-bottom: 2px solid #424D83; /* hr 선 색을 어두운 파란색으로 */
+}
+
+.form-template.gate .form-title {
+    font-size: 28px;
+    margin-bottom: 10px;
+    color: #424D83; /* 텍스트 색을 어두운 파란색으로 */
+}
+
+.form-template.gate .form-content {
+    margin: 40px 0 0 0;
+}
+
+.form-template.gate input {
+    width: 250px;
+    height: 40px;
+    box-sizing: border-box;
+    padding: 0 0 0 10px;
+    border: 2px solid #424D83; /* 입력창 테두리 색을 어두운 파란색으로 */
+    border-radius: 5px;
+    font-size: 14px;
+    color: #424D83; /* 입력 텍스트 색을 어두운 파란색으로 */
+    background-color: #FFF; /* 배경을 흰색으로 */
+}
+
+.form-template.gate .button-area {
+    margin-top: 10px;
+}
+
+.form-template.gate .button {
+    width: 250px;
+    height: 40px;
+    box-sizing: border-box;
+    font-size: 18px;
+    color: #FFF; /* 버튼 텍스트 색을 흰색으로 */
+    background-color: #424D83; /* 버튼 배경을 어두운 파란색으로 */
+    border: 2px solid #424D83; /* 버튼 테두리 색을 어두운 파란색으로 */
+}
+
+.form-template.gate .row-1 {
+    justify-content: center;
+}
+
+/* Quiz Add, Edit, Detail Form */
+.form-template.quiz-add,
+.form-template.quiz-edit ,
+.form-template.quiz-detail {
+    color: #424D83; /* 텍스트 색을 어두운 파란색으로 */
+}
+
+.form-template.quiz-add .form-row,
+.form-template.quiz-edit .form-row,
+.form-template.quiz-detail .form-row {
+    box-sizing: border-box;
+    border-left: 5px solid #424D83; /* 좌측 선 색을 어두운 파란색으로 */
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.form-template.quiz-add .form-column:last-child,
+.form-template.quiz-edit .form-column:last-child,
+.form-template.quiz-detail .form-column:last-child {
+    width: 100%;
+}
+
+.form-template.quiz-add input,
+.form-template.quiz-edit input,
+.form-template.quiz-detail input {
+    width: 100%;
+    height: 40px;
+    line-height: 2;
+    box-sizing: border-box;
+    padding-left: 5px;
+    border: 2px solid #424D83; /* 입력창 테두리 색을 어두운 파란색으로 */
+    border-radius: 2px;
+    font-size: 18px;
+    color: #424D83; /* 입력 텍스트 색을 어두운 파란색으로 */
+    background-color: #FFF; /* 배경을 흰색으로 */
+}
+
+.form-template.quiz-add select,
+.form-template.quiz-edit select,
+.form-template.quiz-detail select {
+    width: 250px;
+    height: 30px;
+    box-sizing: border-box;
+    border: 2px solid #424D83; /* 선택창 테두리 색을 어두운 파란색으로 */
+    border-radius: 2px;
+    font-size: 18px;
+    color: #424D83; /* 선택 텍스트 색을 어두운 파란색으로 */
+    background-color: #FFF; /* 배경을 흰색으로 */
+}
+
+.form-template.quiz-add textarea,
+.form-template.quiz-edit textarea,
+.form-template.quiz-detail textarea {
+    width: 100%;
+    height: 300px;
+    box-sizing: border-box;
+    border: 2px solid #424D83; /* 텍스트 영역 테두리 색을 어두운 파란색으로 */
+    border-radius: 2px;
+    resize: none;
+    font-size: 18px;
+    color: #424D83; /* 텍스트 색을 어두운 파란색으로 */
+    background-color: #FFF; /* 배경을 흰색으로 */
+}
+
+.form-template.quiz-add .row-4 input,
+.form-template.quiz-edit .row-4 input,
+.form-template.quiz-detail .row-4 input {
+    margin-bottom: 10px;
+}
+
+.form-template.quiz-add .row-4 input:last-child,
+.form-template.quiz-edit .row-4 input:last-child,
+.form-template.quiz-detail .row-4 input:last-child {
+    margin-bottom: 0;
+}
+
+/* Quiz List */
+.form-template.quiz-list {
+    flex-shrink: 0;
+    width: 800px;
+    border: 2px solid #424D83; /* 테두리 색을 어두운 파란색으로 */
+    color: #424D83; /* 텍스트 색을 어두운 파란색으로 */
+    background-color: #FFF; /* 배경을 흰색으로 */
+}
+
+.form-template.quiz-list .form-row {
+    margin-bottom: 0;
+    border-left: none;
+    border-bottom: 1px solid #424D83; /* 하단 선 색을 어두운 파란색으로 */
+}
+
+.form-template.quiz-list .form-row.header {
+    border-top: 2px solid #424D83; /* 상단 선 색을 어두운 파란색으로 */
+    border-bottom: 2px solid #424D83;
+}

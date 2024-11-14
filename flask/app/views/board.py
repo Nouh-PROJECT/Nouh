@@ -8,7 +8,7 @@ from flask_login import login_required, current_user
 from app.models import User
 from openpyxl import Workbook, load_workbook
 from app.utils.db import execute_query
-
+from flask import jsonify
 
 bp = Blueprint('board', __name__)
 
@@ -20,11 +20,11 @@ def check_board_owner(func):# 완료
             rows = execute_query(query, (kwargs.get('idx')))
 
             if (not rows) or (rows[0]['u_id'] != current_user.id):
-                return redirect("/")
+                return redirect("/board/list")
         return func(*args, **kwargs)
     return wrapper
 
-
+ 
 @bp.route("/list", methods=['GET'])
 @login_required
 def board_list(): #완료
@@ -40,7 +40,7 @@ def board_list(): #완료
     offset = (page - 1) * per_page
 
     count_query = r"SELECT COUNT(*) num FROM board"
-    query = r"SELECT id, title, content, created_at FROM board"
+    query = r"SELECT id, (select name from users where id = u_id) as uname, title, content, created_at FROM board"
     param = []
 
     if keyword:
@@ -57,7 +57,7 @@ def board_list(): #완료
     end_page = min(page + 2, total_pages)
 
     # 페이지 데이터 불러오기
-    query += r" LIMIT %s OFFSET %s"
+    query += r" order by id desc LIMIT %s OFFSET %s "
     param.append(per_page)
     param.append(offset)
     boards = execute_query(query, tuple(param))
@@ -119,7 +119,7 @@ def board_edit(idx: int):
         title = request.form.get('title')
         content = request.form.get('content')
 
-        query = r"UPDATE board SET title=%s, content=%s, WHERE id=%s"
+        query = r"UPDATE board SET title=%s, content=%s WHERE id=%s"
         param = (title, content, idx)
         execute_query(query, param, True)
 
@@ -142,5 +142,5 @@ def board_edit(idx: int):
 @check_board_owner
 def board_delete(idx: str):
     query = r"DELETE FROM board WHERE id=%s"
-    execute_query(query, (idx), True)
-    return redirect(url_for('board.board_list'))
+    execute_query(query, (idx,), True)
+    return redirect(url_for('board.board_list', deleted="true"))
