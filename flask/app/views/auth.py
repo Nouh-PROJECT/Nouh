@@ -1,5 +1,5 @@
 import json
-from flask import render_template, redirect, url_for, request, flash, Blueprint, current_app, session
+from flask import render_template, redirect, url_for, request, flash, Blueprint, current_app, session, jsonify
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.models import User
@@ -111,3 +111,21 @@ def update_mypage():
         data = {'status': 'success', 'message': '회원 정보 수정 완료!'}
     
     return json.dumps(data)
+
+@bp.route('/delete_account', methods=['POST'])
+@login_required
+def delete_account():
+    try:
+        rows = execute_query(r"DELETE FROM users WHERE id=%s", (current_user.id),True)
+
+        if rows == 0:
+            flash("회원 탈퇴에 실패했습니다. 다시 시도해주세요.", "error")
+            return redirect(url_for("auth.mypage"))
+
+        logout_user()
+        session.clear()
+
+        return jsonify({"message": "Account deleted successfully"}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
