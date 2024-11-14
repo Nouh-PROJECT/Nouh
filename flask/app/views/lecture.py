@@ -5,6 +5,7 @@ from flask_login import login_required
 
 bp = Blueprint('lecture', __name__)
 
+json_file_path = os.path.join(os.path.dirname(__file__), 'lectures.json')
 @bp.route('/add', methods=['GET', 'POST'])
 @login_required
 def lecture_add():
@@ -20,7 +21,7 @@ def lecture_add():
         {"id": 8, "name": "클라우드 보안 컨설팅 실무"}
     ]
 
-    json_file_path = os.path.join(os.path.dirname(__file__), 'lectures.json')
+    
 
     # JSON 파일이 없으면 빈 파일 생성
     if not os.path.exists(json_file_path):
@@ -66,7 +67,7 @@ def lecture_add():
 @login_required
 def lecture_list():
     try:
-        with open('lectures.json', 'r', encoding='utf-8') as file:
+        with open(json_file_path, 'r', encoding='utf-8') as file:
             lectures = json.load(file)
     except (FileNotFoundError, json.JSONDecodeError):
         lectures = []
