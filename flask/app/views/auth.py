@@ -33,9 +33,10 @@ def register():
         if execute_query(r"SELECT id FROM users WHERE login_id=%s", (user_id,)):
             data['message'] = '중복된 아이디입니다.'
         else:
-            execute_query(r"INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s)", (name, user_id, hashed_pw, email, phone, ), True)
+            execute_query(r"INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, 0)", (name, user_id, hashed_pw, email, phone, ), True)
             data['status'] = 'success'
             data['message'] = '회원가입 완료!'
+                       
 
     return json.dumps(data)
 
@@ -45,8 +46,13 @@ def login():
     user_id = request.form.get('login-user-id')
     user_pw = request.form.get('login-user-pw')
 
+    #구독여부
+    query = r"SELECT subscribe FROM users WHERE login_id=%s"
+    rows = execute_query(query, (user_id))
+    subscribeResult = rows[0] if rows else None
+
+    # 로그인 정보
     result = execute_query(r"SELECT * FROM users WHERE login_id=%s", (user_id,))
-    subscribeResult = execute_query(r"SELECT subscribe FROM membership WHERE u_id=%s", (user_id,))
 
     if not result:
         data = {
@@ -62,7 +68,7 @@ def login():
             'status': 'success',
             'message': f"{user['name']}님 환영합니다!"
         }
-        session['subscribe'] = subscribeResult
+        session['isSubscribe'] = subscribeResult
     else:
         data = {
             'status': 'failed',

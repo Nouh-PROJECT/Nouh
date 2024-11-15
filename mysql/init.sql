@@ -15,6 +15,7 @@ CREATE TABLE users (
 	login_pw VARCHAR(200) NOT NULL,
 	email VARCHAR(50),
 	phone VARCHAR(50),
+	subscribe INT NOT NULL,
 	UNIQUE(login_id)
 );
 

@@ -6,7 +6,6 @@
     <title>결제 상세 정보</title>
     <script>
         function showPopup(){
-            const isSubscribed = {{ user["isSubscribe"] }};
             if (isSubscribed == "1"){
                 alert('이미 구독하였습니다.');
             }else{
@@ -29,10 +28,10 @@
         <h2>결제정보</h2>
     </div>
     <div>
-        <span>결제방법 SSRCPay</span>
+        <span>결제방법 : NouhPay</span>
     </div>
     <div>
-        <span>최종 결제금액 20,000원 / 월</span>
+        <span>최종 결제금액 : 20,000원 / 월</span>
     </div>
     <div>
         <input type="button" value="결제" onclick="showPopup()">

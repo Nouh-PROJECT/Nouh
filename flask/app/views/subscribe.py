@@ -20,9 +20,11 @@ def paymentPopup():
 
 @bp.route("/popup/complete", methods=['GET', 'POST'])
 def paymentComplete():
-    u_id = request.form.get('login-user-id')
-    if u_id:
-        query = "UPDATE membership SET subscribe = '1' WHERE u_id = %s"
-        execute_query(query, (u_id,))
+    # u_id = request.form.get('login-user-id')
+    # if u_id:
+    execute_query(r"UPDATE users SET subscribe = 1 WHERE id=%s", (current_user.id))
+    # user = rows[0] if rows else None
+    # query = "UPDATE users SET subscribe = 1 WHERE login_id = %s"
+    # execute_query(query, (current_user.id,))
 
     return render_template("subscribe/paymentComplete.html")
