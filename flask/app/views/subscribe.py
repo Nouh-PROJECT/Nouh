@@ -10,19 +10,21 @@ bp = Blueprint('subscribe', __name__)
 
 @bp.route("/payment", methods=['GET', "POST"])
 def payment():
-    user = {"name":"홍길동", "email":"guest@guest.com", "phone":"01011112222", "isSubscribe":"0" }
+    user = execute_query(r"SELECT name, email, phone FROM users WHERE id=%s", (current_user.id))
     return render_template("subscribe/payment.html", user=user)
 
 @bp.route("/popup", methods=['GET', "POST"])
 def paymentPopup():
-    user = {"name":"홍길동", "email":"guest@guest.com", "phone":"01011112222" }
     return render_template("subscribe/paymentPopup.html")
 
 @bp.route("/popup/complete", methods=['GET', 'POST'])
 def paymentComplete():
-    u_id = request.form.get('login-user-id')
-    if u_id:
-        query = "UPDATE membership SET subscribe = '1' WHERE u_id = %s"
-        execute_query(query, (u_id,))
+    execute_query(r"UPDATE users SET subscribe = 1 WHERE id=%s", (current_user.id), True)
+    query = r"SELECT subscribe FROM users WHERE id=%s"
+    rows = execute_query(query, (current_user.id,))
+
+    if rows:
+        subscribeResult = rows[0] 
+        session['isSubscribe'] = subscribeResult
 
     return render_template("subscribe/paymentComplete.html")

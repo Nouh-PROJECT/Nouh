@@ -359,7 +359,7 @@
                     <p class="menu">시험 보기</p>
                 </a>
                 
-                {% if session["subscribe"] == 1 %}
+                {% if session['isSubscribe'].get('subscribe') %}
                 <a class="card" href="{{ url_for('lecture.lecture_list') }}">
                     <div class="icon"><i class="fa-solid fa-video"></i></div>
                     <p class="menu">강의 보기</p>
@@ -409,13 +409,19 @@
                 </div>
         
                 <!-- 구매하기 버튼 -->
+                {% if session['isSubscribe'].get('subscribe') %}
+                <a onclick="alert('이미 구독중입니다')" class="purchase-button">구매하기</a>
+                {% else %}
                 <a href="{{ url_for('subscribe.payment') }}" class="purchase-button">구매하기</a>
+                {% endif %}
             </div>
         </div>
 
     </section>
 
 </main>
+
+{% if session['isSubscribe'].get('subscribe') %}
 <a href="{{ url_for('chatbot.index') }}" target="_blank" class="chatbot__redirect-button">
     <picture>
       <img
@@ -476,6 +482,70 @@
         }
     }
 </script>
+<!-- 미구독자 -->
+{% else %}
+<a onclick="alert('구독자만 이용가능합니다')" target="_blank" class="chatbot__redirect-button">
+    <picture>
+      <img
+          src="static/img/chatbot_icon.png"
+        alt="챗봇 아이콘"
+        class="chatbot__icon"
+      />
+    </picture>
+</a>
+<div id="pagination-container" class=""></div>
+<script>
+    window.onload = () => {
+        const pageContainer = document.getElementById('page-container');
+        const paginationContainer = document.getElementById('pagination-container');
+        const pages = pageContainer.children;
+
+        let currentPage = 0;
+        let lastPage = pages.length;
+        let movingPage = false;
+        let pageButtons = [];
+
+        const gotoPage = (index) => {
+            if ((index != currentPage) && !movingPage) {
+                movingPage = true;
+                setTimeout(() => movingPage = false, 500);
+                
+                pageButtons[currentPage].classList.remove('active');
+                currentPage = index;
+                pageButtons[currentPage].classList.add('active');
+
+                for (let i = 0; i < lastPage; ++i) {
+                    pages[i].style.bottom = ((currentPage - i) * 100) + '%';
+                }
+            }
+        }
+
+        const prevPage = () => ((currentPage > 0) ? gotoPage(currentPage - 1) : false);
+        const nextPage = () => ((currentPage < (lastPage - 1)) ? gotoPage(currentPage + 1) : false);
+        
+        pageContainer.ontouchstart = (e) => touchstart = e.touches[0].screenY;
+        pageContainer.ontouchend = (e) => ((touchstart < e.changedTouches[0].screenY) ? prevPage() : nextPage());
+        pageContainer.onmousewheel = pageContainer.onwheel = (e) => ((e.deltaY < 0) ? prevPage() : nextPage());
+        
+        for (let i = 0; i < lastPage; ++i) {
+            pages[i].style.bottom = -(i * 100) + '%';
+            
+            if (paginationContainer) {
+                let button = document.createElement('li');
+                button.dataset.page_num = i;
+                button.addEventListener('click', (e) => gotoPage(parseInt(e.target.dataset.page_num)));
+                pageButtons.push(button);
+                paginationContainer.appendChild(button);
+            }
+        }
+
+        if (paginationContainer) {
+            pageButtons[0].classList.add('active');
+        }
+    }
+</script>
+{% endif %}
+
 {% else %}
 <main id="page-container" class="">
     <section id="page1" class="page">
