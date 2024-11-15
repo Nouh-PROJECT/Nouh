@@ -77,13 +77,13 @@
     <div class="header">결제</div>
     <div class="section">
         <h2>주문자정보</h2>
-        <p>이름 : {{ user["name"] }}</p>
-        <p>이메일 : {{ user["email"] }}</p>
-        <p>연락처 : {{ user["phone"] }}</p>
+        <p>이름 : {{ user[0]['name'] }}</p>
+        <p>이메일 : {{ user[0]['email'] }}</p>
+        <p>연락처 : {{ user[0]['phone'] }}</p>
     </div>
     <div class="section">
         <h2>결제정보</h2>
-        <p>결제 방법 : SSRCPay</p>
+        <p>결제 방법 : NouhPay</p>
         <p>최종 결제 금액 : 20,000원 / 월</p>
     </div>
     <a class="pay-button" onclick="showPopup()">결제</a>

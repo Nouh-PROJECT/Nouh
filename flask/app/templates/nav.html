@@ -3,7 +3,6 @@
         <a id="" class="logo" href="/">SSR21</a>
         <div  id="" class="menu-area">
             {% if current_user.is_authenticated %}
-            <a id="" class="" href="{{ url_for('auth.mypage') }}">{{ session['isSubscribe'].get('subscribe') }} 님</a>
                 {% if session['isSubscribe'].get('subscribe') %}
                 <a id="" class="">구독중</a>
                 {% else %}
