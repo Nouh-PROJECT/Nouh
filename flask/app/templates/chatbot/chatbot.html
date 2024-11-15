@@ -156,6 +156,22 @@
             formsubmitted();
         });
 
+        const textarea = document.getElementById('userinput');
+        
+        function handleSubmit(event) {
+            event.preventDefault(); // 폼 제출 방지 (이벤트 제어)
+            // 폼 제출 관련 작업 추가
+            console.log("폼이 제출되었습니다!");
+        }
+        
+        textarea.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault(); // 엔터 기본 동작 방지
+                document.getElementById('sendbtn').click(); // 버튼 클릭 트리거
+            }
+        });
+
+
         // sending request to python server
         const formsubmitted = async () => {
             let userinput = document.getElementById('userinput').value
