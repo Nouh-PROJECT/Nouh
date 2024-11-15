@@ -191,6 +191,27 @@
             justify-content: center;
         }
     }
+    /* css 수정부분 - chatbot */
+    .chatbot__icon {
+        width: 100px; /* 버튼 안에서 이미지의 크기를 조정 */
+        height: 100px;
+        object-fit: contain;
+        
+    }
+    .chatbot__redirect-button {
+        box-sizing: border-box;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+
+        border: 10px solid royalblue;
+        border-radius: 100%;
+        background: white;
+        color: white;
+        font-weight: bold;
+        box-shadow: 0px 5px 10px gray;
+        cursor: pointer;
+    }
 
     /* page3 */
     #page3 > .row {
@@ -350,7 +371,7 @@
                 </a>
                 {% endif %}
 
-                <a class="card" href="{{ url_for('board.post_list') }}">
+                <a class="card" href="{{ url_for('board.board_list') }}">
                     <div class="icon"><i class="fa-regular fa-clipboard"></i></div>
                     <p class="menu">자유게시판</p>
                 </a>
@@ -395,6 +416,15 @@
     </section>
 
 </main>
+<a href="{{ url_for('chatbot.index') }}" target="_blank" class="chatbot__redirect-button">
+    <picture>
+      <img
+          src="static/img/chatbot_icon.png"
+        alt="챗봇 아이콘"
+        class="chatbot__icon"
+      />
+    </picture>
+</a>
 <div id="pagination-container" class=""></div>
 <script>
     window.onload = () => {

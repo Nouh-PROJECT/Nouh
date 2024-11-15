@@ -4,6 +4,7 @@ from flask_session import Session
 from .models import User
 from .views import register_routes
 from .utils.db import *
+from flask_cors import CORS
 
 
 def create_app():
@@ -32,6 +33,8 @@ def create_app():
     @login_manager.unauthorized_handler
     def unauthorized():
         return redirect("/")
+
+    CORS(app)
 
     app.teardown_appcontext(close_db)
 

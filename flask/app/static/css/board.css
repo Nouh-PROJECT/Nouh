@@ -3,6 +3,7 @@
     display: flex;
     justify-content: center;
     padding: 120px 0 125px 0;
+    background-color: #F0F0F0; /* 배경색을 밝은 회색으로 */
 }
 
 /* Form Template */
@@ -11,11 +12,11 @@
     flex-direction: column;
     width: 800px;
     box-sizing: border-box;
-    padding: 50px;
+    padding: 40px;
     border: 2px solid #424D83; /* 테두리 색을 어두운 파란색으로 */
     border-radius: 10px;
     background-color: #FFF; /* 배경색을 흰색으로 */
-    height: 700px;
+    height: 100%;
 }
 
 .form-template .form-title {

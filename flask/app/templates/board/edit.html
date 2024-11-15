@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link href="{{ url_for('static', filename='css/board.css') }}" rel="stylesheet" />
+
+{% endblock %}
+
+{% block title %}게시글 작성{% endblock %}
+
+{% block content %}
+{% include "nav.html" %}
+
+<div class="form-wrapper">
+    <form class="form-template quiz-add" method="post">
+        <h1 class="form-title">게시글 수정</h1>
+    
+        <hr>
+    
+        <div class="form-content">
+    
+            <div class="form-row row-1">
+                <div class="form-column header">제목</div>
+                <input type="text" class="form-control" id="title" name="title" value="{{board.title}}" required>
+            </div>
+    
+            <div class="form-row row-2">
+                <div class="form-column header">내용</div>
+                <textarea class="form-control" id="content" name="content" rows="15" required>{{ board.content }}</textarea>
+            </div>
+            <div class="button-area">
+                <label for="file">파일 업로드</label>
+                <input type="file" class="form-control" id="file" name="file">
+                <img id="file-preview" class="file-preview" src="" alt="" style="display: none;">
+            </div>
+        </div>
+    
+    
+        <div class="button-area">
+            <button class="button" type="submit">수정</button>
+            <a class="button" href="/board/list">메인으로</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
