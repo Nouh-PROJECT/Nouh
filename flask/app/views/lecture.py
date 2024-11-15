@@ -131,6 +131,17 @@ def lecture_detail(id):
 @bp.route('/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
 def lecture_edit(id):
+    subjects = [
+        {"id": 1, "name": "인프라 활용을 위한 파이썬"},
+        {"id": 2, "name": "애플리케이션 보안"},
+        {"id": 3, "name": "시스템/네트워크 보안 기술"},
+        {"id": 4, "name": "클라우드 보안 기술"},
+        {"id": 5, "name": "클라우드기반 시스템 운영/구축 실무"},
+        {"id": 6, "name": "클라우드기반 취약점 진단 및 대응 실무"},
+        {"id": 7, "name": "데이터 3법과 개인정보보호"},
+        {"id": 8, "name": "클라우드 보안 컨설팅 실무"}
+    ]
+    
     try:
         with open(json_file_path, 'r', encoding='utf-8') as file:
             lectures = json.load(file)

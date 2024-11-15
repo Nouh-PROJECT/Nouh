@@ -1,0 +1,14 @@
+[
+    {
+        "subject_id": 3,
+        "subject_name": "시스템/네트워크 보안 기술",
+        "lecture_name": "asd",
+        "lec_url": "https://www.youtube.com/watch?v=ueNtKgT1_Io"
+    },
+    {
+        "subject_id": 8,
+        "subject_name": "클라우드 보안 컨설팅 실무",
+        "lecture_name": "심신의 안정",
+        "lec_url": "https://www.youtube.com/watch?v=oaIJNOqY1oQ"
+    }
+]

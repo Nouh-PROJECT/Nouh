@@ -5,6 +5,39 @@
 
 <style>
     body { overflow: auto; }
+
+    .edit-button, .delete-button {
+        width: 40px;
+        height: 25px;
+        background: #6f7275;
+        color: #fff;
+        font-size: 12px;
+        line-height: 20px;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 8px;
+        border-color: #6f7275;
+        font-weight: bold;
+        display: inline-block;
+        cursor: pointer;
+        margin-top: 0px;
+        margin-right: 3px;
+    }
+
+    .edit-button:hover {
+        background-color: #a1a6ac;
+    }
+
+    .delete-button {
+        background: #d30000;
+        border-color: #d30000;
+    }
+
+   
+    .delete-button:hover {
+        background-color: #d65252;
+    }
+
 </style>
 {% endblock %}
 
@@ -41,10 +74,10 @@
                         <div class="form-column actions">
                             {% if current_user.name == 'admin' %}
                                 <form action="{{ url_for('lecture.lecture_edit', id=loop.index0) }}" method="get" style="display:inline;">
-                                    <button class="button" type="submit">수정</button>
+                                    <button class="edit-button" type="submit">수정</button>
                                 </form>
                                 <form action="{{ url_for('lecture.lecture_delete', id=loop.index0) }}" method="post" style="display:inline;">
-                                    <button class="button" type="submit" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
+                                    <button class="delete-button" type="submit" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
                                 </form>
                             {% endif %}
                         </div>

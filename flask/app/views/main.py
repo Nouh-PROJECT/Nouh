@@ -7,5 +7,5 @@ bp = Blueprint('main', __name__)
 
 @bp.route("/", methods=['GET', 'POST'])
 def index():
-    session["subscribe"] = 0
+    session["subscribe"] =1
     return render_template('index.html')
