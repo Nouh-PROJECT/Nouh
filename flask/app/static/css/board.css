@@ -10,13 +10,13 @@
 .form-template {
     display: flex;
     flex-direction: column;
-    width: 800px;
     box-sizing: border-box;
     padding: 40px;
     border: 2px solid #424D83; /* 테두리 색을 어두운 파란색으로 */
     border-radius: 10px;
     background-color: #FFF; /* 배경색을 흰색으로 */
     height: 100%;
+    min-width: 800px;
 }
 
 .form-template .form-title {
@@ -161,14 +161,7 @@
     color: #424D83; /* 텍스트 색을 어두운 파란색으로 */
 }
 
-.form-template.quiz-add .form-row,
-.form-template.quiz-edit .form-row,
-.form-template.quiz-detail .form-row {
-    box-sizing: border-box;
-    border-left: 5px solid #424D83; /* 좌측 선 색을 어두운 파란색으로 */
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-}
+
 
 .form-template.quiz-add .form-column:last-child,
 .form-template.quiz-edit .form-column:last-child,
@@ -265,4 +258,34 @@
 .form-template.quiz-list .form-row.header {
     border-top: 2px solid #424D83; /* 상단 선 색을 어두운 파란색으로 */
     border-bottom: 2px solid #424D83;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+@media print {
+	body {
+		margin: 0 !important;
+	}
+}
+
+.main-container {
+	font-family: 'Lato';
+	width: fit-content;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.ck-content {
+	font-family: 'Lato';
+	line-height: 1.6;
+	word-break: break-word;
+}
+
+.editor-container_classic-editor .editor-container__editor {
+	min-width: 795px;
+	max-width: 795px;
+}
+
+.ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline.ck-blurred {
+    font-size: 10px !important;
 }

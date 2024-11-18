@@ -103,7 +103,7 @@ def board_add():
             query = r"INSERT INTO yfile (b_id, real_file, enc_file) VALUES (%s, %s, %s)"
             execute_query(query, (board_id, real_file, enc_file), True)
 
-        return redirect(url_for('board.board_list'))
+        return jsonify({"status":"S", "message":"게시글 등록 성공"})
 
     return render_template("board/add.html")
 

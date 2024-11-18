@@ -39,10 +39,12 @@
                 </div>
             </div>
             {% endif %}
+            {% autoescape false %}
             <div class="form-row row-5">
                 <div class="form-column header">내용</div>
                 <div class="form-column"><textarea name="board_content" disabled>{{ board.content }}</textarea></div>
             </div>
+            {% endautoescape %}
         </div>
     
         <hr>
