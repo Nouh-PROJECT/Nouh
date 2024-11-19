@@ -19,7 +19,7 @@ def paymentPopup():
 
 @bp.route("/popup/complete", methods=['GET', 'POST'])
 def paymentComplete():
-    execute_query(r"UPDATE users SET subscribe = 1 WHERE id=%s", (current_user.id), True)
+    execute_query(r"UPDATE users SET subscribe = 2 WHERE id=%s", (current_user.id), True)
     query = r"SELECT subscribe FROM users WHERE id=%s"
     rows = execute_query(query, (current_user.id,))
 
