@@ -89,18 +89,33 @@ def update_admin_pw():
 @login_required
 #@admin_required
 def get_boards():
-    # 게시글 ID, 제목, 작성자 이름 조회
-    sql = """
-        SELECT board.id, board.title, users.name AS author
-        FROM board
-        JOIN users ON board.u_id = users.id
-        ORDER BY board.created_at DESC
-    """
-    posts = execute_query(sql)
-    if posts is None:
-        return jsonify({"error": "Failed to fetch posts"}), 500
+    try:
+        # 페이지와 한 페이지당 항목 수를 가져옴
+        page = int(request.args.get('page', 1))
+        per_page = int(request.args.get('per_page', 10))
+        offset = (page - 1) * per_page
 
-    return jsonify(posts), 200
+        # 게시글 ID, 제목, 작성자 이름을 조회하고 페이지에 맞게 제한
+        sql = """
+            SELECT board.id, board.title, users.name AS author
+            FROM board
+            JOIN users ON board.u_id = users.id
+            ORDER BY board.created_at DESC
+            LIMIT %s OFFSET %s
+        """
+        rows = execute_query(sql, (per_page, offset))
+
+        # 총 게시글 수를 구하는 쿼리
+        total_query = "SELECT COUNT(*) as total FROM board"
+        total_result = execute_query(total_query)
+        total_count = total_result[0]['total'] if total_result else 0
+
+        # 게시글 리스트 생성
+        posts = [{'id': row['id'], 'title': row['title'], 'author': row['author']} for row in rows]
+
+        return jsonify({'posts': posts, 'total': total_count, 'page': page, 'per_page': per_page}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 # 게시글 삭제
