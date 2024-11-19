@@ -138,3 +138,19 @@ def delete_account():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@bp.route('/cancel_subscribe', methods=['GET'])
+@login_required
+def cancel_subscribe():
+    try:
+        execute_query(r"UPDATE users SET subscribe = 0 WHERE id=%s", (current_user.id), True)
+        query = r"SELECT subscribe FROM users WHERE id=%s"
+        rows = execute_query(query, (current_user.id,))
+
+        if rows:
+            subscribeResult = rows[0] 
+            session['isSubscribe'] = subscribeResult
+
+        return render_template("index.html")
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
