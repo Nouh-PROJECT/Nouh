@@ -1,44 +1,98 @@
-{% extends "base.html" %}
+{% extends "board_base.html" %}
 
 {% block head %}
 <link href="{{ url_for('static', filename='css/board.css') }}" rel="stylesheet" />
+<link rel="stylesheet" href="./board.css">
+<link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.3.1/ckeditor5.css">
 
+<style>
+    .ck.ck-editor__main p { min-height: 300px; margin-left: 10px; font-size: 16px !important; }
+</style>
 {% endblock %}
 
-{% block title %}게시글 작성{% endblock %}
+{% block title %}게시글 수정{% endblock %}
 
 {% block content %}
 {% include "nav.html" %}
 
 <div class="form-wrapper">
-    <form class="form-template quiz-add" method="post">
+    <form class="form-template quiz-add" method="post" enctype="multipart/form-data" onsubmit="return EditBoard();">
         <h1 class="form-title">게시글 수정</h1>
-    
         <hr>
-    
+
         <div class="form-content">
-    
             <div class="form-row row-1">
                 <div class="form-column header">제목</div>
-                <input type="text" class="form-control" id="title" name="title" value="{{board.title}}" required>
+                <input type="text" class="form-control" id="title" name="title" value="{{ board.title }}" required>
             </div>
-    
+
             <div class="form-row row-2">
-                <div class="form-column header">내용</div>
-                <textarea class="form-control" id="content" name="content" rows="15" required>{{ board.content }}</textarea>
+                <div>
+                    <div class="editor-container editor-container_classic-editor" id="editor-container">
+                        <div class="editor-container__editor">
+                            <textarea name="content" id="editor">
+                                {{ board.content }}
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+                <script type="importmap">
+                {
+                    "imports": {
+                        "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/43.3.1/ckeditor5.js",
+                        "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/43.3.1/"
+                    }
+                }
+                </script>
+                <script type="module" src="../../static/js/editor.js"></script>
             </div>
+
+            <div class="form-row row-4">
+                <div class="form-column header">첨부파일</div>
+                <div class="form-column">
+                    {% if board.real_file %}
+                        <a href="{{ url_for('board.download_file', enc_file=board.enc_file) }}" class="btn btn-primary">
+                            {{ board.real_file }}
+                        </a>
+                    {% else %}
+                        <p>첨부파일이 없습니다.</p>
+                    {% endif %}
+                </div>
+            </div>
+
             <div class="button-area">
-                <label for="file">파일 업로드</label>
+                <label for="file"></label>
                 <input type="file" class="form-control" id="file" name="file">
-                <img id="file-preview" class="file-preview" src="" alt="" style="display: none;">
             </div>
         </div>
-    
-    
+        <hr>
+
         <div class="button-area">
             <button class="button" type="submit">수정</button>
             <a class="button" href="/board/list">메인으로</a>
         </div>
     </form>
 </div>
+
+<script>
+    function EditBoard() {
+        const formData = new FormData();
+        formData.append("title", document.querySelector("input[name=title]").value);
+        formData.append("content", document.querySelector(".ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline").innerHTML);
+        formData.append("file", document.querySelector("#file").files[0]);
+
+        fetch(window.location.href, {method: "POST", body: formData})
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            if (data.status === "S") {
+                location.href = window.location.href;
+            }
+        })
+        .catch(error => {console.log("ERROR: ", error)});
+        
+        return false;
+    }
+</script>
+
 {% endblock %}

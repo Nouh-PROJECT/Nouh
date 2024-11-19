@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "board_base.html" %}
 
 {% block head %}
 <link href="{{ url_for('static', filename='css/board.css') }}" rel="stylesheet" />
@@ -29,12 +29,22 @@
                 <div class="form-column header">날짜</div>
                 <div class="form-column"><input type="text" name="board_created_at" value="{{ board.created_at }}" disabled></div>
             </div>
+            {% if board.real_file %}
             <div class="form-row row-4">
-                <div class="form-column header">내용</div>
-                <div class="form-column"><textarea name="board_content" disabled>{{ board.content }}</textarea></div>
+                <div class="form-column header">첨부 파일</div>
+                <div class="form-column">
+                    <a class="btn btn-primary" href="{{ url_for('board.download_file', enc_file=board.enc_file) }}">
+                        {{ board.real_file }}
+                    </a>
+                </div>
             </div>
-    
-    
+            {% endif %}
+            {% autoescape false %}
+            <div class="form-row row-5">
+                <div class="form-column header">내용</div>
+                <div class="form-column"><div name="board_content" disabled>{{ board.content }}</div></div>
+            </div>
+            {% endautoescape %}
         </div>
     
         <hr>
