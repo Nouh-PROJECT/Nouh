@@ -180,13 +180,14 @@
                         </thead>
                         <tbody>
                 `;
-    
+                            
                 // 게시글 데이터를 테이블에 추가
                 data.posts.forEach(post => {
+                    const postUrl = `/admin/board/view/${post.id}`;
                     contentHtml += `
                         <tr>
                             <td>${post.id}</td>
-                            <td>${post.title}</td>
+                            <td><a href="${postUrl}" class="board-title-link">${post.title}</a></td>
                             <td>${post.author}</td>
                             <td>
                                 <button class="delete-button" onclick="deletePost(${post.id})">

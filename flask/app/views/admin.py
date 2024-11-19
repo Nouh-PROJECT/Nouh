@@ -129,3 +129,26 @@ def delete_board_post(post_id):
         return '게시글 삭제가 완료되었습니다.', 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+#게시글 조회
+@bp.route('/board/view/<int:post_id>', methods=['GET'])
+def render_board_post(post_id):
+    try:
+        query = r"""
+            SELECT 
+                b.id, (SELECT name FROM users WHERE id = b.u_id) AS uname, 
+                b.title, b.content, b.created_at, 
+                y.real_file, y.enc_file
+            FROM board b 
+            LEFT JOIN yfile y ON b.id = y.b_id
+            WHERE b.id=%s
+        """
+        rows = execute_query(query, (post_id,))
+        board = rows[0] if rows else []
+
+        if not board:
+            return redirect("/admin/")
+
+        return render_template('/admin/board_view.html', board=board)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
