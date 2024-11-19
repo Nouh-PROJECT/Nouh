@@ -71,6 +71,8 @@
                     <button class="button" type="button" onclick="ConfirmDeleteAccount()">회원 탈퇴</button>
                     {% if session['isSubscribe'].get('subscribe') == 1 %}
                     <button class="button" type="button" onclick="cancelSubscribe()">구독 취소</button>
+                    {% elif session['isSubscribe'].get('subscribe') == 2 %}
+                    <button class="button" type="button" onclick="cancelSubscribe()">신청 취소</button>
                     {% endif %}
                 </div>
                 <div class="column column-2">
@@ -131,7 +133,7 @@
     }
 
     function cancelSubscribe(){
-        if(!confirm("정말로 구독을 취소하시겠습니까?")) {
+        if(!confirm("정말로 취소하시겠습니까?")) {
             return;
         } else {
             window.location.href = "{{ url_for('auth.cancel_subscribe') }}";
