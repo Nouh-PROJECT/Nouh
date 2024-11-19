@@ -64,6 +64,58 @@
     .pay-button:hover {
         background-color: #1a326b;
     }
+
+    .title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .payment-methods {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      font-size: 15px;
+    }
+    .payment-methods label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 15px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    .bank-info {
+      margin-top: 10px;
+    }
+    .bank-info button {
+      padding: 5px 10px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .bank-info button:hover {
+      background-color: #0056b3;
+    }
+    .receipt {
+      margin-top: 20px;
+    }
+    .receipt label {
+      margin-right: 10px;
+    }
 </style>
 {% endblock %}
 
@@ -81,17 +133,55 @@
         <p>이메일 : {{ user[0]['email'] }}</p>
         <p>연락처 : {{ user[0]['phone'] }}</p>
     </div>
+    <hr>
     <div class="section">
         <h2>결제정보</h2>
-        <p>결제 방법 : NouhPay</p>
+        <p>결제 방법 : 무통장입금</p>
         <p>최종 결제 금액 : 20,000원 / 월</p>
     </div>
-    <a class="pay-button" onclick="showPopup()">결제</a>
+    <hr>
+    <br>
+    <br>
+    <div class="section">
+        <h2>결제수단</h2>
+        <div class="payment-methods">
+          <label><input type="radio" name="payment" value="card" disabled> 카드 결제</label>
+          <label><input type="radio" name="payment" value="realtime" disabled> 실시간 계좌이체</label>
+          <label><input type="radio" name="payment" value="mobile" disabled> 휴대폰 결제</label>
+          <label><input type="radio" name="payment" value="deposit" checked> 무통장 입금</label>
+          <label><input type="radio" name="payment" value="virtual" disabled> 가상계좌</label>
+        </div>
+    
+        <div class="form-group">
+          <label for="payer-name">입금자명</label>
+          <input type="text" id="payer-name" placeholder="홍길동">
+        </div>
+        <div class="form-group">
+          <label for="bank">입금은행</label>
+          <select id="bank">
+            <option value="shinhan">신한은행: 1401234567 Nouh</option>
+            <option value="kb">국민은행: 123456789012 Nouh</option>
+            <option value="woori">우리은행: 987654321012 Nouh</option>
+          </select>
+        </div>
+      </div>
+      <a class="pay-button" onclick="validateInput()">다음</a>
 </div>
 
 <script>
-    function showPopup(){
+    function validateInput() {
+        const payerName = document.getElementById("payer-name").value.trim();
+
+        if (!payerName) {
+            alert("입금자명을 입력해주세요.");
+            return;
+        }
+        showPopup();
+    }
+
+    function showPopup() {
         window.open("{{url_for('subscribe.paymentPopup')}}", "popup", "width=700, height=400, left=100, top=50");
     }
 </script>
+
 {% endblock %}
