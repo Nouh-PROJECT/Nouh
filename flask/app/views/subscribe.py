@@ -24,7 +24,7 @@ def paymentComplete():
     rows = execute_query(query, (current_user.id,))
 
     if rows:
-        subscribeResult = rows[0] 
+        subscribeResult = rows[0]
         session['isSubscribe'] = subscribeResult
 
     return render_template("subscribe/paymentComplete.html")

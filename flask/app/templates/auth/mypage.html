@@ -69,7 +69,7 @@
             <div class="row row-1">
                 <div class="column column-1">
                     <button class="button" type="button" onclick="ConfirmDeleteAccount()">회원 탈퇴</button>
-                    {% if session['isSubscribe'].get('subscribe') %}
+                    {% if session['isSubscribe'].get('subscribe') == 1 %}
                     <button class="button" type="button" onclick="cancelSubscribe()">구독 취소</button>
                     {% endif %}
                 </div>

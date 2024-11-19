@@ -4,7 +4,7 @@
         <div  id="" class="menu-area">
             {% if current_user.is_authenticated %}
             <a id="" class="" href="{{ url_for('auth.mypage') }}">{{ current_user.name }}님</a>
-                {% if session['isSubscribe'].get('subscribe') %}
+                {% if session['isSubscribe'].get('subscribe') == 1 %}
                 <a id="isSubscribe" class="">&nbsp;구독자</a>
                 {% else %}
                 <a id="isSubscribe" class="">&nbsp;미구독자</a>
