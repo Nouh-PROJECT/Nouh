@@ -89,6 +89,7 @@
       display: block;
       font-weight: bold;
       margin-bottom: 5px;
+      font-size: 20px;
     }
     .form-group input, .form-group select {
       width: 100%;
@@ -154,7 +155,7 @@
     
         <div class="form-group">
           <label for="payer-name">입금자명</label>
-          <input type="text" id="payer-name" placeholder="홍길동">
+          <input type="text" id="payer-name" value="{{ user[0]['name'] }}" disabled>
         </div>
         <div class="form-group">
           <label for="bank">입금은행</label>

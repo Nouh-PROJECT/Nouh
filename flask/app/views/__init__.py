@@ -11,7 +11,7 @@ def register_routes(app):
     from .lecture import bp as lecture_bp
     from .board import bp as board_bp
     from .subscribe import bp as subscribe_bp
-    
+    from .admin import bp as admin_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
@@ -22,4 +22,4 @@ def register_routes(app):
     app.register_blueprint(quiz_bp, url_prefix='/quiz')
     app.register_blueprint(exam_bp, url_prefix='/exam')
     app.register_blueprint(subscribe_bp, url_prefix='/subscribe')
-    
+    app.register_blueprint(admin_bp, url_prefix='/admin')

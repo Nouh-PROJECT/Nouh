@@ -1,0 +1,270 @@
+{% extends "admin_base.html" %}
+
+{% block head %}
+<style>
+    .admin-page, .admin-page * { box-sizing: border-box; }
+    .admin-page { display: flex; flex-direction: column; align-items: center; font-family: Arial, sans-serif; color: #424d83; padding: 30px; border: 2px solid #424d83; border-radius: 10px; width: 100%; max-width: 1400px; margin: 0 auto; }
+    .header { text-align: center; margin-bottom: 20px; width: 100%; }
+    .header h2 { font-size: 36px; margin-bottom: 10px; }
+    .header hr { border: none; height: 2px; background-color: #424d83; width: 100%; }
+    .main-content { display: flex; width: 100%; }
+    .menu { width: 200px; border-right: 2px solid #424d83; padding: 10px; }
+    .menu .menu-item { cursor: pointer; margin-bottom: 10px; padding: 8px; border-radius: 5px; font-size: 16px; }
+    .menu .menu-item:hover, .menu .menu-item.active { background-color: #A1B0FC; color: #FFF; }
+    .content { flex-grow: 1; padding: 20px; }
+    .content h2 { font-size: 24px; margin-bottom: 15px; }
+    .content hr { border: none; height: 2px; background-color: #424d83; margin-bottom: 20px; width: 100%; }
+    .member-table, .board-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    .member-table th, .member-table td, .board-table th, .board-table td { border: 1px solid #424d83; padding: 10px; text-align: center; }
+    .member-table th, .board-table th { background-color: #A1B0FC; color: #FFF; }
+    .approve-button { background-color: #424d83; color: #FFF; border: none; padding: 5px 10px; cursor: pointer; border-radius: 5px; }
+    .approve-button:hover { background-color: #A1B0FC; }
+    #pagination-controls { margin-top: 20px; }
+    #pagination-controls button { margin: 2px; padding: 5px 10px; }
+    .form-group { margin-bottom: 15px; }
+    label { font-weight: bold; }
+    input[type="text"], input[type="password"] { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; }
+    button { background-color: #424d83; color: #FFF; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background-color: #A1B0FC; }
+</style>
+{% endblock %}
+{% block title %}관리자 페이지{% endblock %}
+
+{% block content %}
+{% include "nav.html" %}
+<div class="admin-page">
+    <div class="header">
+        <h2>관리자 페이지</h2>
+        <hr>
+    </div>
+    <div class="main-content">
+        <div class="menu">
+            <div class="menu-item active" onclick="loadContent('dashboard')">관리자 홈</div>
+            <div class="menu-item" onclick="loadContent('member-management')">멤버 관리</div>
+            <div class="menu-item" onclick="loadContent('board-management')">게시판 관리</div>
+        </div>
+        <div class="content" id="content-area">
+            <!-- 기본값으로 관리자 홈을 표시 -->
+            <h2>관리자 홈</h2>
+            <hr>
+            <form id="admin-pw-form">
+                <div class="form-group">
+                    <label for="admin-id">ID</label>
+                    <input type="text" id="admin-id" name="admin-id" value="admin" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="admin-new-pw">새 비밀번호</label>
+                    <input type="password" id="admin-new-pw" name="admin-new-pw" placeholder="새 비밀번호 입력" required>
+                </div>
+                <button type="button" onclick="updateAdminPw()">수정</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function loadContent(menu) {
+        const contentArea = document.getElementById('content-area');
+        if (menu === 'dashboard') {
+            contentArea.innerHTML = `
+                <h2>관리자 홈</h2>
+                <hr>
+                <form id="admin-pw-form">
+                    <div class="form-group">
+                        <label for="admin-id">ID</label>
+                        <input type="text" id="admin-id" name="admin-id" value="admin" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="admin-new-pw">새 비밀번호</label>
+                        <input type="password" id="admin-new-pw" name="admin-new-pw" placeholder="새 비밀번호 입력" required>
+                    </div>
+                    <button type="button" onclick="updateAdminPw()">수정</button>
+                </form>
+            `;
+        } else if (menu === 'member-management') {
+            loadMembers();  // 멤버 관리 페이지를 로드
+        } else if (menu === 'board-management') {
+            contentArea.innerHTML = `
+                <h2>게시판 관리</h2>
+                <hr>
+                <table class="board-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>제목</th>
+                            <th>작성자</th>
+                            <th>관리</th>
+                        </tr>
+                    </thead>
+                    <tbody id="board-table-body"></tbody>
+                </table>
+            `;
+        
+            // 게시판 데이터를 불러오기 위한 API 호출
+            fetch('/admin/board/get_boards')
+                .then(response => response.json())
+                .then(posts => {
+                    const tableBody = document.getElementById('board-table-body');
+                    tableBody.innerHTML = posts.map(post => `
+                        <tr>
+                            <td>${post.id}</td>
+                            <td>${post.title}</td>
+                            <td>${post.author}</td>
+                            <td>
+                                <button onclick="deletePost(${post.id})" class="delete-button">
+                                    삭제
+                                </button>
+                            </td>
+                        </tr>
+                    `).join('');
+                })
+                .catch(error => {
+                    console.error('Error fetching board data:', error);
+                    alert('게시판 데이터를 불러오는 데 실패했습니다.');
+                });
+        } else {
+            contentArea.innerHTML = `
+                <h2>기타 기능</h2>
+                <hr>
+                <p>이 기능은 아직 구현되지 않았습니다.</p>
+            `;
+        }
+
+        document.querySelectorAll('.menu .menu-item').forEach(item => item.classList.remove('active'));
+        document.querySelector(`.menu .menu-item[onclick="loadContent('${menu}')"]`).classList.add('active');
+    }
+
+    function loadMembers(page = 1) {
+        const perPage = 10;
+        fetch(`/admin/member/get_members?page=${page}&per_page=${perPage}`)
+            .then(response => response.json())
+            .then(data => {
+                const contentArea = document.getElementById('content-area');
+                let contentHtml = `
+                    <h2>멤버 관리</h2>
+                    <hr>
+                    <table class="member-table">
+                        <thead>
+                            <tr>
+                                <th>이름</th>
+                                <th>ID</th>
+                                <th>PW</th>
+                                <th>Email</th>
+                                <th>구독 상태</th>
+                                <th>액션</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                data.members.forEach(user => {
+                    let status = '';
+                    let actionButton = '-';
+
+                    if (user.subscribe === 0) {
+                        status = '미구독';
+                    } else if (user.subscribe === 2) {
+                        status = '승인대기';
+                        actionButton = `<button class="approve-button" onclick="approveMember(this, ${user.id})">승인</button>`;
+                    } else if (user.subscribe === 1) {
+                        status = '구독';
+                    }
+
+                    contentHtml += `
+                        <tr>
+                            <td>${user.name}</td>
+                            <td>${user.login_id}</td>
+                            <td>${user.login_pw}</td>
+                            <td>${user.email}</td>
+                            <td>${status}</td>
+                            <td>${actionButton}</td>
+                        </tr>
+                    `;
+                });
+
+                contentHtml += `
+                        </tbody>
+                    </table>
+                    <div id="pagination-controls"></div>
+                `;
+                contentArea.innerHTML = contentHtml;
+
+                createPaginationControls(data.total, data.page, data.per_page);
+            })
+            .catch(error => {
+                console.error('Error fetching members:', error);
+                alert('멤버 데이터를 불러오는 데 실패했습니다.');
+            });
+    }
+
+    function createPaginationControls(total, currentPage, perPage) {
+        const totalPages = Math.ceil(total / perPage);
+        const paginationControls = document.getElementById('pagination-controls');
+        paginationControls.innerHTML = '';
+
+        for (let i = 1; i <= totalPages; i++) {
+            paginationControls.innerHTML += `
+                <button onclick="loadMembers(${i})" ${i === currentPage ? 'disabled' : ''}>
+                    ${i}
+                </button>
+            `;
+        }
+    }
+
+    function approveMember(button, userId) {
+        fetch(`/admin/member/approve_subscription/${userId}`, { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert(data.message);
+                    loadMembers();  // 현재 페이지 새로고침
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error approving member:', error);
+                alert('멤버 승인 중 오류가 발생했습니다.');
+            });
+    }
+
+    function updateAdminPw() {
+        const formData = new FormData(document.getElementById('admin-pw-form'));
+        fetch('/admin/update_admin_pw', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert(data.message);
+                location.reload();
+            } else {
+                alert(data.message || '비밀번호 업데이트 중 오류가 발생했습니다.');
+            }
+        })
+        .catch(error => {
+            console.error('Error updating password:', error);
+            alert('비밀번호 업데이트 중 오류가 발생했습니다.');
+        });
+    }
+
+    function deletePost(postId) {
+        if (confirm('정말로 이 게시글을 삭제하시겠습니까?')) {
+            fetch(`/admin/board/delete/${postId}`, { method: 'DELETE' })
+                .then(response => {
+                    if (response.ok) {
+                        alert('게시글이 삭제되었습니다.');
+                        loadContent('board-management'); // 삭제 후 게시판 목록 새로고침
+                    } else {
+                        alert('게시글 삭제에 실패했습니다.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting post:', error);
+                    alert('게시글 삭제 중 오류가 발생했습니다.');
+                });
+        }
+    }
+</script>
+{% endblock %}
