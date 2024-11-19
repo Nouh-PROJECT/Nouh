@@ -176,6 +176,8 @@ def board_edit(idx: int):
                 file_path = os.path.join(os.getcwd(), "app", "uploads", enc_file)
                 if os.path.isfile(file_path):
                     os.remove(file_path)
+                query = r"DELETE FROM yfile WHERE b_id=%s"
+                execute_query(query, (idx,), True)
 
             # 새로운 파일 처리
             real_file = file.filename
@@ -192,6 +194,8 @@ def board_edit(idx: int):
                 VALUES (%s, %s, %s)
             """
             execute_query(query, (idx, real_file, enc_file), True)
+
+        return jsonify({"status":"S", "message":"게시글 수정 완료"})
 
     # 게시글 정보 및 첨부파일 정보 가져오기
     query = r"""

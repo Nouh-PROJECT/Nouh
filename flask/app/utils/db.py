@@ -25,7 +25,7 @@ def close_db(e=None):
         db.close()
 
 
-def execute_query(sql, params=None, commit=False):
+def execute_query(sql, params=None, commit=False, return_last_id=False):
     db = get_db()
     if not db:
         return None
@@ -34,6 +34,8 @@ def execute_query(sql, params=None, commit=False):
             cursor.execute(sql, params)
             if commit:
                 db.commit()
+                if return_last_id:
+                    return cursor.lastrowid  # 마지막으로 삽입된 ID 반환
             return cursor.fetchall() if not commit else None
         except Exception as e:
             print(f"Query execution error: {e}")

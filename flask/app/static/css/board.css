@@ -184,6 +184,19 @@
     background-color: #FFF; /* 배경을 흰색으로 */
 }
 
+.form-template.quiz-detail p{
+    width: 100%;
+    min-height: 300px;
+    line-height: 2;
+    box-sizing: border-box;
+    padding-left: 5px;
+    border: 2px solid #424D83; /* 입력창 테두리 색을 어두운 파란색으로 */
+    border-radius: 2px;
+    font-size: 18px;
+    color: #424D83; /* 입력 텍스트 색을 어두운 파란색으로 */
+    background-color: #FFF; /* 배경을 흰색으로 */
+}
+
 .form-template.quiz-edit a,
 .form-template.quiz-add a,
 .form-template.quiz-detail a {
