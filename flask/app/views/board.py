@@ -46,12 +46,12 @@ def board_list(): #완료
     param = []
 
     if keyword:
-        query += r" WHERE title LIKE %s"
-        count_query += r" WHERE title LIKE %s"
-        param = [f"%{keyword}%"]
+        # SQL 인젝션 취약점: 사용자 입력을 직접 쿼리에 삽입
+        query += f" WHERE title LIKE '%{keyword}%'"
+        count_query += f" WHERE title LIKE '%{keyword}%'"
 
     # 페이지 계산
-    rows = execute_query(count_query, tuple(param))
+    rows = execute_query(count_query)
     total_board = rows[0]['num'] if rows else 0
     total_pages = (total_board + per_page - 1) // per_page
 
@@ -59,10 +59,10 @@ def board_list(): #완료
     end_page = min(page + 2, total_pages)
 
     # 페이지 데이터 불러오기
-    query += r" order by id desc LIMIT %s OFFSET %s "
-    param.append(per_page)
-    param.append(offset)
-    boards = execute_query(query, tuple(param))
+    query += f" order by id desc LIMIT {per_page} OFFSET {offset}"
+    # param.append(per_page)
+    # param.append(offset)
+    boards = execute_query(query)
     boards = boards if boards else []
 
     if (end_page - start_page) < 4:
@@ -73,6 +73,7 @@ def board_list(): #완료
 
     return render_template("board/list.html", boards=boards, type=display_type, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page)
 
+                                                     
 # 일부 완
 # 만약 첨부파일이 있다면, 첨부파일도 올리기
 @bp.route("/add", methods=['GET', 'POST'])
