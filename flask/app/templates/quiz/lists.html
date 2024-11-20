@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block head %}
+<style>
+    #quiz-lists > .content { width: 800px; }
+    #quiz-lists > .content > .table > .row > .cell:nth-child(1) { flex-shrink: 0; width: 200px; text-align: center; }
+    #quiz-lists > .content > .table > .row > .cell:nth-child(2) { flex: 1; padding: 0 10px; }
+    #quiz-lists > .content > .table > .row > .cell:nth-child(2) > a:hover { font-weight: bold; }
+    #quiz-lists > .button-area { justify-content: end; }
+    #quiz-lists > .content > .pagination { display: flex; justify-content: center; margin-top: 10px; }
+    #quiz-lists > .content > .pagination > * { margin-right: 5px; }
+    #quiz-lists > .content > .pagination > :last-child { margin-right: 0; }
+</style>
+{% endblock %}
+
+{% block title %}문제 목록{% endblock %}
+
+{% block content %}
+{% include "nav.html" %}
+
+
+<main id="form-template">
+    <div id="quiz-lists" class="frame">
+        <div class="title">문제 목록</div>
+
+        <div class="content">
+            <form class="search-area">
+                <select name="searchBy">
+                    <option value="0">제목+내용</option>
+                    <option value="1">제목</option>
+                    <option value="2">내용</option>
+                </select>
+
+                <input type="search" name="keyword" />
+                <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+
+            <div class="table">
+                <div class="row head">
+                    <div class="cell">과목</div>
+                    <div class="cell">문제</div>
+                </div>
+                {% if quizzes | length == 0 %}
+                <div class="row">
+                    <div class="cell" style="width: 100%;">데이터가 없습니다.</div>
+                </div>
+                {% else %}
+                {% for quiz in quizzes %}
+                <div class="row">
+                    <div class="cell">{{ quiz.s }}</div>
+                    <div class="cell"><a href="{{ url_for('quiz.quiz_view', idx=quiz.id) }}">{{ quiz.q }}</a></div>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="pagination">
+                {% for p in range(start_page, end_page + 1) %}
+                {% if p == page %}
+                <strong>{{ p }}</strong>
+                {% else %}
+                <a href="{{ url_for('quiz.quiz_lists', page=p) }}">{{ p }}</a>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="button-area">
+            <button type="button" onclick=location.href="{{ url_for('quiz.quiz_create') }}">추가</button>
+        </div>
+    </div>
+</main>
+
+{% endblock %}

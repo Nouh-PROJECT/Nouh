@@ -1,0 +1,28 @@
+<div class="bg-nav">
+    <nav class="top-nav">
+        <section>
+            <button type="button" class="btn-menu" onclick="" style="display: none;"><i class="fa-solid fa-bars"></i></button>
+            <div class="menu">
+                <a href="/" class="item">Home</a>
+                <a href="#" class="item">Lecture</a>
+                <a href="#" class="item">Exam</a>
+                <a href="{{ url_for('quiz.quiz_lists') }}" class="item">Quiz</a>
+                <a href="{{ url_for('board.board_lists') }}" class="item">Board</a>
+            </div>
+        </section>
+    
+        <section>
+            {% if current_user.is_authenticated %}
+            <a href="{{ url_for('member.mypage') }}">{{ current_user.name }} 님</a>
+            <div style="width: 2px; height: 20px; margin: 0 15px; background-color: #FFF"></div>
+            <a onclick="MemberLogout();"><i class="fa-solid fa-right-from-bracket fa-lg"></i>Logout</a>
+            {% else %}
+            <a onclick="ShowLoginForm();"><i class="fa-solid fa-right-to-bracket fa-lg"></i>Login</a>
+            {% endif %}
+        </section>
+    </nav>
+</div>
+
+{% include "member/login.html" %}
+
+{% include "member/register.html" %}

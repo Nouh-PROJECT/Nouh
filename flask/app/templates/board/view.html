@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block title %}게시글{% endblock %}
+
+{% block content %}
+{% include "nav.html" %}
+
+<style>
+    #board-cvm > .content > div { display: flex; align-items: center; margin-bottom: 10px; border-left: 5px solid #424D83; border-top-left-radius: 5px; border-bottom-left-radius: 5px; }
+    #board-cvm > .content > div > * { padding: 10px; font-size: 12px; }
+    #board-cvm > .content > div > :last-child { width: 100%; border-radius: 5px; background-color: #EEE; }
+    #board-cvm > .button-area { justify-content: end; }
+    #board-cvm > .content > div > :nth-child(1) { flex-shrink: 0; width: 100px; font-weight: bold; color: #424D83; text-align: center; }
+    #board-cvm > .content > :last-child > :last-child { min-height: 300px; }
+        
+    #board-cvm > .button-area { justify-content: center; position: relative; min-height: 35px; }
+    #board-cvm > .button-area > button { margin-right: 10px; }
+    #board-cvm > .button-area > :last-child { position:absolute; right: 0; margin-right: 0; }
+    #board-cvm > .button-area > .btn-delete:hover { background-color: #F00 !important;}
+</style>
+
+<main id="form-template">
+    <form id="board-cvm" class="frame" onsubmit="return PostWrite();">
+        <div class="title">게시글</div>
+
+        <div class="content">
+            <div>
+                <div>제목</div>
+                <p>{{ post.title }}</p>
+            </div>
+
+            <div>
+                <div>작성자</div>
+                <p>{{ post.writer }}</p>
+            </div>
+
+            <div>
+                <div>날짜</div>
+                <p>{{ post.created_at }}</p>
+            </div>
+
+            <div>
+                <div>첨부 파일</div>
+                {% if post.old_filename %}
+                <a href="#">{{ post.old_filename }}</a>
+                {% else %}
+                <p>첨부파일 없음</p>
+                {% endif %}
+            </div>
+
+            <div>
+                <div>내용</div>
+                {% autoescape false %}
+                <div>{{ post.content }}</div>
+                {% endautoescape %}
+            </div>
+        </div>
+
+        <div class="button-area">
+            {% if current_user.is_authenticated and post.u_id == current_user.id %}
+            <button type="button" onclick=location.href="{{ url_for('board.board_modify', idx=post.id) }}">수정</button>
+            <button type="button" class="btn-delete" onclick="PostDelete();">삭제</button>
+            {% endif %}
+            <button type="button" onclick=location.href="{{ url_for('board.board_lists') }}">목록으로</button>
+        </div>
+    </form>
+</main>
+{% endblock %}

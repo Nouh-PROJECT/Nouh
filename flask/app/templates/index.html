@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block head %}
+<style>
+    body { overflow: hidden; }
+</style>
+{% endblock %}
+
+{% block title %}SSR21 문제은행{% endblock %}
+
+{% block content %}
+{% include "nav.html" %}
+
+
+<main class="page">
+    <div class="content">
+        <div class="item item-1">
+            <p>SK Shieldus Rookies 문제은행</p>
+            <p>클라우드기반 스마트 융합보안과정 21기</p>
+            {% if current_user.is_authenticated %}
+            
+            {% if session["subscribe"] %}
+            <button type="button" class="btn-subscribe enable" ><i class="fa-solid fa-bell fa-lg"></i>구독중</button>
+            {% else %}
+            <button type="button" class="btn-subscribe disable" onclick=location.href='/'><i class="fa-solid fa-bell fa-lg"></i>구독하기</button>
+            {% endif %}
+
+            {% endif %}
+        </div>
+        <div class="item item-2"><img src="{{ url_for('static', filename='img/structure.png') }}" /></div>
+    </div>
+</main>
+{% endblock %}

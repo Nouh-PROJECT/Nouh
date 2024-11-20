@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+
+{% block head %}
+<style>
+    /* One Page Template */
+    body { overflow: hidden; }
+    #page-container, #page-container * { box-sizing: border-box; margin: 0; padding: 0; font-size: 0; }
+    #page-container .row, #page-container .column { display: flex; }
+    #page-container .button { cursor: pointer; }
+
+    #page-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+    #page-container .page { position: absolute; display: flex; align-items: start; justify-content: center; width: 100%; height: 100%; transition: bottom .5s; overflow: hidden; }
+    #page-container .page .row { width: 1200px; }
+    #pagination-container { position: absolute; top: 50%; right: 20px; transform: translateY(-50%); }
+    #pagination-container > li { cursor: pointer; list-style: none; width: 10px; height: 10px; margin-top: 10px; border-radius: 50%; background-color: #DDD; transition: background .5s; }
+    #pagination-container > li.active { background-color: #222; }
+
+    /* Page 1 */
+    #page-1::before { z-index: -1; content: ""; position: absolute; width: 100%; min-height: 600px; height: 100%; background-size: cover; background-position: center; background-repeat: no-repeat; background-image: url("../../static/img/header-bg.png"); }
+    #page-1 .row-1 { margin-top: 10%; }
+    #page-1 .row-1 .column { width: 50%; }
+    #page-1 .row-1 .column-1 { flex-direction: column; justify-content: center; }
+    #page-1 .row-1 .column-1 p { color: #FFF; font-weight: bold; word-break: keep-all; }
+    #page-1 .row-1 .column-1 p:first-child { font-size: 44px; margin-bottom: 20px; }
+    #page-1 .row-1 .column-1 p:last-child { font-size: 22px; }
+    #page-1 .row-1 .column-2 { flex-direction: column; justify-content: center; }
+    #page-1 .row-1 .column-2 img { width: 100%; }
+
+    @media only screen and (max-width: 768px) {
+        #page-1 .row { flex-wrap: wrap; }
+        #page-1 .column { width: 100% !important; }
+        #page-1 .column > p { text-align: center; }
+        #page-1 .column > p:first-child { margin-bottom: 10px !important; font-size: 24px !important; }
+        #page-1 .column > p:last-child { font-size: 16px !important; }
+    }
+
+    @media only screen and (max-width: 1000px) {
+        #page-1 .column-1 { margin-bottom: 10% !important; }
+        #page-1 .column-2 { align-items: center !important; }
+        #page-1 .column-2 img { width: 440px !important; }
+    }
+
+    @media only screen and (max-width: 1260px) {
+        #page-container #page-1 .row { margin: 120px 30px 0 30px !important; }
+    }
+
+    /* Page 2 */
+    #page-2 .row-1 { margin-top: 120px; justify-content: center; }
+    #page-2 .row-1 .column-1 { justify-content: center; flex-wrap: wrap; }
+    #page-2 .card { cursor: pointer; margin: 20px; padding: 30px; border: 3px solid #A1B0FC; border-radius: 8px; color: #A1B0FC; text-decoration: none; }
+    #page-2 .card:hover { border-color: #424D83; color: #424D83; }
+    #page-2 .card .icon { display: flex; align-items: center; justify-content: center; margin-bottom: 40px; }
+    #page-2 .card .icon > i::before { display: block; width: 100px; font-size: 80px; text-align: center; }
+    #page-2 .card .menu { width: 100px; font-size: 20px; font-weight: bold; text-align: center; }
+    
+    @media only screen and (min-height: 600px) {
+        #page-2 { align-items: center !important; }
+    }
+</style>
+{% endblock %}
+
+{% block title %}SSR21 문제은행{% endblock %}
+
+{% block content %}
+{% include "nav.html" %}
+
+
+{% if current_user.is_authenticated %}
+<main id="page-container">
+    <section id="page-1" class="page">
+        <div class="row row-1">
+            <div class="column column-1">
+                <p class="">SK Shieldus Rookies 문제은행</p>
+                <p class="">클라우드기반 스마트 융합보안과정 21기</p>
+            </div>
+            <div class="column column-2">
+                <img src="{{ url_for('static', filename='img/structure.png') }}">
+            </div>
+        </div>
+    </section>
+
+    <section id="page-2" class="page">
+        <div class="row row-1">
+            <div class="column column-1">
+                <a class="card" href="/quiz/create">
+                    <div class="icon"><i class="fa-solid fa-file-circle-plus"></i></div>
+                    <p class="menu">문제 추가</p>
+                </a>
+                
+                <a class="card" href="/quiz/lists">
+                    <div class="icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+                    <p class="menu">문제 목록</p>
+                </a>
+                
+                <a class="card" href="">
+                    <div class="icon"><i class="fa-solid fa-scroll"></i></div>
+                    <p class="menu">시험 보기</p>
+                </a>
+
+                <a class="card" href="">
+                    <div class="icon"><i class="fa-solid fa-video"></i></div>
+                    <p class="menu">강의 보기</p>
+                </a>
+
+                <a class="card" href="">
+                    <div class="icon"><i class="fa-regular fa-clipboard"></i></div>
+                    <p class="menu">자유게시판</p>
+                </a>
+            </div>
+        </div>
+    </section>
+</main>
+<div id="pagination-container"></div>
+
+<script>
+    window.onload = () => {
+        const pageContainer = document.getElementById('page-container');
+        const paginationContainer = document.getElementById('pagination-container');
+        const pages = pageContainer.children;
+
+        let currentPage = 0;
+        let lastPage = pages.length;
+        let movingPage = false;
+        let pageButtons = [];
+
+        const gotoPage = (index) => {
+            if ((index != currentPage) && !movingPage) {
+                movingPage = true;
+                setTimeout(() => movingPage = false, 500);
+                
+                pageButtons[currentPage].classList.remove('active');
+                currentPage = index;
+                pageButtons[currentPage].classList.add('active');
+
+                for (let i = 0; i < lastPage; ++i) {
+                    pages[i].style.bottom = ((currentPage - i) * 100) + '%';
+                }
+            }
+        }
+
+        const prevPage = () => ((currentPage > 0) ? gotoPage(currentPage - 1) : false);
+        const nextPage = () => ((currentPage < (lastPage - 1)) ? gotoPage(currentPage + 1) : false);
+        
+        pageContainer.ontouchstart = (e) => touchstart = e.touches[0].screenY;
+        pageContainer.ontouchend = (e) => ((touchstart < e.changedTouches[0].screenY) ? prevPage() : nextPage());
+        pageContainer.onmousewheel = pageContainer.onwheel = (e) => ((e.deltaY < 0) ? prevPage() : nextPage());
+        
+        for (let i = 0; i < lastPage; ++i) {
+            pages[i].style.bottom = -(i * 100) + '%';
+            
+            if (paginationContainer) {
+                let button = document.createElement('li');
+                button.dataset.page_num = i;
+                button.addEventListener('click', (e) => gotoPage(parseInt(e.target.dataset.page_num)));
+                pageButtons.push(button);
+                paginationContainer.appendChild(button);
+            }
+        }
+
+        if (paginationContainer) {
+            pageButtons[0].classList.add('active');
+        }
+    }
+</script>
+{% else %}
+<main id="page-container">
+    <section id="page-1" class="page">
+        <div class="row row-1">
+            <div class="column column-1">
+                <p class="">SK Shieldus Rookies 문제은행</p>
+                <p class="">클라우드기반 스마트 융합보안과정 21기</p>
+            </div>
+            <div class="column column-2">
+                <img src="{{ url_for('static', filename='img/structure.png') }}">
+            </div>
+        </div>
+    </section>
+</main>
+{% endif %}
+
+{% endblock %}
