@@ -36,7 +36,7 @@
                     <div class="form-row">
                         <div class="form-column subject">{{ lecture.subject_name }}</div>
                         <div class="form-column question">
-                            <a href="{{ url_for('lecture.lecture_detail', id=loop.index0) }}">{{ lecture.lecture_name }}</a>
+                            <a href="{{ url_for('lecture.lecture_detail', path=lecture.file_path) }}">{{ lecture.lecture_name }}</a>
                         </div>
                         <div class="form-column actions">
                             {% if current_user.name == 'admin' %}
