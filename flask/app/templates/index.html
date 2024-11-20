@@ -193,8 +193,8 @@
     }
     /* css 수정부분 - chatbot */
     .chatbot__icon {
-        width: 100px; /* 버튼 안에서 이미지의 크기를 조정 */
-        height: 100px;
+        width: 60px; /* 버튼 안에서 이미지의 크기를 조정 */
+        height: 60px;
         object-fit: contain;
         
     }
@@ -211,6 +211,30 @@
         font-weight: bold;
         box-shadow: 0px 5px 10px gray;
         cursor: pointer;
+    }
+        /* 숨김 상태 */
+    .hidden {
+        display: none;
+    }
+        /* 팝업 창 스타일 */
+    .chatbot_popup {
+        position: fixed;
+        bottom: 110px;
+        right: 40px;
+        width: 400px;
+        height: 550px;
+        background-color: white;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+        overflow: hidden;
+        z-index: 1000;
+    }
+
+    /* 팝업 내 iframe 스타일 */
+    .chatbot_iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
     }
 
     /* page3 */
@@ -423,16 +447,22 @@
 
 </main>
 
-{% if session['isSubscribe'].get('subscribe') == 1 %}
-<a href="{{ url_for('chatbot.index') }}" target="_blank" class="chatbot__redirect-button">
+{% if session['isSubscribe'].get('subscribe') %}
+<!--챗봇-->
+<button class="chatbot__redirect-button" onclick="chatbot()" type="button" id ="chatbotButton">
     <picture>
-      <img
-          src="static/img/chatbot_icon.png"
-        alt="챗봇 아이콘"
-        class="chatbot__icon"
-      />
+        <img
+            src="static/img/chatbot_icon.png"
+            alt="챗봇 아이콘"
+            class="chatbot__icon"
+        />
     </picture>
-</a>
+    </button>
+<!-- 챗봇 팝업 창 -->
+<div id="chatbotPopup" class="chatbot_popup hidden">
+    <iframe src="{{ url_for('chatbot.index') }}" class="chatbot_iframe"></iframe>
+</div>
+
 <div id="pagination-container" class=""></div>
 <script>
     window.onload = () => {

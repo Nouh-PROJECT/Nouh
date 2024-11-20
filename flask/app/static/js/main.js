@@ -134,3 +134,11 @@ function ParsingQuiz() {
     
     CloseQuizParser();
 }
+
+
+// 챗봇 추가
+// 버튼과 팝업 선택
+function chatbot(){
+    const chatbotPopup = document.getElementById("chatbotPopup");
+    chatbotPopup.classList.toggle("hidden");
+}
