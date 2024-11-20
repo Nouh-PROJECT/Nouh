@@ -52,6 +52,7 @@
             justify-content: flex-start;
             flex-wrap: wrap;
             margin-right: 20%;
+            white-space: pre-wrap;
         }
 
         .appmessage {
@@ -59,6 +60,21 @@
             color: #000;
             padding: 0.5rem .875rem;
             border-radius: 20px;
+        }
+
+        .menubtn {            
+            background-color: white;
+            color: black;             
+            border: 1px solid #D3D3D3; 
+
+            flex-wrap: wrap;
+            padding: 0.5rem .875rem;
+            border-radius: 20px;       
+        }
+
+        .menubtn:hover {
+            background-color: #097df1;
+            color: white;
         }
 
         .upper {
@@ -111,8 +127,6 @@
         <div class="box">
             <div class="upper" id="upperid">
                 <span class="downwarning">검색어를 입력해주세요.</span>
-                
-
             </div>
 
             <div class="bottom">
@@ -145,7 +159,8 @@
 
     <script>
         // for scrolling messages
-        function scrollToBottom() {
+
+        async function scrollToBottom() {
             var div = document.getElementById("upperid");
             div.scrollTop = div.scrollHeight;
         }
@@ -153,12 +168,14 @@
 
         document.getElementById("userinputform").addEventListener("submit", function (event) {
             event.preventDefault();
-            formsubmitted();
+            let userinput = document.getElementById('userinput').value
+
+            formsubmitted(userinput, global_type);
         });
 
         const textarea = document.getElementById('userinput');
-        
-        function handleSubmit(event) {
+
+        function handleSubmit(event, type) {
             event.preventDefault(); // 폼 제출 방지 (이벤트 제어)
             // 폼 제출 관련 작업 추가
             console.log("폼이 제출되었습니다!");
@@ -171,56 +188,47 @@
             }
         });
 
-
         // sending request to python server
-        const formsubmitted = async () => {
-            let userinput = document.getElementById('userinput').value
+        const formsubmitted = async (userinput, type) => {
             let sendbtn = document.getElementById('sendbtn')
             let userinputarea = document.getElementById('userinput')
             let upperdiv = document.getElementById('upperid')
-           
-
-            upperdiv.innerHTML = upperdiv.innerHTML + `<div class="message">
+            buttonReset()
+            if(userinput!="start"){
+                upperdiv.innerHTML = upperdiv.innerHTML + `<div class="message">
                 <div class="usermessagediv">
-                        <div class="usermessage">
-                            ${userinput}
-                        </div>
-                </div>
-            </div>`
+                            <div class="usermessage">
+                                ${userinput}
+                            </div>
+                            </div>
+                    </div>`
+            }
             sendbtn.disabled = true
             userinputarea.disabled = true
             scrollToBottom()
             document.getElementById('userinput').value = ""
             document.getElementById('userinput').placeholder = "Wait . . ."
 
-            const response = await fetch("http://127.0.0.1:80/chatbot/chatbot_response", {
+            const jsonResponse = await fetch(`/chatbot/chatbot_response/${type}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ data: userinput })
-
-
             });
-            let json = await response.json();
+            let answerJson = await jsonResponse.json();
 
             document.getElementById('userinput').placeholder = "Your message..."
    
-
-            if (json.response) {
-                let message = json.message
+            if (answerJson.response) {
+                let message = answerJson.message
                 message = message.toString()
-      
                 upperdiv.innerHTML = upperdiv.innerHTML + `<div class="message">
-                <div class="appmessagediv">
-                    <div class="appmessage" id="temp">
-                        
-                    </div>
-                </div>
-            </div>`
+                <div class="appmessagediv"> <div class="appmessage" id="temp"></div></div></div>`
                 let temp = document.getElementById('temp')
                 let index = 0
-                function displayNextLetter() {
+
+                async function displayNextLetter() {
                     scrollToBottom()
                     if (index < message.length) {
                         temp.innerHTML = temp.innerHTML + message[index];
@@ -230,31 +238,52 @@
                         temp.removeAttribute('id')
                         sendbtn.disabled = false
                         userinputarea.disabled = false
+
+                        await fetch(`/chatbot/get_buttons/${type}`)
+                        .then(response => response.json())
+                            .then(buttons => {
+                                buttons.forEach((button, btnidx) => {
+                                    let marginLeftStyle = btnidx === 0 ? 'margin-left: 20px;' : 'margin-left: 5px;';
+                                    upperdiv.innerHTML = upperdiv.innerHTML +
+                                    `<div class="menu-wrapper" style="display:inline-block; ${marginLeftStyle}">
+                                    <div class="appmenudiv">
+                                        <button class="menubtn" type="button" value="${button.idx}" onclick="buttonExecute(this.value, '${button.name}' )">
+                                        ${button.name}
+                                        </button>
+                                    </div>
+                                </div>`
+                                });
+                            });
+
                     }
                 }
+
                 displayNextLetter()
                 scrollToBottom()
 
             }
             else {
-                let message = json.message
+                let message = answerJson.message
                 upperdiv.innerHTML = upperdiv.innerHTML +
                     `<div class="message">
-                <div class="appmessagediv">
-                    <div class="appmessage"  style="border: 1px solid red;">
-                      ${message}
-
-                    </div>
-                </div>
-            </div>`
+                <div class="appmessagediv"><div class="appmessage"  style="border: 1px solid red;">${message}</div></div></div>`
                 sendbtn.disabled = false
                 userinputarea.disabled = false
             }
-
             scrollToBottom()
-
-
         } 
+        function buttonExecute(type, name) {
+            global_type = type;
+            formsubmitted(name, type);
+
+        }
+        function buttonReset() {
+            buttonWrappers = document.querySelectorAll('.menu-wrapper');
+            buttonWrappers.forEach(wrapper => wrapper.remove());
+        }
+
+        let global_type = "default"
+        formsubmitted("start", "default")
     </script>
 </body>
 
