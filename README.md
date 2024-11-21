@@ -1,5 +1,4 @@
 # Nouh LMS
-<br>
 
 ### 서비스 환경 구성 가이드
 - `config.py` 추가
