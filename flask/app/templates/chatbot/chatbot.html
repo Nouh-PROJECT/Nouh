@@ -66,7 +66,7 @@
             background-color: white;
             color: black;             
             border: 1px solid #D3D3D3; 
-
+            font-size: 12px;
             flex-wrap: wrap;
             padding: 0.5rem .875rem;
             border-radius: 20px;       
@@ -216,8 +216,8 @@
                 },
                 body: JSON.stringify({ data: userinput })
             });
-            let answerJson = await jsonResponse.json();
 
+            let answerJson = await jsonResponse.json();
             document.getElementById('userinput').placeholder = "Your message..."
    
             if (answerJson.response) {

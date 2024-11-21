@@ -1,4 +1,4 @@
-from flask import Flask, render_template,jsonify,request, current_app
+from flask import Flask, render_template,jsonify,request, current_app, render_template_string
 from flask import Blueprint
 import requests,openai,os, json
 from dotenv.main import load_dotenv
