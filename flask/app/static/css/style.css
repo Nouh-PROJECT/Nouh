@@ -144,9 +144,17 @@ form.quiz-cvm .cell.opt-group > input:last-child { margin: 0; } */
 #form-template > .frame { min-width: 600px; margin: 50px 0; padding: 50px 50px 30px 50px; border: 2px solid #424D83; border-radius: 15px; }
 #form-template > .frame > .title { font-size: 36px; font-weight: bold; color: #424D83; text-align: center; }
 #form-template > .frame > .content { margin: 20px 0; padding: 30px 0; border-top: 2px solid #424D83; border-bottom: 2px solid #424D83; }
-#form-template > .frame > .button-area { display: flex; }
-#form-template > .frame > .button-area > button { width: 100px; height: 35px; border-radius: 5px; background-color: #424D83; font-size: 16px; font-weight: bold; color: #FFF; text-align: center; }
+#form-template > .frame > .button-area { display: flex; justify-content: center; position: relative; min-height: 35px; }
+#form-template > .frame > .button-area > button { width: 100px; height: 35px; margin-right: 10px; border-radius: 5px; background-color: #424D83; font-size: 16px; font-weight: bold; color: #FFF; text-align: center; }
 #form-template > .frame > .button-area > button:hover { background-color: #A1B0FC; }
+#form-template > .frame > .button-area > :last-child { position:absolute; right: 0; margin-right: 0; }
+#form-template > .frame > .button-area > .btn-delete { margin: 0; }
+#form-template > .frame > .button-area > .btn-delete:hover { background-color: #F00 !important;}
+
+/* #form-template > .frame > .button-area { justify-content: center; position: relative; min-height: 35px; } */
+/* #form-template > .frame > .button-area > button { margin-right: 10px; } */
+
+
 
 .search-area input[type=search]::-webkit-search-decoration,
 .search-area input[type=search]::-webkit-search-cancel-button,
@@ -167,7 +175,7 @@ form.quiz-cvm .cell.opt-group > input:last-child { margin: 0; } */
 .table > .row { display: flex; align-items: center; line-height: 30px; margin: 0 !important; border-bottom: 1px solid #424D83; }
 .table > .row.head { border-top: 2px solid #424D83; border-bottom: 2px solid #424D83; }
 .table > .row > .cell { border-right: 1px solid #424D83; font-size: 12px; color: #424D83; }
-.table > .row.head > .cell { font-weight: bold; text-align: center; }
+.table > .row.head > .cell { font-weight: bold; text-align: center !important; }
 .table > .row > .cell:last-child { border-right: none; }
 
 

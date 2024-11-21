@@ -34,12 +34,18 @@ def execute_query(sql: str, params=None):
         try:
             cursor.execute(sql, params)
             
-            if sql.strip().lower().startswith("select"):
+            command = sql.strip().lower()
+            if command.startswith("select"):
                 return cursor.fetchall()
-            
+            elif command.startswith("delete"):
+                return True
+
+            db.commit()
             try:
-                db.commit()
-                return cursor.lastrowid
+                if command.startswith("insert"):
+                    return cursor.lastrowid
+                if command.startswith("update"):
+                    return True
             except Exception as commit_error:
                 db.rollback()
                 return False

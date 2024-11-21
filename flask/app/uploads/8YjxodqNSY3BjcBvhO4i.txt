@@ -1,0 +1,9 @@
+- EC2의 Role 권한이 높아야한다?
+- 원격 코드 실행이 가능하면 공격 가능?
+
+IMDS version1
+OS 인젝션
+SSTI
+
+IMDS version2
+SSRF만 빠짐

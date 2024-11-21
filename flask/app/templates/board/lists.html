@@ -56,7 +56,7 @@
                 {% else %}
                 {% for post in posts %}
                 <div class="row">
-                    <div class="cell"><a href="{{ url_for('board.board_view', idx=post.id)}}">{{ post.title }}</a></div>
+                    <div class="cell"><a href="{{ url_for('board.board_view', idx=post.id) }}">{{ post.title }}</a></div>
                     <div class="cell">{{ post.writer }}</div>
                     <div class="cell">{{ post.created_at }}</div>
                 </div>

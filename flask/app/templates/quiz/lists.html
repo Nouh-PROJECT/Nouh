@@ -25,14 +25,22 @@
 
         <div class="content">
             <form class="search-area">
-                <select name="searchBy">
-                    <option value="0">제목+내용</option>
-                    <option value="1">제목</option>
-                    <option value="2">내용</option>
-                </select>
-
-                <input type="search" name="keyword" />
-                <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <div style="justify-content: space-between;">
+                    <select name="searchBy" style="width: 200px; margin-bottom: 10px;">
+                        <option value="0">전체</option>
+                        {% for s in subjects %}
+                        <option value="{{ s.id }}">{{ s.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <select name="sortBy">
+                        <option value="DESC">최신순</option>
+                        <option value="ASC">오래된순</option>
+                    </select>
+                </div>
+                <div>
+                    <input type="search" name="keyword" />
+                    <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
             </form>
 
             <div class="table">
@@ -66,7 +74,8 @@
         </div>
 
         <div class="button-area">
-            <button type="button" onclick=location.href="{{ url_for('quiz.quiz_create') }}">추가</button>
+            <button type="button" style="margin: 0;" onclick=location.href="{{ url_for('quiz.quiz_create') }}">추가</button>
+            <button type="button" onclick=location.href="{{ url_for('main.index') }}">메인으로</button>
         </div>
     </div>
 </main>

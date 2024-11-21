@@ -8,6 +8,3 @@ cryptography
 
 pymysql
 openpyxl
-
-bs4
-lxml

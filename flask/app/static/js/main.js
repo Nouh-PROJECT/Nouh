@@ -179,7 +179,7 @@ function QuizModify() {
 }
 
 function QuizDelete() {
-    if (confirm("게시글을 정말 삭제하시겠습니까?")) {
+    if (confirm("게시글된 문제를 정말 삭제하시겠습니까?")) {
         fetch("/quiz/delete/" + window.location.pathname.slice(11), {method: "GET"})
         .then(response => response.json())
         .then(data => {
@@ -213,6 +213,45 @@ function PostWrite() {
         }
     })
     .catch(error => { console.log("ERROR: ", error) });
+
+    return false;
+}
+
+function PostModify() {
+    const title = document.querySelector("#board-cvm input[name=title]").value;
+    const content = window.editor.getData();
+    const file = document.querySelector("#board-cvm input[name=file]").files[0];
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("content", content);
+    formData.append("file", file);
+
+    fetch(window.location.href, { method: "POST", body: formData })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+        if (data.status === "S") {
+            location.href = "/board/lists";
+        }
+    })
+    .catch(error => { console.log("ERROR: ", error) });
+
+    return false;
+}
+
+function PostDelete() {
+    if (confirm("게시글을 정말 삭제하시겠습니까?")) {
+        fetch("/board/delete/" + window.location.pathname.slice(12), {method: "GET"})
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            if (data.status == "S") {
+                location.href = "/board/lists";
+            }
+        })
+        .catch(error => { console.log("ERROR: ", error)});
+    }
 
     return false;
 }

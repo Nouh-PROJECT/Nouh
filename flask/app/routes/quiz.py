@@ -33,20 +33,36 @@ def quiz_lists():
     if subjects is False:
         return redirect("/")
     
+    page = request.args.get("page", 1, type=int)
     keyword = request.args.get("keyword", "", type=str)
+    sort_by = request.args.get("sortBy", "DESC", type=str)
+    search_by = request.args.get("searchBy", 0, type=int)
     
     # 페이지네이션
-    page = request.args.get("page", 1, type=int)
     total_pages = 0
     start_page = 0
     end_page = 0
     per_page = 10
     offset = (page - 1) * per_page
 
-    total_quizzes = rows[0]["num"] if (rows:=execute_query(r"SELECT COUNT(*) num FROM quizzes WHERE question LIKE %s", (f"%{keyword}%",))) else 0
+    count_query = f"SELECT COUNT(*) num FROM quizzes"
+    query = r"SELECT id, u_id, (SELECT name FROM subjects WHERE id=s_id) AS s, question AS q FROM quizzes "
+    if search_by == 0:
+        condition = f" WHERE question LIKE %s ORDER BY 1 {sort_by}"
+        params = (f"%{keyword}%",)
+    else:
+        condition = f" WHERE question LIKE %s AND s_id=%s ORDER BY 1 {sort_by}"
+        params = (f"%{keyword}%", search_by)
+    limit = f" LIMIT {per_page} OFFSET {offset}"
+    
+    total_quizzes = rows[0]["num"] if (rows:=execute_query(count_query+condition, params)) else 0
     total_pages = (total_quizzes + per_page - 1) // per_page
+    quizzes = rows if (rows:=execute_query(query+condition+limit, params)) else []
+    
+    # total_quizzes = rows[0]["num"] if (rows:=execute_query(r"SELECT COUNT(*) num FROM quizzes WHERE question LIKE %s", (f"%{keyword}%",))) else 0
+    # total_pages = (total_quizzes + per_page - 1) // per_page
 
-    quizzes = execute_query(r"SELECT id, u_id, (SELECT name FROM subjects WHERE id=s_id)s, question q FROM quizzes WHERE question LIKE %s ORDER BY 1 DESC LIMIT %s OFFSET %s", (f"%{keyword}%", per_page, offset))
+    # quizzes = execute_query(r"SELECT id, u_id, (SELECT name FROM subjects WHERE id=s_id)s, question q FROM quizzes WHERE question LIKE %s ORDER BY 1 DESC LIMIT %s OFFSET %s", (f"%{keyword}%", per_page, offset))
 
     start_page = max(page - 2, 1)
     end_page = min(page + 2, total_pages)

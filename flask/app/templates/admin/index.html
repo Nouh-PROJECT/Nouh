@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block title %}SSR21 문제은행{% endblock %}
+
+{% block content %}
+{% include "nav.html" %}
+
+
+<style>
+    main { display: flex; justify-content: center; width: 100%; padding: 50px 30px; }
+    main > .frame { display: flex; width: 1200px; padding: 30px; border: 2px solid #424D83; border-radius: 15px; }
+    main > .frame > section { padding: 10px; }
+    main > .frame > :nth-child(1) { flex-shrink: 0; width: 200px; }
+    main > .frame > :nth-child(1) > button { width: 100%; height: 40px; margin-bottom: 10px; border-radius: 5px; background-color: #A1B0FC; font-size: 16px; font-weight: bold; color: #FFF; }
+    main > .frame > :nth-child(1) > :last-child { margin-bottom: 0; }
+    main > .frame > :nth-child(1) > button:hover { width: 100%; height: 40px; border-radius: 5px; background-color: #424D83; }
+    main > .frame > :nth-child(1) > button.active { background-color: #424D83; }
+    main > .frame > :nth-child(3) { flex: 1; }
+    main > .frame > :nth-child(3) > div > :nth-child(1) { padding: 10px; border-bottom: 3px solid #424D83; font-size: 24px; font-weight: bold; color: #424D83; }
+    main > .frame > :nth-child(3) > div > .table { width: 800px; margin: 50px auto; }
+    main > .frame > :nth-child(3) > div > .table > .row > .cell { padding: 5px; text-align: center; }
+    main > .frame > :nth-child(3) > div > .table > .row > .cell > button { margin: 0 5px; }
+    main > .frame > :nth-child(3) > div > .table > .row > .cell > button:hover { color: #000; }
+    
+    /* 회원 관리 */
+    main > .frame > :nth-child(3) > :nth-child(2) > .table > .row > :nth-child(1) { flex: 1; }
+    main > .frame > :nth-child(3) > :nth-child(2) > .table > .row > :nth-child(2) { flex: 2; }
+    main > .frame > :nth-child(3) > :nth-child(2) > .table > .row > :nth-child(3) { flex: 2; }
+    main > .frame > :nth-child(3) > :nth-child(2) > .table > .row > :nth-child(4) { flex: 3; }
+    main > .frame > :nth-child(3) > :nth-child(2) > .table > .row > :nth-child(5) { flex: 3; }
+    main > .frame > :nth-child(3) > :nth-child(2) > .table > .row > :nth-child(6) { flex: 1; }
+
+    /* 문제 관리 */
+    main > .frame > :nth-child(3) > :nth-child(3) > .table > .row > :nth-child(1) { flex: 1; }
+    main > .frame > :nth-child(3) > :nth-child(3) > .table > .row > :nth-child(2) { flex: 2; }
+    main > .frame > :nth-child(3) > :nth-child(3) > .table > .row > :nth-child(3) { flex: 6; text-align: left; }
+    main > .frame > :nth-child(3) > :nth-child(3) > .table > .row > :nth-child(4) { flex: 2; }
+    main > .frame > :nth-child(3) > :nth-child(3) > .table > .row > :nth-child(5) { flex: 1; }
+
+    /* 시험 관리 */
+    main > .frame > :nth-child(3) > :nth-child(4) > .table > .row > :nth-child(1) { flex: 1; }
+    main > .frame > :nth-child(3) > :nth-child(4) > .table > .row > :nth-child(2) { flex: 2; }
+    main > .frame > :nth-child(3) > :nth-child(4) > .table > .row > :nth-child(3) { flex: 6; text-align: left; }
+    main > .frame > :nth-child(3) > :nth-child(4) > .table > .row > :nth-child(4) { flex: 2; }
+    main > .frame > :nth-child(3) > :nth-child(4) > .table > .row > :nth-child(5) { flex: 1; }
+
+    /* 게시판 관리 */
+    main > .frame > :nth-child(3) > :nth-child(5) > .table > .row > :nth-child(1) { flex: 1; }
+    main > .frame > :nth-child(3) > :nth-child(5) > .table > .row > :nth-child(2) { flex: 2; }
+    main > .frame > :nth-child(3) > :nth-child(5) > .table > .row > :nth-child(3) { flex: 6; text-align: left; }
+    main > .frame > :nth-child(3) > :nth-child(5) > .table > .row > :nth-child(4) { flex: 2; }
+    main > .frame > :nth-child(3) > :nth-child(5) > .table > .row > :nth-child(5) { flex: 1; }
+
+</style>
+
+<script>
+    window.onload = function() {
+        const buttons = document.querySelectorAll("#admin-page > .frame > :nth-child(1) > button");
+
+        buttons.forEach((button, index) => {
+            button.addEventListener("click", function() {
+                // 버튼 전환
+                buttons.forEach(btn => btn.classList.remove("active"));
+                button.classList.add("active");
+
+                // 메뉴 전환
+                const menus = document.querySelectorAll("#admin-page > .frame > :nth-child(3) > div");
+                menus.forEach(menu => menu.style.display = "none");
+                menus[index].style.display = "block";
+            });
+        });
+    };
+</script>
+
+<main id="admin-page">
+    <div class="frame">
+        <section>
+            <button type="button" class="menu active">대시보드</button>
+            <button type="button" class="menu">회원 관리</button>
+            <button type="button" class="menu">문제 관리</button>
+            <button type="button" class="menu">시험 관리</button>
+            <button type="button" class="menu">게시판 관리</button>
+        </section>
+
+        <div style="width: 2px; margin: 0 10px; background-color: #424D83;"></div>
+
+        <section>
+            <div>
+                <div>대시보드</div>
+                <div></div>
+            </div>
+ 
+            <div style="display: none;">
+                <div>회원 관리</div>
+
+                <div class="table">
+                    <div class="row head">
+                        <div class="cell">No</div>
+                        <div class="cell">ID</div>
+                        <div class="cell">NAME</div>
+                        <div class="cell">EMAIL</div>
+                        <div class="cell">PHONE</div>
+                        <div class="cell">-</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="cell">1</div>
+                        <div class="cell">admin</div>
+                        <div class="cell">admin</div>
+                        <div class="cell">admin@admin.com</div>
+                        <div class="cell">01012341234</div>
+                        <div class="cell">
+                            <button type="button"><i type="button" class="fa-solid fa-pencil"></i></button>
+                            <button type="button"><i type="button" class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: none;">
+                <div>문제 관리</div>
+
+                <div class="table">
+                    <div class="row head">
+                        <div class="cell">No</div>
+                        <div class="cell">Writer</div>
+                        <div class="cell">Title</div>
+                        <div class="cell">Created</div>
+                        <div class="cell">-</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="cell">1</div>
+                        <div class="cell">admin</div>
+                        <div class="cell">다음중 올바르지 않은 것을 고르시오.</div>
+                        <div class="cell">2024-11-20</div>
+                        <div class="cell">
+                            <button type="button"><i type="button" class="fa-solid fa-pencil"></i></button>
+                            <button type="button"><i type="button" class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="display: none;">
+                <div>시험 관리</div>
+
+                <div class="table">
+                    <div class="row head">
+                        <div class="cell">No</div>
+                        <div class="cell">Writer</div>
+                        <div class="cell">Title</div>
+                        <div class="cell">Created</div>
+                        <div class="cell">-</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="cell">1</div>
+                        <div class="cell">admin</div>
+                        <div class="cell">애플리케이션 보안 1회</div>
+                        <div class="cell">2024-11-20</div>
+                        <div class="cell">
+                            <button type="button"><i type="button" class="fa-solid fa-pencil"></i></button>
+                            <button type="button"><i type="button" class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="display: none;">
+                <div>게시판 관리</div>
+
+                <div class="table">
+                    <div class="row head">
+                        <div class="cell">No</div>
+                        <div class="cell">Writer</div>
+                        <div class="cell">Title</div>
+                        <div class="cell">Created</div>
+                        <div class="cell">-</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="cell">1</div>
+                        <div class="cell">admin</div>
+                        <div class="cell">공지사항입니다.</div>
+                        <div class="cell">2024-11-20</div>
+                        <div class="cell">
+                            <button type="button"><i type="button" class="fa-solid fa-pencil"></i></button>
+                            <button type="button"><i type="button" class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+{% endblock %}

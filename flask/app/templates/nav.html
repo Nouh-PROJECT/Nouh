@@ -4,7 +4,7 @@
             <button type="button" class="btn-menu" onclick="" style="display: none;"><i class="fa-solid fa-bars"></i></button>
             <div class="menu">
                 <a href="/" class="item">Home</a>
-                <a href="#" class="item">Lecture</a>
+                <a href="{{ url_for('lecture.lecture_lists') }}" class="item">Lecture</a>
                 <a href="#" class="item">Exam</a>
                 <a href="{{ url_for('quiz.quiz_lists') }}" class="item">Quiz</a>
                 <a href="{{ url_for('board.board_lists') }}" class="item">Board</a>
