@@ -241,7 +241,8 @@
 import json
 import os
 import mimetypes
-from flask import Blueprint, render_template, request, redirect, flash, url_for, send_file, Response
+import uuid
+from flask import Blueprint, render_template, request, redirect, flash, url_for, Response
 from flask_login import login_required
 
 bp = Blueprint('lecture', __name__)
@@ -253,20 +254,25 @@ ALLOWED_EXTENSIONS = {'mp4', 'avi', 'mov', 'mkv', 'pdf', 'txt', 'jpg', 'png', 'h
 
 
 def allowed_file(filename):
-    # 취약점: 파일 확장자에 대한 검증을 약화하여 모든 확장자 허용
+    # 취약점: 모든 파일 확장자 허용
     return True
+
+
+def generate_unique_filename(original_filename):
+    """파일명을 UUID로 고유하게 생성"""
+    ext = os.path.splitext(original_filename)[1]
+    return f"{uuid.uuid4().hex}{ext}"
+
 
 @bp.route('/uploads/<filename>')
 def uploaded_file(filename):
     try:
         file_path = os.path.join(UPLOAD_FOLDER, filename)
         if os.path.exists(file_path) and not os.path.isdir(file_path):
-            # MIME 타입 설정: 텍스트 파일로 반환하여 브라우저가 그대로 표시하도록 설정
             mime_type, _ = mimetypes.guess_type(file_path)
             if mime_type is None or mime_type.startswith('text'):
                 mime_type = 'text/plain'
-            
-            # 파일 내용을 읽어 Response 객체로 반환
+
             with open(file_path, 'rb') as file:
                 file_content = file.read()
 
@@ -299,19 +305,20 @@ def lecture_add():
         video_file = request.files.get('video-file')
 
         if subject_id != 0 and lecture_name and video_file and allowed_file(video_file.filename):
-            filename = video_file.filename
-            file_path = os.path.join(UPLOAD_FOLDER, filename)
+            original_filename = video_file.filename
+            unique_filename = generate_unique_filename(original_filename)
+            file_path = os.path.join(UPLOAD_FOLDER, unique_filename)
 
-            # 취약점: 파일 검증 없이 저장 및 시스템 명령어 사용
+            # 파일 저장
             video_file.save(file_path)
-            os.system(f'mv {file_path} {UPLOAD_FOLDER}/{filename}')  # 명령어 주입 가능성 존재
 
             subject_name = next((sub['name'] for sub in subjects if sub['id'] == subject_id), None)
             new_lecture = {
                 "subject_id": subject_id,
                 "subject_name": subject_name,
                 "lecture_name": lecture_name,
-                "file_path": filename
+                "original_filename": original_filename,  # 원본 파일명 저장
+                "file_path": unique_filename  # 고유한 파일명 저장
             }
 
             try:
@@ -333,6 +340,7 @@ def lecture_add():
             flash('모든 필드를 입력하고 적절한 형식의 파일을 업로드해 주세요.', 'danger')
 
     return render_template('/lecture/lectureAdd.html', subjects=subjects)
+
 
 @bp.route('/list', methods=['GET'])
 @login_required
@@ -380,13 +388,14 @@ def lecture_detail():
 
     return render_template('/lecture/lecture.html', lecture=lecture, video_url=video_url)
 
+
 @bp.route('/lecture/video', methods=['GET'])
 def video_view():
     file_path = request.args.get('path')
     if file_path:
         try:
             full_path = os.path.abspath(os.path.join(UPLOAD_FOLDER, file_path))
-            
+
             # 보안상 매우 위험: 경로 검증 없이 절대 경로 생성 및 파일 읽기
             if os.path.exists(full_path) and not os.path.isdir(full_path):
                 mime_type, _ = mimetypes.guess_type(full_path)
@@ -399,6 +408,7 @@ def video_view():
         except Exception as e:
             return f"오류 발생: {str(e)}", 500
     return "잘못된 요청입니다.", 400
+
 
 @bp.route('/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -420,10 +430,12 @@ def lecture_edit(id):
 
         if subject_id != 0 and lecture_name and (not video_file or allowed_file(video_file.filename)):
             if video_file:
-                filename = video_file.filename
-                file_path = os.path.join(UPLOAD_FOLDER, filename)
+                original_filename = video_file.filename
+                unique_filename = generate_unique_filename(original_filename)
+                file_path = os.path.join(UPLOAD_FOLDER, unique_filename)
                 video_file.save(file_path)
-                lecture['file_path'] = filename
+                lecture['file_path'] = unique_filename
+                lecture['original_filename'] = original_filename
 
             lecture['subject_id'] = subject_id
             lecture['subject_name'] = next((sub['name'] for sub in subjects if sub['id'] == subject_id), None)
@@ -441,6 +453,7 @@ def lecture_edit(id):
             flash('모든 필드를 입력해 주세요.', 'danger')
 
     return render_template('/lecture/lectureEdit.html', lecture=lecture, subjects=subjects)
+
 
 @bp.route('/delete/<int:id>', methods=['POST'])
 @login_required
