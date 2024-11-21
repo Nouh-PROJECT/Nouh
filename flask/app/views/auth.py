@@ -121,11 +121,12 @@ def update_mypage():
     
     return json.dumps(data)
 
-@bp.route('/delete_account', methods=['POST'])
+
+@bp.route('/delete_account', methods=['GET'])  # GET 방식으로 변경
 @login_required
 def delete_account():
     try:
-        rows = execute_query(r"DELETE FROM users WHERE id=%s", (current_user.id),True)
+        rows = execute_query("DELETE FROM users WHERE id=%s", (current_user.id,), True)
 
         if rows == 0:
             flash("회원 탈퇴에 실패했습니다. 다시 시도해주세요.", "error")
@@ -138,6 +139,7 @@ def delete_account():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 @bp.route('/cancel_subscribe', methods=['GET'])
 @login_required
