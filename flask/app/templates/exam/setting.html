@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block title %}시험 목록{% endblock %}
+
+{% block content %}
+{% include "nav.html" %}
+
+<style>
+    #exam-setting > .content { padding: 50px 0 !important; }
+    #exam-setting .row-1 .form-column > * { box-sizing: border-box; font-size: 14px; }
+    #exam-setting > .content > div > :nth-child(1) { width: 250px; height: 30px; margin-right: 20px; }
+    #exam-setting > .content > div > :nth-child(2) { width: 80px; height: 30px; margin-right: 15px; }
+    #exam-setting > .content > div > :nth-child(3) { margin-right: 5px; }
+    #exam-setting label { cursor: pointer; font-size: 14px; }
+</style>
+
+<main id="form-template">
+    <div id="exam-setting" class="frame">
+        <div class="title">환경 설정</div>
+
+        <div class="content">
+            <div>
+                <input type="text" value="{{ subject.name }}" data-id="{{ subject.id }}" disabled>
+                <input type="number" name="count" min="0" max="{{ subject.count }}" value="{{ subject.count }}">
+                <label><input type="radio" name="exam-type" value="1" checked>최신</label>
+                <label><input type="radio" name="exam-type" value="2">랜덤</label>
+            </div>
+        </div>
+
+        <div class="button-area">
+            <button type="button" onclick="StartExam()" style="margin: 0;">시험 시작</button>
+            <button type="button" onclick=location.href="{{ url_for('exam.exam_lists') }}">취소</button>
+        </div>
+    </div>
+</main>
+
+
+<script>
+    function StartExam() {
+        let target = document.querySelector('#exam-setting > .content > div > :nth-child(1)');
+        let sID = target.dataset.id;
+
+        target = document.querySelector('#exam-setting > .content > div > :nth-child(2)');
+        let count = target.value;
+
+        target = document.querySelector('#exam-setting > .content > div > :nth-child(3) > input');
+        let examType = target.checked ? 1 : 2;
+
+        settingData = JSON.stringify({'s_id':sID, 'count':count, 'exam_type':examType});
+        
+        const jsonData = document.createElement("input");
+        jsonData.setAttribute("type", "hidden");
+        jsonData.setAttribute("name", "settingData");
+        jsonData.setAttribute("value", settingData);
+
+        const settingForm = document.createElement("form");
+        settingForm.setAttribute("charset", "UTF-8");
+        settingForm.setAttribute("method", "post");
+        settingForm.setAttribute("action", "/exam/start");
+        settingForm.appendChild(jsonData);
+
+        document.body.appendChild(settingForm);
+
+        settingForm.submit();
+    }
+</script>
+{% endblock %}

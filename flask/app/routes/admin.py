@@ -29,18 +29,51 @@ def index():
 
 
 
-@bp.route("/")
+@bp.route("/api/get_users")
 @login_required
 @check_authority
 def admin_get_users():
-    page = 1
-    total_pages = 0
-    per_page = 10
-    offset = (page - 1) * per_page
-    
-    query = f"SELECT * FROM users LIMIT {per_page} OFFSET {offset}"
-    users = rows if (rows:=execute_query(query)) else []
-    data = {
-    }
-    
-    return jsonify({"status": "S", "data": data})
+    try:
+        query = f"SELECT * FROM users"
+        users = rows if (rows:=execute_query(query)) else []
+        return jsonify(users)
+    except Exception as e:
+        return jsonify({"status": "F", "message": str(e), "users": []})
+
+
+@bp.route("/api/get_subscribe_request")
+@login_required
+@check_authority
+def admin_get_subscribe_request():
+    try:
+        query = r"SELECT id, (SELECT login_id FROM users WHERE id=subscribe.id)login_id, (SELECT name FROM users WHERE id=subscribe.id)name, DATE_FORMAT(expired_at, '%Y-%m-%d')expired_at FROM subscribe WHERE status=1"
+        waiting = rows if (rows:=execute_query(query)) else []
+        return jsonify(waiting)
+    except Exception as e:
+        return jsonify({"status": "F", "message": str(e), "users": []})
+
+
+@bp.route("/get-data/dashboard")
+@login_required
+@check_authority
+def admin_dashboard():
+    try:
+        query = r"SELECT t.status, COALESCE(COUNT(s.id), 0) AS num FROM "
+        query += r"(SELECT 0 AS status UNION ALL SELECT 1 UNION ALL SELECT 2) AS t "
+        query += r"LEFT JOIN subscribe s ON s.status = t.status GROUP BY t.status"
+        
+        data = {
+            "num_of_users": rows[0]["num"] if (rows:=execute_query(r"SELECT COUNT(*) AS num FROM users")) else 0,
+            "num_of_quizzes": rows[0]["num"] if (rows:=execute_query(r"SELECT COUNT(*) AS num FROM quizzes")) else 0,
+            "num_of_subjects": rows[0]["num"] if (rows:=execute_query(r"SELECT COUNT(*) AS num FROM subjects")) else 0,
+            "subscribe_info": rows if (rows:=execute_query(query)) else []
+        }
+        return jsonify({"status": "S", "message": "데이터 로딩 완료", "data": data})
+    except Exception as e:
+        return jsonify({"status": "F", "messasge": str(e)})
+
+
+# @bp.route("/api/")
+# @login_required
+# @check_authority
+# def admin_

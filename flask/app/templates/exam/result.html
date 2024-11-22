@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block title %}시험 목록{% endblock %}
+
+{% block content %}
+{% include "nav.html" %}
+
+<main id="form-template">
+    <div id="exam-result" class="frame">
+        <div class="title">시험 결과</div>
+
+        <div class="content">
+            <div style="text-align: center;">총 {{ num_of_quizzes }}문제 중 {{ correct_answer }}문제 맞추셨습니다.</div>
+        </div>
+
+        <div class="button-area">
+            <button type="button" onclick=location.href='{{ url_for("exam.exam_download_result") }}'>다운로드</button>
+            <button type="button" onclick=location.href='{{ url_for("main.index") }}'>메인화면</button>
+        </div>
+    </div>
+</main>
+{% endblock %}

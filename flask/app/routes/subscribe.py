@@ -49,10 +49,10 @@ def subscribe_result():
 def subscribe_add(user_id: int):
     user = rows[0] if (rows:=execute_query(r"SELECT * FROM subscribe WHERE id=%s", (user_id,))) else []
     if not user:
-        if (x:=execute_query(r"INSERT INTO subscribe VALUES (%s, 1, DATE_ADD(NOW(), INTERVAL 1 MONTH))", (user_id,))):
+        if (x:=execute_query(r"INSERT INTO subscribe VALUES (%s, 2, DATE_ADD(NOW(), INTERVAL 1 MONTH))", (user_id,))):
             return jsonify({"status": "F", "message": f"구독 실패{x}"})
     else:
-        if not (execute_query(r"UPDATE subscribe SET status=1, expired_at=DATE_ADD(NOW(), INTERVAL 1 MONTH) WHERE id=%s", (user_id,))):
+        if not (execute_query(r"UPDATE subscribe SET status=2, expired_at=DATE_ADD(NOW(), INTERVAL 1 MONTH) WHERE id=%s", (user_id,))):
             return jsonify({"status": "F", "message": "구독 실패"})
     session['subscribe'] = True
     return jsonify({"status": "S", "message": "구독 완료"})

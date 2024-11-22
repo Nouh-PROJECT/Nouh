@@ -16,8 +16,7 @@ def check_authority(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         if current_user.is_authenticated:
-            query = r"SELECT 1 FROM admin WHERE id=%s"
-            if execute_query(query, (current_user.id)):
+            if current_user.is_admin or session["subscribe"]:
                 return func(*args, **kwargs)
         return redirect("/")
     return wrapper
@@ -25,6 +24,7 @@ def check_authority(func):
 
 @bp.route("/lists")
 @login_required
+@check_authority
 def lecture_lists():
     subjects = execute_query(r"SELECT id, name FROM subjects")
     if subjects is False:
@@ -81,6 +81,7 @@ def lecture_lists():
 
 @bp.route("/view")
 @login_required
+@check_authority
 def lecture_view():
     return render_template("lecture/view.html")
 
@@ -89,15 +90,14 @@ def lecture_view():
 @login_required
 @check_authority
 def lecture_create():
+    return render_template("lecture/create.html")
     
-    return jsonify({"status": "F", "message": "강의 등록에 실패했습니다."})
-
 
 @bp.route("/modify")
 @login_required
 @check_authority
 def lecture_modify():
-    return jsonify({"status": "F", "message": "강의 등록에 실패했습니다."})
+    return render_template("lecture/modify.html")
 
 
 

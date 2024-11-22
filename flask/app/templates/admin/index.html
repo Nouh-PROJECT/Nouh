@@ -25,6 +25,14 @@
     main > .frame > :nth-child(3) > div > .table > .row > .cell > button { padding: 0 10px; }
     main > .frame > :nth-child(3) > div > .table > .row > .cell > button:hover { color: #000; }
     
+    /* 대시보드 */
+    main > .frame > :nth-child(3) > :nth-child(1) > .table-1 > .row > :nth-child(1) { flex: 1; }
+    main > .frame > :nth-child(3) > :nth-child(1) > .table-1 > .row > :nth-child(2) { flex: 1; }
+    main > .frame > :nth-child(3) > :nth-child(1) > .table-1 > .row > :nth-child(3) { flex: 1; }
+    main > .frame > :nth-child(3) > :nth-child(1) > .table-2 > .row > :nth-child(1) { flex: 1; }
+    main > .frame > :nth-child(3) > :nth-child(1) > .table-2 > .row > :nth-child(2) { flex: 1; }
+    main > .frame > :nth-child(3) > :nth-child(1) > .table-2 > .row > :nth-child(3) { flex: 1; }
+
     /* 회원 관리 */
     main > .frame > :nth-child(3) > :nth-child(2) > .table > .row > :nth-child(1) { width: 80px; }
     main > .frame > :nth-child(3) > :nth-child(2) > .table > .row > :nth-child(2) { flex: 2; }
@@ -35,13 +43,11 @@
 
     /* 구독 관리 */
     main > .frame > :nth-child(3) > :nth-child(3) > .table > .row > :nth-child(1) { width: 80px; }
-    main > .frame > :nth-child(3) > :nth-child(3) > .table > .row > :nth-child(2) { flex: 3; }
-    main > .frame > :nth-child(3) > :nth-child(3) > .table > .row > :nth-child(3) { flex: 3; }
-    main > .frame > :nth-child(3) > :nth-child(3) > .table > .row > :nth-child(4) { flex: 3; }
-    main > .frame > :nth-child(3) > :nth-child(3) > .table > .row > :nth-child(5) { flex: 3; }
-    main > .frame > :nth-child(3) > :nth-child(3) > .table > .row > :nth-child(6) { width: 100px; }
-    main > .frame > :nth-child(3) > :nth-child(3) > .table > .row > :nth-child(6) > button { transition: transform 0.3s ease; }
-    main > .frame > :nth-child(3) > :nth-child(3) > .table > .row > :nth-child(6) > button:hover { transform: translateY(-5px); }
+    main > .frame > :nth-child(3) > :nth-child(3) > .table > .row > :nth-child(2) { flex: 1; }
+    main > .frame > :nth-child(3) > :nth-child(3) > .table > .row > :nth-child(3) { flex: 1; }
+    main > .frame > :nth-child(3) > :nth-child(3) > .table > .row > :nth-child(4) { width: 100px; }
+    main > .frame > :nth-child(3) > :nth-child(3) > .table > .row > :nth-child(4) > button { transition: transform 0.3s ease; }
+    main > .frame > :nth-child(3) > :nth-child(3) > .table > .row > :nth-child(4) > button:hover { transform: translateY(-5px); }
 
     /* 문제 관리 */
     main > .frame > :nth-child(3) > :nth-child(4) > .table > .row > :nth-child(1) { width: 80px; }
@@ -67,24 +73,6 @@
 
 </style>
 
-<script>
-    window.onload = function() {
-        const buttons = document.querySelectorAll("#admin-page > .frame > :nth-child(1) > button");
-
-        buttons.forEach((button, index) => {
-            button.addEventListener("click", function() {
-                // 버튼 전환
-                buttons.forEach(btn => btn.classList.remove("active"));
-                button.classList.add("active");
-
-                // 메뉴 전환
-                const menus = document.querySelectorAll("#admin-page > .frame > :nth-child(3) > div");
-                menus.forEach(menu => menu.style.display = "none");
-                menus[index].style.display = "block";
-            });
-        });
-    };
-</script>
 
 <main id="admin-page">
     <div class="frame">
@@ -102,7 +90,22 @@
         <section>
             <div>
                 <div>대시보드</div>
-                <div></div>
+
+                <div class="table table-1">
+                    <div class="row head">
+                        <div class="cell">회원 수</div>
+                        <div class="cell">문제 수</div>
+                        <div class="cell">과목 수</div>
+                    </div>
+                </div>
+                
+                <div class="table table-2">
+                    <div class="row head">
+                        <div class="cell">미구독자</div>
+                        <div class="cell">승인대기</div>
+                        <div class="cell">구독자</div>
+                    </div>
+                </div>
             </div>
  
             <div style="display: none;">
@@ -115,19 +118,7 @@
                         <div class="cell">NAME</div>
                         <div class="cell">EMAIL</div>
                         <div class="cell">PHONE</div>
-                        <div class="cell">-</div>
-                    </div>
-
-                    <div class="row">
-                        <div class="cell">1</div>
-                        <div class="cell">admin</div>
-                        <div class="cell">admin</div>
-                        <div class="cell">admin@admin.com</div>
-                        <div class="cell">01012341234</div>
-                        <div class="cell">
-                            <button type="button"><i type="button" class="fa-solid fa-pencil"></i></button>
-                            <button type="button"><i type="button" class="fa-solid fa-trash-can"></i></button>
-                        </div>
+                        <div class="cell">Actions</div>
                     </div>
                 </div>
             </div>
@@ -140,21 +131,7 @@
                         <div class="cell">No</div>
                         <div class="cell">ID</div>
                         <div class="cell">Name</div>
-                        <div class="cell">Subscribe</div>
-                        <div class="cell">Expired Date</div>
-                        <div class="cell">-</div>
-                    </div>
-
-                    <div class="row">
-                        <div class="cell">1</div>
-                        <div class="cell">guest</div>
-                        <div class="cell">guest</div>
-                        <div class="cell">True</div>
-                        <div class="cell">2024-12-01</div>
-                        <div class="cell">
-                            <button type="button"><i class="fa-solid fa-check" style="color: #00FF00;"></i></button>
-                            <button type="button"><i class="fa-solid fa-xmark" style="color: #FF0000;"></i></button>
-                        </div>
+                        <div class="cell">Actions</div>
                     </div>
                 </div>
             </div>
@@ -168,7 +145,7 @@
                         <div class="cell">Writer</div>
                         <div class="cell">Title</div>
                         <div class="cell">Created</div>
-                        <div class="cell">-</div>
+                        <div class="cell">Actions</div>
                     </div>
 
                     <div class="row">
@@ -193,7 +170,7 @@
                         <div class="cell">Writer</div>
                         <div class="cell">Title</div>
                         <div class="cell">Created</div>
-                        <div class="cell">-</div>
+                        <div class="cell">Actions</div>
                     </div>
 
                     <div class="row">
@@ -218,7 +195,7 @@
                         <div class="cell">Writer</div>
                         <div class="cell">Title</div>
                         <div class="cell">Created</div>
-                        <div class="cell">-</div>
+                        <div class="cell">Actions</div>
                     </div>
 
                     <div class="row">
@@ -233,8 +210,176 @@
                     </div>
                 </div>
             </div>
-            
         </section>
     </div>
+    <script>
+        function getDataDashboard() {
+            fetch("/admin/get-data/dashboard")
+            .then(response => response.json())
+            .then(data => {
+                console.log(JSON.stringify(data));
+                const table1 = document.querySelector("main > .frame > :nth-child(3) > :nth-child(1) > .table-1");
+                const table2 = document.querySelector("main > .frame > :nth-child(3) > :nth-child(1) > .table-2")
+                if (data.length === 0) {;
+                    const row = document.createElement("div");
+                    row.classList.add("row");
+                    row.innerHTML = '<div class="cell" style="flex:1">데이터가 없습니다.</div>';
+                    table1.appendChild(row);
+                    table2.appendChild(row);
+                }
+                else {
+                    const row1 = document.createElement("div");
+                    row1.classList.add("row");
+                    row1.innerHTML = `
+                        <div class="cell">${data.data.num_of_users}</div>
+                        <div class="cell">${data.data.num_of_quizzes}</div>
+                        <div class="cell">${data.data.num_of_subjects}</div>
+                    `;
+                    table1.appendChild(row1);
+                    
+                    const row2 = document.createElement("div");
+                    row2.classList.add("row");
+                    row2.innerHTML = `
+                        <div class="cell">${data.data.subscribe_info[0].num}</div>
+                        <div class="cell">${data.data.subscribe_info[1].num}</div>
+                        <div class="cell">${data.data.subscribe_info[2].num}</div>
+                    `;
+                    table2.appendChild(row2);
+                }
+            })
+        }
+
+        function getSubscribeRequest() {
+            fetch("/admin/api/get_subscribe_request")
+            .then(response => response.json())
+            .then(data => {
+                const table = document.querySelector("main > .frame > :nth-child(3) > :nth-child(3) > .table");
+
+                if (data.length === 0) {
+                    const row = document.createElement("div");
+                    row.classList.add("row");
+                    row.innerHTML = `
+                        <div class="cell" style="flex:1">데이터가 없습니다.</div>
+                    `;
+                    table.appendChild(row);
+                }
+                else {
+                    data.forEach((user, index) => {
+                        const row = document.createElement("div");
+                        row.classList.add("row");
+    
+                        row.innerHTML = `
+                            <div class="cell">${user.id}</div>
+                            <div class="cell">${user.login_id}</div>
+                            <div class="cell">${user.name}</div>
+                            <div class="cell">
+                                <button type="button" onclick='ApproveSubscribeRequest(${user.id});'><i class="fa-solid fa-check" style="color: #00FF00;"></i></button>
+                                <button type="button" onclick='RejectSubscribeRequest(${user.id});'><i class="fa-solid fa-xmark" style="color: #FF0000;"></i></button>
+                            </div>
+                        `;
+    
+                        table.appendChild(row);
+                    })
+                }
+            })
+        }
+
+        function getUsers() {
+            fetch("/admin/api/get_users")
+            .then(response => response.json())
+            .then(data => {
+                const table = document.querySelector("main > .frame > :nth-child(3) > :nth-child(2) > .table");
+
+                if (data.length === 0) {
+                    const row = document.createElement("div");
+                    row.classList.add("row");
+                    row.innerHTML = `
+                        <div class="cell" style="flex:1">데이터가 없습니다.</div>
+                    `;
+                    table.appendChild(row);
+                }
+                else {
+                    data.forEach((user, index) => {
+                        const row = document.createElement("div");
+                        row.classList.add("row");
+    
+                        row.innerHTML = `
+                            <div class="cell">${user.id}</div>
+                            <div class="cell">${user.login_id}</div>
+                            <div class="cell">${user.name}</div>
+                            <div class="cell">${user.email}</div>
+                            <div class="cell">${user.phone ? user.phone : "-"}</div>
+                            <div class="cell">
+                                <button type="button"><i type="button" class="fa-solid fa-pencil"></i></button>
+                                <button type="button"><i type="button" class="fa-solid fa-trash-can"></i></button>
+                            </div>
+                        `;
+    
+                        table.appendChild(row);
+                    })
+                }
+            })
+        }
+
+        window.onload = function() {
+            const buttons = document.querySelectorAll("#admin-page > .frame > :nth-child(1) > button");
+    
+            buttons.forEach((button, index) => {
+                button.addEventListener("click", function() {
+                    // 버튼 전환
+                    buttons.forEach(btn => btn.classList.remove("active"));
+                    button.classList.add("active");
+    
+                    // 메뉴 전환
+                    const menus = document.querySelectorAll("#admin-page > .frame > :nth-child(3) > div");
+                    menus.forEach(menu => menu.style.display = "none");
+                    menus[index].style.display = "block";
+                });
+            });
+
+            getDataDashboard();
+            getSubscribeRequest();
+            getUsers();
+        };
+
+        function DisplayMenu(index) {
+            const buttons = document.querySelectorAll("#admin-page > .frame > :nth-child(1) > button");
+            const menus = document.querySelectorAll("#admin-page > .frame > :nth-child(3) > div");
+            menus.forEach(menu => menu.style.display = "none");
+            menus[index].style.display = "block";
+        }
+
+        // 구독 관련 함수
+        function ApproveSubscribeRequest(userID) {
+            fetch(`/subscribe/api/add/${userID}`)
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.status === 'S') {
+                    location.reload();
+                    DisplayMenu(2);
+                }
+            })
+            .catch(error => {
+                console.error('Error approving member:', error);
+                alert('오류가 발생했습니다.');
+            });
+        }
+
+        function RejectSubscribeRequest(userID) {
+            fetch(`/subscribe/api/remove/${userID}`)
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.status === 'S') {
+
+                }
+            })
+            .catch(error => {
+                console.error('Error reject member:', error);
+                alert('오류가 발생했습니다.');
+            });
+        }
+    </script>
 </main>
 {% endblock %}
