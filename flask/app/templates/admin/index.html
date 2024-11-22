@@ -113,7 +113,32 @@
 
                  }
 
-                // else if (menus[index].id == "subscribe"){ AdminGetSubscribe() }
+                else if (menus[index].id == "subscribe"){ 
+                    const div = document.getElementById('subscribe_div');
+                    div.innerHTML = '';
+
+                    let subscribes = AdminGetSubscribe()
+
+                    subscribes.forEach((subscribe, index) =>{
+                        const row = document.createElement('div');
+                        row.className='row';
+                        
+                        row.innerHTML =`
+                        <div class="row" id="subscribe_div">
+                        <div class="cell">${index}</div>
+                        <div class="cell">${subscribe.id}</div>
+                        <div class="cell">${subscribe.name}</div>
+                        <div class="cell">${subscribe.expired_at}</div>
+                        <div class="cell">
+                            <button type="button"><i class="fa-solid fa-check" style="color: #00FF00;"></i></button>
+                            <button type="button"><i class="fa-solid fa-xmark" style="color: #FF0000;"></i></button>
+                        </div>
+                    </div>
+                        `;
+
+                        div.appendChild(row);
+                    })
+                }
                 // else if (menus[index].id == "quiz"){ AdminGetQuiz() }
                 // else if (menus[index].id == "test"){ }
                 // else if (menus[index].id == "board"){ AdminGetBoard() }
@@ -182,7 +207,7 @@
                     </div>
 
                     {% for subscribe in subscribes %}
-                    <div class="row">
+                    <div class="row" id="subscribe_div">
                         <div class="cell">{{loop.index}}</div>
                         <div class="cell">{{subscribe.id}}</div>
                         <div class="cell">{{subscribe.name}}</div>
