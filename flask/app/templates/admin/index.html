@@ -3,7 +3,7 @@
 {% block head %}
 {% endblock %}
 
-{% block title %}SSR21 문제은행{% endblock %}
+{% block title %}관리자 페이지{% endblock %}
 
 {% block content %}
 {% include "nav.html" %}
@@ -63,8 +63,6 @@
     main > .frame > :nth-child(3) > :nth-child(6) > .table > .row > :nth-child(3) { flex: 6; text-align: left; }
     main > .frame > :nth-child(3) > :nth-child(6) > .table > .row > :nth-child(4) { flex: 2; }
     main > .frame > :nth-child(3) > :nth-child(6) > .table > .row > :nth-child(5) { width: 100px; }
-
-
 </style>
 
 <script>
@@ -74,13 +72,51 @@
         buttons.forEach((button, index) => {
             button.addEventListener("click", function() {
                 // 버튼 전환
-                buttons.forEach(btn => btn.classList.remove("active"));
+                buttons.forEach(btn =>     
+                    btn.classList.remove("active")
+                );
                 button.classList.add("active");
+                
 
                 // 메뉴 전환
                 const menus = document.querySelectorAll("#admin-page > .frame > :nth-child(3) > div");
                 menus.forEach(menu => menu.style.display = "none");
                 menus[index].style.display = "block";
+               
+                if (menus[index].id == "member"){ 
+                    const div = document.getElementById('member_div');
+                    div.innerHTML = '';
+
+                    let members = AdminGetMembers()
+
+                    members.forEach((member, index) =>{
+                        const row = document.createElement('div');
+                        row.className='row';
+                        
+                        row.innerHTML =`
+                        <div class="row" id="member_div">
+                            <div class="cell">${loop.index}</div>
+                            <div class="cell">${members.login_id}</div>
+                            <div class="cell">${members.name}</div>
+                            <div class="cell">${members.email}</div>
+                            <div class="cell">${members.phone}</div>
+                            <div class="cell">
+                                <button type="button"><i type="button" class="fa-solid fa-pencil"></i></button>
+                                <button type="button"><i type="button" class="fa-solid fa-trash-can"></i></button>
+                            </div>
+                        </div>
+                        `;
+
+                        div.appendChild(row);
+                    })
+
+
+                 }
+
+                // else if (menus[index].id == "subscribe"){ AdminGetSubscribe() }
+                // else if (menus[index].id == "quiz"){ AdminGetQuiz() }
+                // else if (menus[index].id == "test"){ }
+                // else if (menus[index].id == "board"){ AdminGetBoard() }
             });
         });
     };
@@ -105,7 +141,7 @@
                 <div></div>
             </div>
  
-            <div style="display: none;">
+            <div id="member" style="display: none;">
                 <div>회원 관리</div>
 
                 <div class="table">
@@ -117,22 +153,23 @@
                         <div class="cell">PHONE</div>
                         <div class="cell">-</div>
                     </div>
-
-                    <div class="row">
-                        <div class="cell">1</div>
-                        <div class="cell">admin</div>
-                        <div class="cell">admin</div>
-                        <div class="cell">admin@admin.com</div>
-                        <div class="cell">01012341234</div>
+                    {% for member in members %}
+                    <div class="row" id="member_div">
+                        <div class="cell">{{loop.index}}</div>
+                        <div class="cell">{{members.login_id}}</div>
+                        <div class="cell">{{members.name}}</div>
+                        <div class="cell">{{members.email}}</div>
+                        <div class="cell">{{members.phone}}</div>
                         <div class="cell">
                             <button type="button"><i type="button" class="fa-solid fa-pencil"></i></button>
                             <button type="button"><i type="button" class="fa-solid fa-trash-can"></i></button>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
             </div>
 
-            <div style="display: none;">
+            <div id="subscribe" style="display: none;">
                 <div>구독 관리</div>
 
                 <div class="table">
@@ -140,26 +177,26 @@
                         <div class="cell">No</div>
                         <div class="cell">ID</div>
                         <div class="cell">Name</div>
-                        <div class="cell">Subscribe</div>
                         <div class="cell">Expired Date</div>
                         <div class="cell">-</div>
                     </div>
 
+                    {% for subscribe in subscribes %}
                     <div class="row">
-                        <div class="cell">1</div>
-                        <div class="cell">guest</div>
-                        <div class="cell">guest</div>
-                        <div class="cell">True</div>
-                        <div class="cell">2024-12-01</div>
+                        <div class="cell">{{loop.index}}</div>
+                        <div class="cell">{{subscribe.id}}</div>
+                        <div class="cell">{{subscribe.name}}</div>
+                        <div class="cell">{{subscribe.expired_at}}</div>
                         <div class="cell">
                             <button type="button"><i class="fa-solid fa-check" style="color: #00FF00;"></i></button>
                             <button type="button"><i class="fa-solid fa-xmark" style="color: #FF0000;"></i></button>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
             </div>
 
-            <div style="display: none;">
+            <div id="quiz" style="display: none;">
                 <div>문제 관리</div>
 
                 <div class="table">
@@ -171,20 +208,22 @@
                         <div class="cell">-</div>
                     </div>
 
+                    {% for quiz in quizzes %}
                     <div class="row">
-                        <div class="cell">1</div>
-                        <div class="cell">admin</div>
-                        <div class="cell">다음중 올바르지 않은 것을 고르시오.</div>
-                        <div class="cell">2024-11-20</div>
+                        <div class="cell">{{loop.index}}</div>
+                        <div class="cell">{{quiz.id}}</div>
+                        <div class="cell">{{quiz.question}}</div>
+                        <div class="cell">{{quiz.created_at}}</div>
                         <div class="cell">
                             <button type="button"><i type="button" class="fa-solid fa-pencil"></i></button>
                             <button type="button"><i type="button" class="fa-solid fa-trash-can"></i></button>
                         </div>
                     </div>
+                    {% endfor %}                    
                 </div>
             </div>
             
-            <div style="display: none;">
+            <div id="test" style="display: none;">
                 <div>시험 관리</div>
 
                 <div class="table">
@@ -209,7 +248,7 @@
                 </div>
             </div>
             
-            <div style="display: none;">
+            <div id="board" style="display: none;">
                 <div>게시판 관리</div>
 
                 <div class="table">
@@ -220,17 +259,18 @@
                         <div class="cell">Created</div>
                         <div class="cell">-</div>
                     </div>
-
+                    {% for board in boards %}
                     <div class="row">
-                        <div class="cell">1</div>
-                        <div class="cell">admin</div>
-                        <div class="cell">공지사항입니다.</div>
-                        <div class="cell">2024-11-20</div>
+                        <div class="cell">{{board.id}}</div>
+                        <div class="cell">{{board.author}}</div>
+                        <div class="cell">{{board.title}}</div>
+                        <div class="cell">{{board.created_at}}</div>
                         <div class="cell">
-                            <button type="button"><i type="button" class="fa-solid fa-pencil"></i></button>
-                            <button type="button"><i type="button" class="fa-solid fa-trash-can"></i></button>
+                            <button type="button" data-id="{{ board.id }}" onclick='AdminEditBoard(this)'><i type="button" class="fa-solid fa-pencil"></i></button>
+                            <button type="button" data-id="{{ board.id }}" onclick="AdminDeleteBoard(this)"><i type="button" class="fa-solid fa-trash-can"></i></button>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
             </div>
             

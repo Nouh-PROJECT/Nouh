@@ -261,3 +261,81 @@ function ShowChatbot() {
     const chatbotPopup = document.getElementById("chatbotPopup");
     chatbotPopup.classList.toggle("hidden");
 }
+
+// Admin
+function AdminGetMembers(){
+    fetch("/admin/members", {method: "GET"})
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.members)
+            if(data.status_code==200){
+                return data.members
+            }
+            return false     
+        })
+        .catch(error => { console.log("ERROR: ", error)});
+}
+
+function AdminGetSubscribe(){
+    fetch("/admin/subscribe" + window.location.pathname.slice(12), {method: "GET"})
+        .then(response => response.json())
+        .then(data => {
+            if(status_code==200){
+                return data
+            }       
+            return false     
+        })
+        .catch(error => { console.log("ERROR: ", error)});
+}
+
+function AdminGetQuiz(){
+    fetch("/admin/quiz" + window.location.pathname.slice(12), {method: "GET"})
+        .then(response => response.json())
+        .then(data => {
+            if(status_code==200){
+                return data
+            }       
+            return false     
+        })
+        .catch(error => { console.log("ERROR: ", error)});
+}
+
+function AdminGetBoard(){
+    fetch("/admin/board" + window.location.pathname.slice(12), {method: "GET"})
+        .then(response => response.json())
+        .then(data => {
+            if(status_code==200){
+                return data
+            }       
+            return false     
+        })
+        .catch(error => { console.log("ERROR: ", error)});
+}
+
+function AdminEditBoard(){
+    fetch("/admin/board", {method: "GET"})
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            // console.log(data.status_code)
+            // if(data.status_code=='S'){
+            //     return data
+            // }       
+            return false     
+        })
+        .catch(error => { console.log("ERROR: ", error)});
+}
+
+function AdminDeleteBoard(boardId){
+    const id = boardId.getAttribute('data-id');
+
+    fetch(`/board/delete/${boardId}`, {method: "GET"})
+        .then(response => response.json())
+        .then(data => {
+            if(status_code==200){
+                location.reload(true);
+            }       
+            return false     
+        })
+        .catch(error => { console.log("ERROR: ", error)});
+}
