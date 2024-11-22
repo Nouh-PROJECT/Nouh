@@ -1,30 +1,45 @@
-from flask import Blueprint, jsonify, request, redirect, url_for, render_template
+from flask import Blueprint, jsonify, request, redirect, url_for, render_template,flash
 from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash
 from app.utils.db import execute_query
 from flask import render_template, request, session
+from functools import wraps
 
 bp = Blueprint('admin', __name__, url_prefix='/admin')
 
-# 관리자 전용 페이지 접근 시 비관리자 리다이렉트
-#def admin_required(func):
-#    def wrapper(*args, **kwargs):
- #       if not hasattr(current_user, 'is_admin') or not current_user.is_admin:
- #           return redirect(url_for('main.index'))  # 메인 페이지로 리다이렉트
-  #      return func(*args, **kwargs)
-   # wrapper.__name__ = func.__name__
-   # return wrapper
+# 데코레이터 정의
+def admin_required(func):
+    @wraps(func)
+    def decorated_view(*args, **kwargs):
+        # 현재 사용자가 로그인하지 않았을 경우
+        if not current_user.is_authenticated:
+            flash("접근 권한이 없습니다.", "warning")
+            return redirect(url_for('main.index'))  # 메인 페이지로 리디렉션
+        
+        # 현재 사용자가 관리자 테이블에 존재하는지 확인
+        query = "SELECT COUNT(*) FROM admin WHERE id = %s"
+        result = execute_query(query, (current_user.id,))
+        is_admin = result[0]['COUNT(*)'] if result else 0
+
+        # 관리자가 아닐 경우
+        if not is_admin:
+            flash("접근 권한이 없습니다.", "danger")
+            return redirect(url_for('main.index'))  # 메인 페이지로 리디렉션
+        
+        # 관리자인 경우 요청한 함수 실행
+        return func(*args, **kwargs)
+    
+    return decorated_view
+
 
 @bp.route("/")
-@login_required
-#@admin_required
+@admin_required
 def index():
     return render_template('admin/admin.html')
 
 # 멤버 목록 가져오기 엔드포인트
 @bp.route('/member/get_members', methods=['GET'])
-@login_required
-#@admin_required
+@admin_required
 def get_members():
     try:
         page = int(request.args.get('page', 1))
@@ -46,8 +61,7 @@ def get_members():
 
 # 구독 상태 업데이트 엔드포인트
 @bp.route('/member/approve_subscription/<int:user_id>', methods=['POST'])
-@login_required
-#@admin_required
+@admin_required
 def approve_subscription(user_id):
     try:
         query = "UPDATE users SET subscribe = 1 WHERE id = %s AND subscribe = 2"
@@ -67,8 +81,7 @@ def approve_subscription(user_id):
 
 # 관리자 비밀번호 업데이트 엔드포인트
 @bp.route('/update_admin_pw', methods=['POST'])
-@login_required
-#@admin_required
+@admin_required
 def update_admin_pw():
     new_pw = request.form.get('admin-new-pw')
     if not new_pw:
@@ -86,8 +99,7 @@ def update_admin_pw():
 
 # 게시판 리스트
 @bp.route('/board/get_boards', methods=['GET'])
-@login_required
-#@admin_required
+@admin_required
 def get_boards():
     try:
         # 페이지와 한 페이지당 항목 수를 가져옴
@@ -120,8 +132,7 @@ def get_boards():
 
 # 게시글 삭제
 @bp.route('/board/delete/<int:post_id>', methods=['DELETE'])
-@login_required
-#@admin_required
+@admin_required
 def delete_board_post(post_id):
     try:
         query = "DELETE FROM board WHERE id = %s"
@@ -132,6 +143,7 @@ def delete_board_post(post_id):
 
 #게시글 조회
 @bp.route('/board/view/<int:post_id>', methods=['GET'])
+@admin_required
 def render_board_post(post_id):
     try:
         query = r"""
