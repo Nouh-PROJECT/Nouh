@@ -79,7 +79,10 @@ def quiz_lists():
         "page": page,
         "total_pages": total_pages,
         "start_page": start_page,
-        "end_page": end_page
+        "end_page": end_page,
+        "keyword": keyword,
+        "sortBy": sort_by,
+        "searchBy": search_by
     }
     return render_template("quiz/lists.html", **data)
 

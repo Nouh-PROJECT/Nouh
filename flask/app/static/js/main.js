@@ -180,6 +180,7 @@ function QuizModify() {
 
 function QuizDelete() {
     if (confirm("게시글된 문제를 정말 삭제하시겠습니까?")) {
+        console.log("/quiz/delete/" + window.location.pathname.slice(11));
         fetch("/quiz/delete/" + window.location.pathname.slice(11), {method: "GET"})
         .then(response => response.json())
         .then(data => {
@@ -254,4 +255,9 @@ function PostDelete() {
     }
 
     return false;
+}
+
+function ShowChatbot() {
+    const chatbotPopup = document.getElementById("chatbotPopup");
+    chatbotPopup.classList.toggle("hidden");
 }

@@ -37,14 +37,12 @@ def execute_query(sql: str, params=None):
             command = sql.strip().lower()
             if command.startswith("select"):
                 return cursor.fetchall()
-            elif command.startswith("delete"):
-                return True
 
             db.commit()
             try:
                 if command.startswith("insert"):
                     return cursor.lastrowid
-                if command.startswith("update"):
+                if command.startswith("update") or command.startswith("delete"):
                     return True
             except Exception as commit_error:
                 db.rollback()

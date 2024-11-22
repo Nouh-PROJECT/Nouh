@@ -45,3 +45,7 @@ def xss():
 @bp.route("/form")
 def form():
     return render_template("test/form.html")
+
+@bp.route("/bot")
+def bot():
+    return render_template("chatbot/home.html")

@@ -7,6 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app.utils.db import execute_query
 from app.routes import User
 
+
 bp = Blueprint('member', __name__)
 
 
@@ -38,7 +39,7 @@ def member_login():
     user_id = request.form.get("userId", "")
     user_pw = request.form.get("userPw", "")
     if (user_id and user_pw):
-        query = r"SELECT id, name, login_pw, (SELECT 1 FROM admin WHERE admin.id=users.id)is_admin, "
+        query = r"SELECT id, name, login_pw, (SELECT 1 FROM admin WHERE id=users.id)is_admin, "
         query += r"(SELECT 1 FROM subscribe WHERE subscribe.id=users.id)is_subscribe FROM users WHERE login_id=%s"
         user = rows[0] if (rows:=(execute_query(query, (user_id,)))) else []
         if user and check_password_hash(user["login_pw"], user_pw):

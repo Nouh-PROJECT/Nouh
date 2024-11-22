@@ -26,3 +26,21 @@
 {% include "member/login.html" %}
 
 {% include "member/register.html" %}
+
+{# 구독자 #}
+{% if current_user.is_authenticated %}
+    {% if session["subscribe"] %}
+    <button type="button" id ="chatbotButton" class="chatbot__redirect-button" onclick="ShowChatbot()" >
+        <img src="{{ url_for('static', filename='img/chatbot_icon.png') }}" alt="챗봇 아이콘" class="chatbot__icon" />
+    </button>
+
+    <div id="chatbotPopup" class="chatbot_popup hidden">
+        <iframe class="chatbot_iframe" src="{{ url_for('chatbot.index') }}"></iframe>
+    </div>
+    {# 미구독자 #}
+    {% else %}
+    <button class="chatbot__redirect-button" onclick="alert('구독자만 이용가능합니다')" target="_blank">
+        <img src="{{ url_for('static', filename='img/chatbot_icon.png') }}" alt="챗봇 아이콘" class="chatbot__icon" />
+    </button>
+    {% endif %}
+{% endif %}

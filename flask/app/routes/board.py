@@ -134,6 +134,7 @@ def board_write():
 
 @bp.route("/modify/<idx>", methods=["GET", "POST"])
 @login_required
+@check_authority
 def board_modify(idx: int):
     query = r"SELECT b.id, b.u_id, (SELECT name FROM users WHERE id=b.u_id) AS writer, b.title, b.content, b.created_at, "
     query += r"f.o_filename, f.e_filename FROM board AS b LEFT JOIN files AS f ON b.id=f.b_id WHERE b.id=%s"
