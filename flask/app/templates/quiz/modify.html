@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block title %}문제 수정{% endblock %}
+
+{% block content %}
+{% include "nav.html" %}
+
+
+<main id="form-template">
+    <form id="quiz-cvm" class="frame" onsubmit="return QuizModify();">
+        <div class="title">문제 수정</div>
+
+        <div class="content">
+            <div>
+                <div>과목</div>
+                <select name="quiz-s">
+                    {% for s in subjects %}
+                    {% if quiz.s_id == s.id %}
+                    <option value="{{ s.id }}" selected>{{ s.name }}</option>
+                    {% else %}
+                    <option value="{{ s.id }}">{{ s.name }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <div>문제</div>
+                <textarea name="quiz-q">{{ quiz.q }}</textarea>
+            </div>
+
+            <div>
+                <div>정답</div>
+                <input type="text" name="quiz-a" value="{{ quiz.a }}" required />
+            </div>
+
+            <div>
+                <div>선택지</div>
+                <div>
+                    <input type="text" name="quiz-o1" value="{{ quiz.o1 }}" required />
+                    <input type="text" name="quiz-o2" value="{{ quiz.o2 }}" />
+                    <input type="text" name="quiz-o3" value="{{ quiz.o3 }}" />
+                </div>
+            </div>
+
+            <div>
+                <div>해설</div>
+                <textarea name="quiz-c">{{ quiz.c }}</textarea>
+            </div>
+        </div>
+
+        <div class="button-area">
+            <button type="submit">수정</button>
+            <button type="button" onclick=location.href="{{ url_for('quiz.quiz_lists') }}">목록으로</button>
+        </div>
+    </form>
+</main>
+{% endblock %}

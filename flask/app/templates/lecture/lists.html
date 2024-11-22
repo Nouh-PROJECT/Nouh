@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block head %}
+<style>
+    #lecture-lists > .content { width: 800px; }
+    #lecture-lists > .content > .table > .row > .cell:nth-child(1) { flex: 1; padding: 0 5px; }
+    #lecture-lists > .content > .table > .row > .cell:nth-child(2) { width: 120px; text-align: center; }
+    #lecture-lists > .content > .table > .row > .cell:nth-child(3) { width: 120px; text-align: center }
+    #lecture-lists > .button-area { justify-content: end; }
+    #lecture-lists > .content > .pagination { display: flex; justify-content: center; margin-top: 10px; }
+    #lecture-lists > .content > .pagination > * { margin-right: 5px; }
+    #lecture-lists > .content > .pagination > :last-child { margin-right: 0; }
+</style>
+{% endblock %}
+
+{% block title %}강의 목록{% endblock %}
+
+{% block content %}
+{% include "nav.html" %}
+
+
+<main id="form-template">
+    <div id="lecture-lists" class="frame">
+        <div class="title">강의 목록</div>
+
+        <div class="content">
+            <form class="search-area">
+                <div style="justify-content: space-between;">
+                    <select name="searchBy" style="width: 200px; margin-bottom: 10px;">
+                        <option value="0">전체</option>
+                        {% for s in subjects %}
+                        <option value="{{ s.id }}">{{ s.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <select name="sortBy">
+                        <option value="DESC">최신순</option>
+                        <option value="ASC">오래된순</option>
+                    </select>
+                </div>
+                <div>
+                    <input type="search" name="keyword" />
+                    <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+            </form>
+
+            <div class="table">
+                <div class="row head">
+                    <div class="cell">제목</div>
+                    <div class="cell">작성자</div>
+                    <div class="cell">작성일자</div>
+                </div>
+                {% if posts | length == 0 %}
+                <div class="row">
+                    <div class="cell" style="width: 100%; text-align: center;">데이터가 없습니다.</div>
+                </div>
+                {% else %}
+                {% for post in posts %}
+                <div class="row">
+                    <div class="cell"><a href="{{ url_for('lecture.lecture_view', idx=post.id)}}">{{ post.title }}</a></div>
+                    <div class="cell">{{ post.writer }}</div>
+                    <div class="cell">{{ post.created_at }}</div>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="pagination">
+                {% for p in range(start_page, end_page + 1) %}
+                {% if p == page %}
+                <strong>{{ p }}</strong>
+                {% else %}
+                <a href="{{ url_for('lecture.lecture_lists', page=p) }}">{{ p }}</a>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="button-area">
+            {% if current_user.is_authenticated and current_user.is_admin %}
+            <button type="button" style="margin: 0" onclick=location.href="{{ url_for('lecture.lecture_create') }}">추가</button>
+            {% endif %}
+            <button type="button" onclick=location.href="{{ url_for('main.index') }}">메인으로</button>
+        </div>
+    </div>
+</main>
+
+{% endblock %}

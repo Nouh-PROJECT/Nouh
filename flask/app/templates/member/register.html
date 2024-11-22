@@ -1,0 +1,13 @@
+<div class="bg-modal" onclick="HideModalForm();" style="display: none;">
+    <form class="register" onclick="event.stopPropagation();" onsubmit="return MemberRegister();">
+        <div class="title">SSR21</div>
+        <input type="text" class="" name="userName" placeholder="이름" required />
+        <input type="text" class="" name="userId" placeholder="아이디" required />
+        <input type="password" class="" name="userPw" placeholder="비밀번호" required />
+        <input type="password" class="" name="checkPw" placeholder="비밀번호 확인" required />
+        <input type="email" class="" name="userEmail" placeholder="이메일" />
+        <input type="tel" class="" name="userPhone" placeholder="연락처" />
+        <button type="submit" class="btn-login">회원가입</button>
+        <button type="button" class="btn-register" onclick="ShowLoginForm();">로그인</button>
+    </form>
+</div>

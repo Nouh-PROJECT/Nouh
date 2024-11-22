@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>결제창</title>
+
+    <style>
+        /* 기본 스타일 */
+        body, body * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* 네비게이션 스타일 */
+        nav { padding: 15px; background-color: #22408f; font-size: 18px; font-weight: bold; color: #fff; text-align: center; }
+        /* 메인 컨테이너 */
+        .container { max-width: 500px; width: 90%; margin: 50px auto; padding: 30px; border-radius: 10px; background-color: #fff; text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
+        /* 체크박스 및 결제금액 섹션 */
+        .section { margin-top: 20px; text-align: left; }
+        .section h2 { margin-bottom: 10px; font-size: 20px; color: #333; }
+        .checkbox-container { margin-top: 10px; }
+        .checkbox-container input { margin-right: 10px; transform: scale(1.2); }
+        /* 결제 금액 */
+        .payment-amount { margin: 20px 0; font-size: 24px; font-weight: bold; color: #22408f; }
+        /* 버튼 스타일 */
+        .button-container { display: flex; justify-content: center; margin-top: 30px; }
+        .button { all:unset; display: block; width: 100px; height: 40px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .button-pay { background-color: #22408f; color: #fff; }
+        .button-pay:hover { background-color: #1a326b; }
+        .button-cancel { background-color: #ddd; color: #333; }
+        .button-cancel:hover { background-color: #bbb; }
+        /* 동의 항목 텍스트 */
+        label { font-size: 16px; color: #555; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>Nouh | 결제</nav>
+
+        <!-- 구독 서비스 체크박스 -->
+        <div class="section">
+            <h2>구독 서비스</h2>
+            <div class="checkbox-container">
+                <input type="checkbox" id="agreeall">
+                <label for="agreeall"><b>전체 동의하기</b></label>
+            </div>
+            <div class="checkbox-container">
+                <input class="agree" type="checkbox" id="agree1">
+                <label for="agree1">위 상품의 구매조건 확인 및 결제진행 동의</label>
+            </div>
+            <div class="checkbox-container">
+                <input class="agree" type="checkbox" id="agree2">
+                <label for="agree2">거래정보 제공 동의 (판매자: Nouh)</label>
+            </div>
+        </div>
+
+        <!-- 총 결제금액 -->
+        <div class="section payment-amount">월 / 20,000원</div>
+
+        <!-- 결제 및 취소 버튼 -->
+        <div class="button-container">
+            <button id="pay" class="button button-pay" style="margin-right: 20px;" disabled>다음</button>
+            <button id="no" class="button button-cancel">취소</button>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('pay').addEventListener('click', function () {
+            window.location.href = "{{ url_for('subscribe.subscribe_result') }}"
+        });
+
+        document.getElementById('no').addEventListener('click', function () {
+            window.close();
+        });
+
+        function updateAgreeAllCheckbox() {
+            const agree1Checked = document.getElementById('agree1').checked;
+            const agree2Checked = document.getElementById('agree2').checked;
+            const agreeAllCheckbox = document.getElementById('agreeall');
+            const pay = document.getElementById('pay');
+
+            if (agree1Checked && agree2Checked) {
+                agreeAllCheckbox.checked = true;
+                pay.removeAttribute('disabled');
+            } else {
+                agreeAllCheckbox.checked = false;
+                pay.setAttribute('disabled', '1');
+            }
+        }
+
+        document.querySelectorAll('.agree').forEach(function (checkbox) {
+            checkbox.addEventListener('click', updateAgreeAllCheckbox);
+        });
+
+        document.getElementById('agreeall').addEventListener('click', function () {
+            const agreeAllChecked = this.checked;
+            document.getElementById('agree1').checked = agreeAllChecked;
+            document.getElementById('agree2').checked = agreeAllChecked;
+
+            const pay = document.getElementById('pay');
+            if (agreeAllChecked) {
+                pay.removeAttribute('disabled');
+            } else {
+                pay.setAttribute('disabled', '1');
+            }
+        });
+    });
+    </script>
+</body>
+</html>

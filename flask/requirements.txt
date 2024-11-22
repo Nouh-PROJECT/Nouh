@@ -1,0 +1,17 @@
+gunicorn
+
+flask
+flask_login
+flask_session
+werkzeug
+cryptography
+
+pymysql
+openpyxl
+
+langchain==0.0.273
+openai==0.27.6
+Flask-Cors==3.0.10
+tiktoken==0.5.1
+
+mimetype
