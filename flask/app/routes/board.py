@@ -4,7 +4,7 @@ import secrets
 import datetime
 from flask import Blueprint
 from flask import request, session
-from flask import render_template, url_for, redirect, jsonify
+from flask import render_template, url_for, redirect, jsonify, send_file
 from flask_login import login_required
 from flask_login import current_user
 from functools import wraps
@@ -31,8 +31,9 @@ def check_authority(func):
 
 
 
-# CASE WHEN (1=1) THEN 1 ELSE (SELECT 1 UNION SELECT 2) END
-# CASE WHEN (1=2) THEN 1 ELSE (SELECT 1 UNION SELECT 2) END
+# soryBy SQL Injection
+# (CASE WHEN (1=1) THEN 1 ELSE (SELECT 1 UNION SELECT 2) END)
+# (CASE WHEN (1=2) THEN 1 ELSE (SELECT 1 UNION SELECT 2) END)
 @bp.route("/lists")
 def board_lists():
     page = request.args.get("page", 1, type=int)
@@ -84,6 +85,15 @@ def board_lists():
     return render_template("board/lists.html", **data)
 
 
+@bp.route("/download/<filename>")
+def board_download(filename: str):
+    query = r"SELECT o_filename FROM files WHERE e_filename=%s"
+    file = rows[0] if (rows:=execute_query(query, (filename,))) else []
+    file_path = os.path.join(os.getcwd(), "app", "uploads", filename)
+    if os.path.isfile(file_path):
+        return send_file(file_path, as_attachment=True, download_name=file["o_filename"])
+    
+
 @bp.route("/view/<idx>")
 def board_view(idx: int):
     query = r"SELECT b.id, b.u_id, (SELECT name FROM users WHERE id=b.u_id) AS writer, b.title, b.content, b.created_at, "
@@ -125,7 +135,7 @@ def board_write():
                 file.save(save_path)
             except Exception as e:
                 return jsonify({"status": "F", "message": "게시글 작성 실패"})
-            if not (f_id:=execute_query(r"INSERT INTO files VALUES (NULL, %s, %s)", (b_id, o_filename, e_filename))):
+            if not (execute_query(r"INSERT INTO files VALUES (NULL, %s, %s, %s)", (b_id, o_filename, e_filename))):
                 return jsonify({"status": "F", "message": "게시글 작성 실패"})
         return jsonify({"status": "S", "message": "게시글 작성 완료!"})
 
@@ -158,7 +168,7 @@ def board_modify(idx: int):
         if not content:
             return jsonify({"status": "F", "message": "내용을 입력해주세요!"})
         if not (b_id:=execute_query(r"UPDATE board SET title=%s, content=%s WHERE id=%s", (title, content, idx))):
-            return jsonify({"status": "F", "message": "게시글 작성 실패"})
+            return jsonify({"status": "F", "message": "게시글 수정 실패"})
 
         # 새로운 파일이 등록된 경우
         if file and file.filename:
@@ -171,8 +181,8 @@ def board_modify(idx: int):
                     if os.path.isfile(file_path):
                         os.remove(file_path)
                     # 데이터베이스 정보 삭제
-                    if execute_query(r"DELETE FROM files WHERE b_id=%s", (idx,)):
-                        return jsonify({"status": "F", "message": "게시글 작성 실패"})
+                    if not execute_query(r"DELETE FROM files WHERE b_id=%s", (idx,)):
+                        return jsonify({"status": "F", "message": "게시글 수정 실패"})
                         
 
                 # 파일 이름이 겹치는 경우를 막기 위한 작업
@@ -183,10 +193,10 @@ def board_modify(idx: int):
                 save_path = os.path.join(os.getcwd(), "app", "uploads", e_filename)
                 file.save(save_path)
             except Exception as e:
+                return jsonify({"status": "F", "message": "게시글 수정 실패"})
+            if not (execute_query(r"INSERT INTO files VALUES (NULL, %s, %s, %s)", (idx, o_filename, e_filename))):
                 return jsonify({"status": "F", "message": "게시글 작성 실패"})
-            if not (f_id:=execute_query(r"INSERT INTO files VALUES (NULL, %s, %s, %s)", (b_id, o_filename, e_filename))):
-                return jsonify({"status": "F", "message": "게시글 작성 실패"})
-        return jsonify({"status": "S", "message": "게시글 작성 완료!"})
+        return jsonify({"status": "S", "message": "게시글 수정 완료!"})
     return render_template("board/modify.html", post=post)
 
 
@@ -194,6 +204,13 @@ def board_modify(idx: int):
 @login_required
 @check_authority
 def board_delete(idx: int):
+    filename = rows[0]["e_filename"] if (rows:=execute_query(r"SELECT e_filename FROM files WHERE b_id=%s", (idx,))) else ""
+    if filename:
+        file_path = os.path.join(os.getcwd(), "app", "uploads", filename)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+        if not execute_query(r"DELETE FROM files WHERE b_id=%s", (idx,)):
+            return jsonify({"status": "F", "message": "파일 삭제 실패"})
     if execute_query(r"DELETE FROM board WHERE id=%s", (idx,)):
         return jsonify({"status": "S", "message": "게시글 삭제 완료"})
     return jsonify({"status": "F", "message": "게시글 삭제 실패"})

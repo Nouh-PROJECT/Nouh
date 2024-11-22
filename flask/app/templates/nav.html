@@ -5,7 +5,7 @@
             <div class="menu">
                 <a href="/" class="item">Home</a>
                 <a href="{{ url_for('lecture.lecture_lists') }}" class="item">Lecture</a>
-                <a href="#" class="item">Exam</a>
+                <a href="{{ url_for('exam.exam_lists') }}" class="item">Exam</a>
                 <a href="{{ url_for('quiz.quiz_lists') }}" class="item">Quiz</a>
                 <a href="{{ url_for('board.board_lists') }}" class="item">Board</a>
             </div>

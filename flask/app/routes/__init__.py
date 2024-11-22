@@ -20,6 +20,7 @@ def register_routes(app):
     from .board import bp as board_bp
     from .lecture import bp as lecture_bp
     from .chatbot import bp as chatbot_bp
+    from .subscribe import bp as subscribe_bp
     from .test import bp as test_bp
 
     app.register_blueprint(main_bp)
@@ -30,6 +31,7 @@ def register_routes(app):
     app.register_blueprint(board_bp, url_prefix='/board')
     app.register_blueprint(lecture_bp, url_prefix='/lecture')
     app.register_blueprint(chatbot_bp, url_prefix='/chatbot')
+    app.register_blueprint(subscribe_bp, url_prefix='/subscribe')
     app.register_blueprint(test_bp, url_prefix='/test')
 
 

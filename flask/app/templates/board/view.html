@@ -45,9 +45,9 @@
             <div>
                 <div>첨부 파일</div>
                 {% if post.o_filename %}
-                <a href="#">{{ post.o_filename }}</a>
+                <a href="{{ url_for('board.board_download', filename=post.e_filename) }}">{{ post.o_filename }}</a>
                 {% else %}
-                <p>첨부파일 없음</p>
+                <p>없음</p>
                 {% endif %}
             </div>
 
@@ -60,9 +60,11 @@
         </div>
 
         <div class="button-area">
-            {% if current_user.is_authenticated and post.u_id == current_user.id %}
+            {% if current_user.is_authenticated %}
+            {% if (current_user.is_admin) or (post.u_id == current_user.id) %}
             <button type="button" onclick=location.href="{{ url_for('board.board_modify', idx=post.id) }}">수정</button>
             <button type="button" class="btn-delete" onclick="PostDelete();">삭제</button>
+            {% endif %}
             {% endif %}
             <button type="button" onclick=location.href="{{ url_for('board.board_lists') }}">목록으로</button>
         </div>

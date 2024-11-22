@@ -38,8 +38,8 @@ def execute_query(sql: str, params=None):
             if command.startswith("select"):
                 return cursor.fetchall()
 
-            db.commit()
             try:
+                db.commit()
                 if command.startswith("insert"):
                     return cursor.lastrowid
                 if command.startswith("update") or command.startswith("delete"):
@@ -47,5 +47,7 @@ def execute_query(sql: str, params=None):
             except Exception as commit_error:
                 db.rollback()
                 return False
+                return f"{commit_error}"
         except Exception as query_error:
             return False
+            return f"{query_error}"

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>입금 확인</title>
+    <script>
+        function currentDate() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = ('0' + (today.getMonth() + 1)).slice(-2);
+            const day = ('0' + today.getDate()).slice(-2);
+            const dateString = year + '-' + month + '-' + day;
+            document.getElementById('currentDate').value = dateString;
+        }
+        window.onload = currentDate;
+    </script>
+    
+    <style>
+        body { display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; padding: 0; background-color: #f8f9fa; font-family: Arial, sans-serif; }
+        .container { box-sizing: border-box; width: 90%; max-width: 500px; padding: 20px; border-radius: 10px; background-color: #fff; text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
+
+        /* 완료 메시지 */
+        h2 { margin-bottom: 10px; color: #22408f; font-size: 28px; font-weight: bold; }
+        h4 { margin-bottom: 30px; font-size: 18px; color: #555; }
+
+        /* 이미지 */
+        .image-container img { width: 100%; max-width: 400px; margin-bottom: 20px; border-radius: 5px; }
+        .info { display: flex; align-items: center; flex-direction: column; margin: 15px 0; font-size: 16px; color: #333; }
+        label { margin-bottom: 5px; font-weight: bold; color: #22408f; }
+        .info input { width: 100%; max-width: 250px; margin-bottom: 15px; padding: 8px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9; font-size: 16px; text-align: center; }
+        .button-container { margin-top: 20px; }
+
+        #home { padding: 10px 20px; border: none; border-radius: 5px; background-color: #22408f; font-size: 16px; font-weight: bold; color: #fff; cursor: pointer; }
+        #home:hover { background-color: #1a326b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>입금 확인중</h2>
+        <b style="font-size: 23px;">관리자 승인 후 구독 서비스를 이용하실 수 있습니다.</b>
+
+        <!-- 결제 정보 -->
+        <div class="info">
+            <label>결제 금액</label>
+            <input type="text" value="20,000원 / 월" disabled>
+        </div>
+
+        <div class="info">
+            <label>서비스 신청 날짜</label>
+            <input type="text" id="currentDate" disabled>
+        </div>
+
+        <!-- 홈으로 버튼 -->
+        <div class="button-container">
+            <button id="home">홈으로</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('home').addEventListener('click', function() {
+            if (window.opener && !window.opener.closed) {
+                window.opener.location.href = "{{ url_for('main.index') }}";
+            }
+            window.close();
+        });
+    </script>
+</body>
+</html>

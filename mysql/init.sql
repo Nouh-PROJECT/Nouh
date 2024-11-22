@@ -17,6 +17,7 @@ CREATE TABLE admin (
 
 CREATE TABLE subscribe (
 	id INT NOT NULL,
+	status INT NOT NULL,
 	expired_at TIMESTAMP,
 	FOREIGN KEY(id) REFERENCES users(id) ON DELETE CASCADE
 );

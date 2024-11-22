@@ -18,7 +18,7 @@
             {% if session["subscribe"] %}
             <button type="button" class="btn-subscribe enable" ><i class="fa-solid fa-bell fa-lg"></i>구독중</button>
             {% else %}
-            <button type="button" class="btn-subscribe disable" onclick=location.href='/'><i class="fa-solid fa-bell fa-lg"></i>구독하기</button>
+            <button type="button" class="btn-subscribe disable" onclick=location.href="{{ url_for('subscribe.index') }}"><i class="fa-solid fa-bell fa-lg"></i>구독하기</button>
             {% endif %}
             {% endif %}
         </div>

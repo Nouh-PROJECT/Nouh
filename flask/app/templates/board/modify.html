@@ -27,7 +27,8 @@
                 <div class="editor-container__editor"><div id="editor"></div></div>
             </div>
 
-            <input type="file" name="file" value="post.o_filename" />
+            <pre style="margin-bottom: 5px; font-size: 12px; font-weight: bold;">기존 첨부파일 : {% if post.o_filename %}{{ post.o_filename }}{% else %}파일 없음{% endif %}</pre>
+            <input type="file" name="file" />
         </div>
 
         <div class="button-area">

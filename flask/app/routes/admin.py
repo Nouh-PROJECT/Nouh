@@ -26,3 +26,21 @@ def check_authority(func):
 @check_authority
 def index():
     return render_template("admin/index.html")
+
+
+
+@bp.route("/")
+@login_required
+@check_authority
+def admin_get_users():
+    page = 1
+    total_pages = 0
+    per_page = 10
+    offset = (page - 1) * per_page
+    
+    query = f"SELECT * FROM users LIMIT {per_page} OFFSET {offset}"
+    users = rows if (rows:=execute_query(query)) else []
+    data = {
+    }
+    
+    return jsonify({"status": "S", "data": data})
