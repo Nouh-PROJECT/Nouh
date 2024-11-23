@@ -15,7 +15,9 @@
             <p style="line-height: 1;">SK Shieldus Rookies 문제은행</p>
             <p>클라우드기반 스마트 융합보안과정 21기</p>
             {% if current_user.is_authenticated %}
-            {% if session["subscribe"] %}
+            {% if session["is_subscribe"] == 1 %}
+            <button type="button" class="btn-subscribe disable" onclick="alert('입금 확인중입니다')"><i class="fa-solid fa-bell fa-lg"></i>구독하기</button>
+            {% elif session["is_subscribe"] == 2 %}
             <button type="button" class="btn-subscribe enable" ><i class="fa-solid fa-bell fa-lg"></i>구독중</button>
             {% else %}
             <button type="button" class="btn-subscribe disable" onclick=location.href="{{ url_for('subscribe.index') }}"><i class="fa-solid fa-bell fa-lg"></i>구독하기</button>

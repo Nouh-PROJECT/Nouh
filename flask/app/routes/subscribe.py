@@ -13,7 +13,7 @@ def check_authority(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         if current_user.is_authenticated:
-            if (current_user.is_admin or session["subscribe"]):
+            if (current_user.is_admin or (session["is_subscribe"] == 2)):
                 return func(*args, **kwargs)
         return redirect("/")
     return wrapper
@@ -40,6 +40,7 @@ def subscribe_result():
         execute_query(r"INSERT INTO subscribe VALUES (%s, 1, NULL)", (current_user.id,))
     else:
         execute_query(r"UPDATE subscribe SET status=1 WHERE id=%s", (current_user.id,))
+    session["is_subscribe"] = 1
     return render_template("subscribe/result.html")
 
 
@@ -54,7 +55,7 @@ def subscribe_add(user_id: int):
     else:
         if not (execute_query(r"UPDATE subscribe SET status=2, expired_at=DATE_ADD(NOW(), INTERVAL 1 MONTH) WHERE id=%s", (user_id,))):
             return jsonify({"status": "F", "message": "구독 실패"})
-    session['subscribe'] = True
+    session['is_subscribe'] = 2
     return jsonify({"status": "S", "message": "구독 완료"})
 
 
@@ -64,7 +65,7 @@ def subscribe_add(user_id: int):
 def subscribe_remove(user_id: int):
     query = r"DELETE FROM subscribe WHERE id=%s"
     if execute_query(query, (user_id,)):
-        session['subscribe'] = False
+        session['is_subscribe'] = 0
         return jsonify({"status": "S", "message": "구독 해제"})
     return jsonify({"status": "F", "message": "구독 해제 실패"})
 
