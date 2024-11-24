@@ -4,11 +4,25 @@ from app.utils.db import execute_query
 
 
 class User(UserMixin):
-    def __init__(self, id, name, user_id, is_admin):
+    def __init__(self, id, name, login_id, is_admin, is_subscribe):
         self.id = id
         self.name = name
-        self.user_id = user_id
+        self.user_id = login_id
         self.is_admin = is_admin
+        self.is_subscribe = is_subscribe
+    
+    @staticmethod
+    def get(user_no):
+        query = r"SELECT u.id, u.name, u.login_id, COALESCE(a.id, 0) AS is_admin, COALESCE(s.status, 0) AS is_subscribe"
+        query += r" FROM users AS u LEFT JOIN admin AS a ON a.id=u.id LEFT JOIN subscribe AS s ON s.id=u.id WHERE u.id=%s"
+        user = rows[0] if (rows:=execute_query(query, (user_no,))) else []
+        print(user_no, user)
+        if user:
+            return User(**user)
+
+    def update_subscribe_status(self):
+        self.is_subscribe = rows[0]["status"] if (rows:=execute_query(r"SELECT status FROM subscribe WHERE id = %s", (self.id,))) else 0
+        return ""
 
 
 def register_routes(app):
@@ -41,11 +55,7 @@ def init_login_manager(app):
 
     @login_manager.user_loader
     def load_user(user_no):
-        query = r"SELECT id, name, login_id, (SELECT 1 FROM admin WHERE admin.id=users.id)is_admin FROM users WHERE id=%s"
-        user = rows[0] if (rows := execute_query(query, (user_no,))) else []
-        if user:
-            return User(user["id"], user["name"], user["login_id"], user["is_admin"])
-        return None
+        return User.get(user_no)
 
     @login_manager.unauthorized_handler
     def unauthorized():

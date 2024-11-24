@@ -140,3 +140,13 @@ form.login button[type=button]:hover, form.register button[type=button]:hover { 
 
 #btn-parser { width: 80px; height: 30px; margin-left: 10px; border-radius: 5px; background-color: #424D83; font-size: 12px; font-weight: bold; color: #FFF; }
 #btn-parser:hover { background-color: #A1B0FC; }
+
+
+
+/* Lecture */
+#lecture-cvm > .content > div { display: flex; align-items: center; margin-bottom: 20px; border-left: 5px solid #424D83; border-top-left-radius: 5px; border-bottom-left-radius: 5px; }
+#lecture-cvm > .content > div select { width: 250px; height: 30px;}
+#lecture-cvm > .content > :last-child { margin-bottom: 0; }
+#lecture-cvm > .content > div > :first-child { flex-shrink: 0; width: 100px; font-size: 16px; font-weight: bold; color: #424D83; text-align: center; }
+#lecture-cvm > .content > div input { width: 100%; height: 30px; padding-left: 5px; }
+#lecture-cvm > .content > div textarea { width: 100%; height: 100px; padding: 5px; resize: none; }

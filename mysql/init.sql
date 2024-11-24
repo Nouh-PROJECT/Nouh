@@ -64,10 +64,11 @@ CREATE TABLE files (
 );
 
 
-CREATE TABLE lecture (
+CREATE TABLE lectures (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	s_id INT NOT NULL,
-	name VARCHAR(32) NOT NULL,
+	title VARCHAR(32) NOT NULL,
+	description TEXT NOT NULL,
 	o_filename VARCHAR(255) NOT NULL,
 	e_filename VARCHAR(255) NOT NULL,
 	FOREIGN KEY(s_id) REFERENCES subjects(id) ON DELETE CASCADE

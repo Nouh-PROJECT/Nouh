@@ -13,7 +13,8 @@ def check_authority(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         if current_user.is_authenticated:
-            if (current_user.is_admin or (session["is_subscribe"] == 2)):
+            is_subscribe = rows[0]["status"] if (rows:=execute_query(r"SELECT status FROM subscribe WHERE id=%s", (current_user.id,))) else 0
+            if (current_user.is_admin or current_user.is_subscribe == 2):
                 return func(*args, **kwargs)
         return redirect("/")
     return wrapper
@@ -40,7 +41,6 @@ def subscribe_result():
         execute_query(r"INSERT INTO subscribe VALUES (%s, 1, NULL)", (current_user.id,))
     else:
         execute_query(r"UPDATE subscribe SET status=1 WHERE id=%s", (current_user.id,))
-    session["is_subscribe"] = 1
     return render_template("subscribe/result.html")
 
 
@@ -50,13 +50,12 @@ def subscribe_result():
 def subscribe_add(user_id: int):
     user = rows[0] if (rows:=execute_query(r"SELECT * FROM subscribe WHERE id=%s", (user_id,))) else []
     if not user:
-        if (x:=execute_query(r"INSERT INTO subscribe VALUES (%s, 2, DATE_ADD(NOW(), INTERVAL 1 MONTH))", (user_id,))):
-            return jsonify({"status": "F", "message": f"구독 실패{x}"})
+        if (execute_query(r"INSERT INTO subscribe VALUES (%s, 2, DATE_ADD(NOW(), INTERVAL 1 MONTH))", (user_id,))):
+            return jsonify({"status": "F", "message": "처리 실패"})
     else:
         if not (execute_query(r"UPDATE subscribe SET status=2, expired_at=DATE_ADD(NOW(), INTERVAL 1 MONTH) WHERE id=%s", (user_id,))):
-            return jsonify({"status": "F", "message": "구독 실패"})
-    session['is_subscribe'] = 2
-    return jsonify({"status": "S", "message": "구독 완료"})
+            return jsonify({"status": "F", "message": "처리 실패"})
+    return jsonify({"status": "S", "message": "승인 완료"})
 
 
 @bp.route("/api/remove/<user_id>")
@@ -65,7 +64,6 @@ def subscribe_add(user_id: int):
 def subscribe_remove(user_id: int):
     query = r"DELETE FROM subscribe WHERE id=%s"
     if execute_query(query, (user_id,)):
-        session['is_subscribe'] = 0
-        return jsonify({"status": "S", "message": "구독 해제"})
-    return jsonify({"status": "F", "message": "구독 해제 실패"})
+        return jsonify({"status": "S", "message": "구독 취소 완료"})
+    return jsonify({"status": "F", "message": "구독 취소 실패"})
 

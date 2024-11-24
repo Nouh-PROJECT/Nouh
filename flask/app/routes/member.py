@@ -39,13 +39,10 @@ def member_login():
     user_id = request.form.get("userId", "")
     user_pw = request.form.get("userPw", "")
     if (user_id and user_pw):
-        query = r"SELECT id, name, login_pw, (SELECT 1 FROM admin WHERE id=users.id)is_admin, "
-        query += r"(SELECT status FROM subscribe WHERE subscribe.id=users.id)is_subscribe FROM users WHERE login_id=%s"
-        user = rows[0] if (rows:=(execute_query(query, (user_id,)))) else []
+        user = rows[0] if (rows:=(execute_query(r"SELECT id, login_pw FROM users WHERE login_id=%s", (user_id,)))) else []
         if user and check_password_hash(user["login_pw"], user_pw):
-            session["is_subscribe"] = int(user["is_subscribe"] if user["is_subscribe"] else 0)
-            login_user(User(user["id"], user["name"], user_id, user["is_admin"]))
-            return jsonify({"status":"S", "message": f"{user['name']}님 환영합니다!"})
+            login_user(User.get(user['id']))
+            return jsonify({"status":"S", "message": f"{current_user.name}님 환영합니다!"})
     return jsonify({"status":"F", "message":"아이디 또는 비밀번호가 올바르지 않습니다."})
 
 

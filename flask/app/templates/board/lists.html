@@ -76,7 +76,9 @@
         </div>
 
         <div class="button-area">
+            {% if current_user.is_authenticated %}
             <button type="button" style="margin: 0;" onclick=location.href="{{ url_for('board.board_write') }}">글쓰기</button>
+            {% endif %}
             <button type="button" onclick=location.href="{{ url_for('main.index') }}">메인으로</button>
         </div>
     </div>

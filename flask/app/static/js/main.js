@@ -261,3 +261,30 @@ function ShowChatbot() {
     const chatbotPopup = document.getElementById("chatbotPopup");
     chatbotPopup.classList.toggle("hidden");
 }
+
+
+// Lecture
+function LectureCreate() {
+    const subject = document.querySelector("select[name=subject").value;
+    const title = document.querySelector("input[name=title]").value;
+    const decription = document.querySelector("textarea[name=description").innerText;
+    const file = document.querySelector("input[name=file]").files[0];
+
+    const formData = new FormData();
+    formData.append("subject", subject);
+    formData.append("title", title);
+    formData.append("description", decription);
+    formData.append("file", file);
+
+    fetch("/lecture/create", { method: "POST", body: formData })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+        if (data.status === "S") {
+            location.href = "/lecture/lists";
+        }
+    })
+    .catch(error => { console.log("ERROR: ", error) });
+
+    return false;
+}

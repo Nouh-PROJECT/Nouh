@@ -1,8 +1,11 @@
 import os
-import json
+import string
+import secrets
+import datetime
+import mimetypes
 from flask import Blueprint
 from flask import request, session
-from flask import render_template, url_for, redirect, jsonify
+from flask import render_template, url_for, redirect, jsonify, send_file, Response
 from flask_login import login_required
 from flask_login import current_user
 from functools import wraps
@@ -16,7 +19,7 @@ def check_authority(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         if current_user.is_authenticated:
-            if current_user.is_admin or session["subscribe"]:
+            if current_user.is_admin or current_user.is_subscribe:
                 return func(*args, **kwargs)
         return redirect("/")
     return wrapper
@@ -42,16 +45,17 @@ def lecture_lists():
     per_page = 10   # 한 페이지에 표시할 게시글 수
     offset = (page - 1) * per_page # 페이지 오프셋
 
-    count_query = f"SELECT COUNT(*) num FROM lecture"
-    query = r"SELECT id, (SELECT name FROM users WHERE id=u_id) AS writer, title, content, DATE_FORMAT(created_at, '%%Y-%%m-%%d') AS created_at FROM lecture "
+
+    count_query = f"SELECT COUNT(*) num FROM lectures"
+    query = r"SELECT s.name AS subject, l.id, l.title, l.description, l.e_filename FROM lectures l LEFT JOIN subjects s ON l.id=s.id "
     if search_by == 0:
-        condition = f" WHERE title LIKE %s OR content LIKE %s ORDER BY 1 {sort_by}"
+        condition = f" WHERE l.title LIKE %s OR l.description LIKE %s ORDER BY 1 {sort_by}"
         params = (f"%{keyword}%", f"%{keyword}%")
     elif search_by == 1:
-        condition = f" WHERE title LIKE %s ORDER BY 1 {sort_by}"
+        condition = f" WHERE l.title LIKE %s ORDER BY 1 {sort_by}"
         params = (f"%{keyword}%",)
     elif search_by == 2:
-        condition = f" WHERE content LIKE %s ORDER BY 1 {sort_by}"
+        condition = f" WHERE l.description LIKE %s ORDER BY 1 {sort_by}"
         params = (f"%{keyword}%",)
     limit = f" LIMIT {per_page} OFFSET {offset}"
     
@@ -79,19 +83,74 @@ def lecture_lists():
     return render_template("lecture/lists.html", **data)
 
 
-@bp.route("/view")
+@bp.route("/view/<idx>")
 @login_required
 @check_authority
-def lecture_view():
-    return render_template("lecture/view.html")
+def lecture_view(idx: int):
+    filename = request.args.get("filename")
+    if not filename:
+        return "<h1>Bad Request</h1>", 400
+
+    filepath = os.path.join(os.getcwd(), "app", "uploads", filename)
+
+    query = r"SELECT s.name AS subject, l.id, l.title, l.description, l.e_filename FROM lectures l LEFT JOIN subjects s ON l.id=s.id WHERE l.id=%s"
+    lecture = rows[0] if (rows:=execute_query(query, (idx,))) else []
+    if not lecture:
+        return redirect(url_for("lecture.lecture_list"))
+
+    data = {
+        "lecture": lecture
+    }
+    return render_template("lecture/view.html", **data)
 
 
-@bp.route("/create")
+@bp.route("/view/play_video")
+@login_required
+@check_authority
+def lecture_play_video():
+    filename = request.args.get("filename")
+    if not filename:
+        return "<h1>Bad Request</h1>", 400
+    
+    file_path = os.path.join(os.getcwd(), "app", "uploads", filename)
+
+    try:
+        if os.path.isfile(file_path):
+            m, _ = mimetypes.guess_type(file_path)
+            with open(file_path, "rb") as f:
+                return Response(f.read(), mimetype=m or "application/octet-stream")
+    except Exception as e:
+        return f"ERROR: {e}", 500
+
+
+
+@bp.route("/create", methods=["GET", "POST"])
 @login_required
 @check_authority
 def lecture_create():
-    return render_template("lecture/create.html")
-    
+    if request.method == "POST":
+        subject = request.form.get("subject")
+        title = request.form.get("title")
+        description = request.form.get("description")
+        file = request.files.get("file")
+
+        try:
+            chars = string.ascii_letters + string.digits
+            o_filename = file.filename
+            e_filename = f"{''.join(secrets.choice(chars) for _ in range(20))}.{o_filename.rsplit('.', 1)[1]}"
+            save_path = os.path.join(os.getcwd(), "app", "uploads", e_filename)
+            file.save(save_path)
+        except:
+            return jsonify({"status": "F", "message": "강의 추가 실패"})
+        if not (execute_query(r"INSERT INTO lectures VALUES (NULL, %s, %s, %s, %s, %s)", (subject, title, description, o_filename, e_filename))):
+            return jsonify({"status": "F", "message": "강의 추가 실패"})
+        return jsonify({"status": "S", "message": "강의 추가 완료"})
+
+    data = {
+        "subjects": rows if (rows:=execute_query(r"SELECT id, name FROM subjects")) else []
+    }
+    return render_template("lecture/create.html", **data)
+
 
 @bp.route("/modify")
 @login_required

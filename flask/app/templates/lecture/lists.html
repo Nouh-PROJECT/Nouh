@@ -3,9 +3,8 @@
 {% block head %}
 <style>
     #lecture-lists > .content { width: 800px; }
-    #lecture-lists > .content > .table > .row > .cell:nth-child(1) { flex: 1; padding: 0 5px; }
-    #lecture-lists > .content > .table > .row > .cell:nth-child(2) { width: 120px; text-align: center; }
-    #lecture-lists > .content > .table > .row > .cell:nth-child(3) { width: 120px; text-align: center }
+    #lecture-lists > .content > .table > .row > .cell:nth-child(1) { width: 250px; text-align: center; }
+    #lecture-lists > .content > .table > .row > .cell:nth-child(2) { flex: 1; padding: 0 5px; }
     #lecture-lists > .button-area { justify-content: end; }
     #lecture-lists > .content > .pagination { display: flex; justify-content: center; margin-top: 10px; }
     #lecture-lists > .content > .pagination > * { margin-right: 5px; }
@@ -45,20 +44,18 @@
 
             <div class="table">
                 <div class="row head">
+                    <div class="cell">과목</div>
                     <div class="cell">제목</div>
-                    <div class="cell">작성자</div>
-                    <div class="cell">작성일자</div>
                 </div>
-                {% if posts | length == 0 %}
+                {% if lectures | length == 0 %}
                 <div class="row">
                     <div class="cell" style="width: 100%; text-align: center;">데이터가 없습니다.</div>
                 </div>
                 {% else %}
-                {% for post in posts %}
+                {% for lecture in lectures %}
                 <div class="row">
-                    <div class="cell"><a href="{{ url_for('lecture.lecture_view', idx=post.id)}}">{{ post.title }}</a></div>
-                    <div class="cell">{{ post.writer }}</div>
-                    <div class="cell">{{ post.created_at }}</div>
+                    <div class="cell">{{ lecture.subject }}</div>
+                    <div class="cell"><a href="{{ url_for('lecture.lecture_view', idx=lecture.id, filename=lecture.e_filename)}}">{{ lecture.title }}</a></div>
                 </div>
                 {% endfor %}
                 {% endif %}

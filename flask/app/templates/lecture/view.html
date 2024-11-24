@@ -1,16 +1,7 @@
 {% extends "base.html" %}
 
 {% block head %}
-<link href="{{ url_for('static', filename='css/form.css') }}" rel="stylesheet" />
-
 <style>
-    body { background-color: #424D83; }
-    iframe {
-        width: 100%;
-        height: 500px;
-        border: none;
-        user-select: none; /* 사용자가 텍스트나 경로를 선택하지 못하도록 설정 */
-    }
 </style>
 {% endblock %}
 
@@ -20,25 +11,24 @@
 {% include "nav.html" %}
 
 
-<div class="form-wrapper">
-    <div class="form-template quiz-add">
-        {% autoescape false %}
-        <h1 class="form-title">{{ lecture.subject_name }} - {{ lecture.lecture_name }}</h1>
-        <div class="lecture-content">
-            <iframe src="{{ video_url }}" oncontextmenu="return false;"></iframe> <!-- 동영상을 iframe으로 표시 -->
+<main id="form-template">
+    <div id="lecture-cvm" class="frame">
+        <div class="title">{{ lecture.subject }}</div>
+
+        <div class="content">
+            <div style="border-top: 5px solid #424D83; border-bottom: 1px solid #EEE;">
+                <div>제목</div>
+                <div style="width: 100%; line-height: 40px; background-color: #424D83; font-size: 18px; font-weight: bold; color: #FFF; text-align: center;">{{ lecture.title }}</div>
+            </div>
+
+            <div style="border: none">
+                <iframe src="{{ url_for('lecture.lecture_play_video', filename=lecture.e_filename) }}" oncontextmenu="return false;" style="min-width: 800px; min-height: 600px; border: 1px solid #CCC; user-select: none;"></iframe>
+            </div>
         </div>
-        {% endautoescape %}
+
         <div class="button-area">
-            <a class="button" href="{{ url_for('lecture.lecture_list') }}">목록으로</a>
+            <button type="button" onclick=location.href="{{ url_for('lecture.lecture_lists') }}">목록으로</button>
         </div>
     </div>
-</div>
-<script>
-    // 키보드 단축키를 통한 텍스트 선택 방지
-    document.addEventListener('keydown', function(event) {
-        if (event.ctrlKey && (event.key === 'u' || event.key === 's' || event.key === 'c')) {
-            event.preventDefault();
-        }
-    });
-</script>
+</main>
 {% endblock %}

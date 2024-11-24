@@ -1,3 +1,8 @@
+{% if current_user.is_authenticated %}
+{{ current_user.update_subscribe_status() }}
+{% endif %}
+
+
 <div class="bg-nav">
     <nav class="top-nav">
         <section>
@@ -5,14 +10,18 @@
             <div class="menu">
                 <a href="/" class="item">Home</a>
                 {% if current_user.is_authenticated %}
-                {% if session["is_subscribe"] == 2 %}
+                {% if current_user.is_subscribe == 2 %}
                 <a href="{{ url_for('lecture.lecture_lists') }}" class="item">Lecture</a>
                 {% else %}
-                <a href="#" onclick="alert('구독자만 이용가능합니다')" class="item">Lecture</a>
-                {% endif %}
+                <a href="#" onclick="alert('구독자 전용 페이지입니다')" class="item">Lecture</a>
                 {% endif %}
                 <a href="{{ url_for('exam.exam_lists') }}" class="item">Exam</a>
                 <a href="{{ url_for('quiz.quiz_lists') }}" class="item">Quiz</a>
+                {% else %}
+                <a href="#" onclick="alert('회원가입 후 이용하실 수 있습니다')" class="item">Lecture</a>
+                <a href="#" onclick="alert('회원가입 후 이용하실 수 있습니다')" class="item">Exam</a>
+                <a href="#" onclick="alert('회원가입 후 이용하실 수 있습니다')" class="item">Quiz</a>
+                {% endif %}
                 <a href="{{ url_for('board.board_lists') }}" class="item">Board</a>
             </div>
         </section>
@@ -35,7 +44,7 @@
 
 {# 구독자 #}
 {% if current_user.is_authenticated %}
-    {% if session["is_subscribe"] == 2 %}
+    {% if current_user.is_subscribe == 2 %}
     <button type="button" id ="chatbotButton" class="chatbot__redirect-button" onclick="ShowChatbot()" >
         <img src="{{ url_for('static', filename='img/chatbot_icon.png') }}" alt="챗봇 아이콘" class="chatbot__icon" />
     </button>

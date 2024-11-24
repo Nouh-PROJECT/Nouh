@@ -34,7 +34,7 @@ def check_authority(func):
             if execute_query(query, (current_user.id,)):
                 return func(*args, **kwargs)
             
-            query = r"SELECT 1 FROM subscribe WHERE id=%s"
+            query = r"SELECT COALESCE(status, 0) FROM subscribe WHERE id=%s"
             if execute_query(query, (current_user.id,)):
                 return func(*args, **kwargs)
         return redirect("/")

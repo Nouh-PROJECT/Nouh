@@ -9,3 +9,4 @@ class Config:
     MYSQL_USER = os.environ.get("MYSQL_USER", "master")
     MYSQL_PASSWORD = os.environ.get("MYSQL_PASSWORD", "P@ss4MA")
     MYSQL_DATABASE = os.environ.get("MYSQL_DATABASE", "webapp")
+    MAX_CONTENT_LENGTH = os.environ.get("MAX_CONTENT_LENGTH", 200 * 1024 * 1024)
