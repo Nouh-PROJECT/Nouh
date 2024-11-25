@@ -12,13 +12,11 @@
     #board-cvm > .content > div { display: flex; align-items: center; margin-bottom: 10px; border-left: 5px solid #424D83; border-top-left-radius: 5px; border-bottom-left-radius: 5px; }
     #board-cvm > .content > div > * { padding: 10px; font-size: 12px; }
     #board-cvm > .content > div > :last-child { width: 100%; border-radius: 5px; background-color: #EEE; }
-    #board-cvm > .button-area { justify-content: end; }
     #board-cvm > .content > div > :nth-child(1) { flex-shrink: 0; width: 100px; font-weight: bold; color: #424D83; text-align: center; }
     #board-cvm > .content > :last-child > :last-child { min-height: 300px; }
         
     #board-cvm > .button-area { justify-content: center; position: relative; min-height: 35px; }
     #board-cvm > .button-area > button { margin-right: 10px; }
-    #board-cvm > .button-area > :last-child { position:absolute; right: 0; margin-right: 0; }
     #board-cvm > .button-area > .btn-delete:hover { background-color: #F00 !important;}
 </style>
 
@@ -66,7 +64,6 @@
             <button type="button" class="btn-delete" onclick="PostDelete();">삭제</button>
             {% endif %}
             {% endif %}
-            <button type="button" onclick=location.href="{{ url_for('board.board_lists') }}">목록으로</button>
         </div>
     </form>
 </main>

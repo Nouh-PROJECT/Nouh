@@ -6,7 +6,7 @@
     #exam-lists > .content > .table > .row > .cell:nth-child(1) { flex: 1; padding: 0 5px; }
     #exam-lists > .content > .table > .row > .cell:nth-child(2) { width: 120px; text-align: center; }
     #exam-lists > .content > .table > .row > .cell:nth-child(3) { width: 120px; text-align: center }
-    #exam-lists > .button-area { justify-content: end; }
+    /* #exam-lists > .button-area { justify-content: end; } */
     #exam-lists > .content > .pagination { display: flex; justify-content: center; margin-top: 10px; }
     #exam-lists > .content > .pagination > * { margin-right: 5px; }
     #exam-lists > .content > .pagination > :last-child { margin-right: 0; }
@@ -67,7 +67,6 @@
             {% if current_user.is_authenticated and current_user.is_admin %}
             <button type="button" style="margin: 0" onclick=location.href="{#{ url_for('exam.exam_create') }#}">추가</button>
             {% endif %}
-            <button type="button" onclick=location.href="{{ url_for('main.index') }}">메인으로</button>
         </div>
     </div>
 </main>

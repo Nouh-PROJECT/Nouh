@@ -84,10 +84,10 @@ form.login button[type=button]:hover, form.register button[type=button]:hover { 
 #form-template > .frame { flex-shrink: 0; min-width: 600px; margin: 50px 0; padding: 50px 50px 30px 50px; border: 2px solid #424D83; border-radius: 15px; }
 #form-template > .frame > .title { font-size: 36px; font-weight: bold; color: #424D83; text-align: center; }
 #form-template > .frame > .content { margin: 20px 0; padding: 30px 0; border-top: 2px solid #424D83; border-bottom: 2px solid #424D83; }
-#form-template > .frame > .button-area { display: flex; justify-content: center; position: relative; min-height: 35px; }
+#form-template > .frame > .button-area { display: flex; justify-content: end; position: relative; min-height: 35px; }
 #form-template > .frame > .button-area > button { width: 100px; height: 35px; margin-right: 10px; border-radius: 5px; background-color: #424D83; font-size: 16px; font-weight: bold; color: #FFF; text-align: center; }
 #form-template > .frame > .button-area > button:hover { background-color: #A1B0FC; }
-#form-template > .frame > .button-area > :last-child { position:absolute; right: 0; margin-right: 0; }
+#form-template > .frame > .button-area > :last-child { margin-right: 0; }
 #form-template > .frame > .button-area > .btn-delete { margin: 0; }
 #form-template > .frame > .button-area > .btn-delete:hover { background-color: #F00 !important;}
 
@@ -126,7 +126,7 @@ form.login button[type=button]:hover, form.register button[type=button]:hover { 
 
 #quiz-cvm > .button-area { justify-content: center; position: relative; min-height: 35px; }
 #quiz-cvm > .button-area > button { margin-right: 10px; }
-#quiz-cvm > .button-area > :last-child { position:absolute; right: 0; margin-right: 0; }
+/* #quiz-cvm > .button-area > :last-child { position:absolute; right: 0; margin-right: 0; } */
 #quiz-cvm > .button-area > .btn-delete:hover { background-color: #F00 !important;}
 
 

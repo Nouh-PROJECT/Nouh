@@ -16,7 +16,6 @@ class User(UserMixin):
         query = r"SELECT u.id, u.name, u.login_id, COALESCE(a.id, 0) AS is_admin, COALESCE(s.status, 0) AS is_subscribe"
         query += r" FROM users AS u LEFT JOIN admin AS a ON a.id=u.id LEFT JOIN subscribe AS s ON s.id=u.id WHERE u.id=%s"
         user = rows[0] if (rows:=execute_query(query, (user_no,))) else []
-        print(user_no, user)
         if user:
             return User(**user)
 

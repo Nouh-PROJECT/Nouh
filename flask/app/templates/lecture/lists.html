@@ -76,7 +76,6 @@
             {% if current_user.is_authenticated and current_user.is_admin %}
             <button type="button" style="margin: 0" onclick=location.href="{{ url_for('lecture.lecture_create') }}">추가</button>
             {% endif %}
-            <button type="button" onclick=location.href="{{ url_for('main.index') }}">메인으로</button>
         </div>
     </div>
 </main>

@@ -6,7 +6,6 @@
     #quiz-lists > .content > .table > .row > .cell:nth-child(1) { flex-shrink: 0; width: 200px; text-align: center; }
     #quiz-lists > .content > .table > .row > .cell:nth-child(2) { flex: 1; padding: 0 10px; }
     #quiz-lists > .content > .table > .row > .cell:nth-child(2) > a:hover { font-weight: bold; }
-    #quiz-lists > .button-area { justify-content: end; }
     #quiz-lists > .content > .pagination { display: flex; justify-content: center; margin-top: 10px; }
     #quiz-lists > .content > .pagination > * { margin-right: 5px; }
     #quiz-lists > .content > .pagination > :last-child { margin-right: 0; }
@@ -75,7 +74,6 @@
 
         <div class="button-area">
             <button type="button" style="margin: 0;" onclick=location.href="{{ url_for('quiz.quiz_create') }}">추가</button>
-            <button type="button" onclick=location.href="{{ url_for('main.index') }}">메인으로</button>
         </div>
     </div>
 </main>

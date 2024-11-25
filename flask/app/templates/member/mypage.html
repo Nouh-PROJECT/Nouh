@@ -10,6 +10,8 @@
 <style>
 #mypage > .content > div { display: flex; align-items: center; margin-bottom: 20px; border-left: 5px solid #424D83; border-top-left-radius: 5px; border-bottom-left-radius: 5px; }
 #mypage > .content > :last-child { margin-bottom: 0; }
+#mypage > .content > :last-child button { width: 80px; height: 30px; border: 1px solid #CCC; border-radius: 5px; font-size: 14px; font-weight: bold; }
+#mypage > .content > :last-child button:hover { background-color: #F00; color: #FFF; }
 #mypage > .content > div > :nth-child(1) { flex-shrink: 0; width: 150px; font-size: 16px; font-weight: bold; color: #424D83; text-align: center; }
 #mypage > .content > div input { width: 100%; height: 30px; padding-left: 5px; }
 #mypage > .content > div textarea { width: 100%; height: 100px; padding: 5px; resize: none; }
@@ -59,13 +61,29 @@
                 <div>연락처</div>
                 <input type="phone" name="user-phone" value="{{ user.phone }}" />
             </div>
+
+            <div>
+                <div>구독</div>
+                {% if current_user.is_subscribe == 2 %}
+                <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                    <b>구독중</b>
+                    <button type="button" onclick="SubscribeRevoke();">취소</button>
+                </div>
+                {% elif current_user.is_subscribe == 1 %}
+                <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                    <b>승인 대기중</b>
+                    <button type="button" onclick="SubscribeRevoke();">취소</button>
+                </div>
+                {% else %}
+                <div>미구독</div>
+                {% endif %}
+            </div>
         </div>
 
         <div class="button-area">
             <button type="button" class="btn-delete" onclick="MemberUnregister();">회원탈퇴</button>
             <div style="flex:1"></div>
             <button type="submit">수정</button>
-            <button type="button" style="position: unset" onclick=location.href='/'>취소</button>
         </div>
     </form>
 </main>

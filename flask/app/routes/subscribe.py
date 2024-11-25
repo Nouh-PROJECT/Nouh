@@ -67,3 +67,11 @@ def subscribe_remove(user_id: int):
         return jsonify({"status": "S", "message": "구독 취소 완료"})
     return jsonify({"status": "F", "message": "구독 취소 실패"})
 
+
+@bp.route("/api/revoke_request")
+@login_required
+def subscribe_revoke():
+    query = r"UPDATE subscribe SET status=0 WHERE id=%s"
+    if execute_query(query, (current_user.id,)):
+        return jsonify({"status": "S", "message": "취소 완료"})
+    return jsonify({"status": "F", "message": "처리 실패"})

@@ -284,7 +284,20 @@ function LectureCreate() {
             location.href = "/lecture/lists";
         }
     })
-    .catch(error => { console.log("ERROR: ", error) });
+    .catch(error => { console.log("ERROR: ", error); });
 
     return false;
+}
+
+// Subscribe
+function SubscribeRevoke() {
+    fetch("/subscribe/api/revoke_request")
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+        if (data.status === "S") {
+            location.href = "/member/mypage";
+        }
+    })
+    .catch(error => { console.log("ERROR: ", error); });
 }
