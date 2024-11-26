@@ -1,0 +1,24 @@
+services:
+  flask:
+    container_name: flask
+    build: ./flask
+    volumes:
+      - ./flask/app:/flask/app
+    networks:
+      - web-network
+  
+  nginx:
+    container_name: nginx
+    build: ./nginx
+    volumes:
+	    - /etc/letsencrypt:/etc/letsencrypt
+    ports:
+      - '80:80'
+      - '443:443'
+    depends_on:
+      - flask
+    networks:
+      - web-network
+
+networks:
+  web-network:
