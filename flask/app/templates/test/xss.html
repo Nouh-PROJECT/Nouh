@@ -1,0 +1,8 @@
+<form>
+    <input type="text" name="data" />
+    <input type="submit" value="전송" />
+</form>
+
+{% autoescape false %}
+<h1>{{ data }}</h1>
+{% endautoescape %}

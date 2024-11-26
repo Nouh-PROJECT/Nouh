@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link href="{{ url_for('static', filename='css/form.css') }}" rel="stylesheet" />
+
+<style>
+    body { background-color: #424D83; }
+</style>
+{% endblock %}
+
+{% block title %}강의 수정{% endblock %}
+{% block content %}
+<div class="form-wrapper">
+    <form class="form-template quiz-edit" method="post">
+        <h1 class="form-title">강의 수정</h1>
+        <hr>
+        <div class="form-content">
+            <div class="form-row">
+                <label for="lecture-s">과목</label>
+                <select name="lecture-s">
+                    {% for subject in subjects %}
+                        <option value="{{ subject.id }}" {% if lecture.subject_id == subject.id %}selected{% endif %}>
+                            {{ subject.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-row">
+                <label for="lecture-name">강의 이름</label>
+                <input type="text" name="lecture-name" value="{{ lecture.lecture_name }}">
+            </div>
+            <div class="form-row">
+                <label for="video-link">강의 영상 링크</label>
+                <input type="url" name="video-link" value="{{ lecture.lec_url }}">
+            </div>
+        </div>
+        <hr>
+        <div class="button-area">
+            <button class="button" type="submit">수정</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

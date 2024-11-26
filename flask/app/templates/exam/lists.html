@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block head %}
+<style>
+    #exam-lists > .content { width: 800px; }
+    #exam-lists > .content > .table > .row > .cell:nth-child(1) { flex: 1; padding: 0 5px; }
+    #exam-lists > .content > .table > .row > .cell:nth-child(2) { width: 120px; text-align: center; }
+    #exam-lists > .content > .table > .row > .cell:nth-child(3) { width: 120px; text-align: center }
+    /* #exam-lists > .button-area { justify-content: end; } */
+    #exam-lists > .content > .pagination { display: flex; justify-content: center; margin-top: 10px; }
+    #exam-lists > .content > .pagination > * { margin-right: 5px; }
+    #exam-lists > .content > .pagination > :last-child { margin-right: 0; }
+</style>
+{% endblock %}
+
+{% block title %}시험 목록{% endblock %}
+
+{% block content %}
+{% include "nav.html" %}
+
+
+<main id="form-template">
+    <div id="exam-lists" class="frame">
+        <div class="title">시험 목록</div>
+
+        <div class="content">
+            <form class="search-area">
+                <div style="justify-content: space-between;">
+                    <select name="searchBy" style="width: 200px; margin-bottom: 10px;">
+                        <option value="0">전체</option>
+                        {% for s in subjects %}
+                        <option value="{{ s.id }}">{{ s.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <select name="sortBy">
+                        <option value="DESC">최신순</option>
+                        <option value="ASC">오래된순</option>
+                    </select>
+                </div>
+                <div>
+                    <input type="search" name="keyword" />
+                    <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+            </form>
+
+            <div class="table">
+                <div class="row head">
+                    <div class="cell">과목</div>
+                    <div class="cell">문항 수</div>
+                </div>
+                {% if subjects | length == 0 %}
+                <div class="row">
+                    <div class="cell" style="width: 100%; text-align: center;">데이터가 없습니다.</div>
+                </div>
+                {% else %}
+                {% for s in subjects %}
+                <div class="row">
+                    <div class="cell"><a href="{{ url_for('exam.exam_setting', idx=s.id)}}">{{ s.name }}</a></div>
+                    <div class="cell">{{ s.count }}</div>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="button-area">
+            {% if current_user.is_authenticated and current_user.is_admin %}
+            <button type="button" style="margin: 0" onclick=location.href="{#{ url_for('exam.exam_create') }#}">추가</button>
+            {% endif %}
+        </div>
+    </div>
+</main>
+
+{% endblock %}

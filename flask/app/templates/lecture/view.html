@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block head %}
+<style>
+</style>
+{% endblock %}
+
+{% block title %}강의 보기{% endblock %}
+
+{% block content %}
+{% include "nav.html" %}
+
+
+<main id="form-template">
+    <div id="lecture-cvm" class="frame">
+        <div class="title">{{ lecture.subject }}</div>
+
+        <div class="content">
+            <div style="border-top: 5px solid #424D83; border-bottom: 1px solid #EEE;">
+                <div>제목</div>
+                <div style="width: 100%; line-height: 40px; background-color: #424D83; font-size: 18px; font-weight: bold; color: #FFF; text-align: center;">{{ lecture.title }}</div>
+            </div>
+
+            <div style="border: none">
+                <iframe src="{{ url_for('lecture.lecture_play_video', filename=lecture.e_filename) }}" oncontextmenu="return false;" style="min-width: 800px; min-height: 600px; border: 1px solid #CCC; user-select: none;"></iframe>
+            </div>
+        </div>
+
+        <div class="button-area">
+            <button type="button" onclick=location.href="{{ url_for('lecture.lecture_lists') }}">목록으로</button>
+        </div>
+    </div>
+</main>
+{% endblock %}

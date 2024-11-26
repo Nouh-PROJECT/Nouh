@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block head %}
+<style>
+    #quiz-lists > .content { width: 800px; }
+    #quiz-lists > .content > .table > .row > .cell:nth-child(1) { flex-shrink: 0; width: 200px; text-align: center; }
+    #quiz-lists > .content > .table > .row > .cell:nth-child(2) { flex: 1; padding: 0 10px; }
+    #quiz-lists > .content > .table > .row > .cell:nth-child(2) > a:hover { font-weight: bold; }
+    #quiz-lists > .content > .pagination { display: flex; justify-content: center; margin-top: 10px; }
+    #quiz-lists > .content > .pagination > * { margin-right: 5px; }
+    #quiz-lists > .content > .pagination > :last-child { margin-right: 0; }
+</style>
+{% endblock %}
+
+{% block title %}문제 목록{% endblock %}
+
+{% block content %}
+{% include "nav.html" %}
+
+
+<main id="form-template">
+    <div id="quiz-lists" class="frame">
+        <div class="title">문제 목록</div>
+
+        <div class="content">
+            <form class="search-area">
+                <div style="justify-content: space-between;">
+                    <select name="searchBy" style="width: 200px; margin-bottom: 10px;">
+                        <option value="0">전체</option>
+                        {% for s in subjects %}
+                        <option value="{{ s.id }}">{{ s.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <select name="sortBy">
+                        <option value="DESC">최신순</option>
+                        <option value="ASC">오래된순</option>
+                    </select>
+                </div>
+                <div>
+                    <input type="search" name="keyword" />
+                    <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+            </form>
+
+            <div class="table">
+                <div class="row head">
+                    <div class="cell">과목</div>
+                    <div class="cell">문제</div>
+                </div>
+                {% if quizzes | length == 0 %}
+                <div class="row">
+                    <div class="cell" style="width: 100%;">데이터가 없습니다.</div>
+                </div>
+                {% else %}
+                {% for quiz in quizzes %}
+                <div class="row">
+                    <div class="cell">{{ quiz.s }}</div>
+                    <div class="cell"><a href="{{ url_for('quiz.quiz_view', idx=quiz.id) }}">{{ quiz.q }}</a></div>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="pagination">
+                {% for p in range(start_page, end_page + 1) %}
+                {% if p == page %}
+                <strong>{{ p }}</strong>
+                {% else %}
+                <a href="{{ url_for('quiz.quiz_lists', page=p) }}">{{ p }}</a>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="button-area">
+            <button type="button" style="margin: 0;" onclick=location.href="{{ url_for('quiz.quiz_create') }}">추가</button>
+        </div>
+    </div>
+</main>
+
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block title %}문제 추가{% endblock %}
+
+{% block content %}
+{% include "nav.html" %}
+
+<div class="quiz-parser" style="display: none;">
+    <div class="title">입력 도우미</div>
+    <textarea></textarea>
+    <div class="row">
+        <button type="button" onclick="ParseQuiz();">입력</button>
+        <button type="button" onclick="CloseQuizParser();">닫기</button>
+    </div>
+</div>
+
+<main id="form-template">
+    <form id="quiz-cvm" class="frame" onsubmit="return QuizCreate();">
+        <div class="title">문제 추가</div>
+
+        <div class="content">
+            <div>
+                <div>과목</div>
+                <select name="quiz-s">
+                    <option value="0">과목을 선택해주세요</option>
+                    {% for s in subjects %}
+                    <option value="{{ s.id }}">{{ s.name }}</option>
+                    {% endfor %}
+                </select>
+                <button type="button" id="btn-parser" onclick="OpenQuizParser();">입력 도우미</button>
+            </div>
+
+            <div>
+                <div>문제</div>
+                <textarea name="quiz-q" required></textarea>
+            </div>
+
+            <div>
+                <div>정답</div>
+                <input type="text" name="quiz-a" required />
+            </div>
+
+            <div>
+                <div>선택지</div>
+                <div>
+                    <input type="text" name="quiz-o1" required />
+                    <input type="text" name="quiz-o2" />
+                    <input type="text" name="quiz-o3" />
+                </div>
+            </div>
+
+            <div>
+                <div>해설</div>
+                <textarea name="quiz-c"></textarea>
+            </div>
+        </div>
+
+        <div class="button-area">
+            <button type="submit">추가</button>
+        </div>
+    </form>
+</main>
+{% endblock %}

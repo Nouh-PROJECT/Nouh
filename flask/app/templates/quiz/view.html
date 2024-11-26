@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block title %}상세 정보{% endblock %}
+
+{% block content %}
+{% include "nav.html" %}
+
+<main id="form-template">
+    <div id="quiz-cvm" class="frame">
+        <div class="title">상세 정보</div>
+
+        <div class="content">
+            <div>
+                <div>과목</div>
+                <select disabled>
+                    <option>{{ quiz.s_name }}</option>
+                </select>
+            </div>
+
+            <div>
+                <div>문제</div>
+                <textarea disabled>{{ quiz.q }}</textarea>
+            </div>
+
+            <div>
+                <div>정답</div>
+                <input type="text" value="{{ quiz.a }}" disabled />
+            </div>
+
+            <div>
+                <div>선택지</div>
+                <div>
+                    <input type="text" value="{{ quiz.o1 }}" disabled />
+                    <input type="text" value="{{ quiz.o2 }}" disabled />
+                    <input type="text" value="{{ quiz.o3 }}" disabled />
+                </div>
+            </div>
+
+            <div>
+                <div>해설</div>
+                <textarea disabled>{{ quiz.c }}</textarea>
+            </div>
+        </div>
+
+        <div class="button-area">
+            {% if current_user.is_authenticated and quiz.u_id == current_user.id %}
+            <button type="button" onclick=location.href="{{ url_for('quiz.quiz_modify', idx=quiz.id) }}">수정</button>
+            <button type="button" class="btn-delete" onclick="QuizDelete();">삭제</button>
+            {% endif %}
+        </div>
+    </div>
+</main>
+{% endblock %}

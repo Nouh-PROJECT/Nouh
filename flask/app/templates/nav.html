@@ -1,0 +1,61 @@
+{% if current_user.is_authenticated %}
+{{ current_user.update_subscribe_status() }}
+{% endif %}
+
+
+<div class="bg-nav">
+    <nav class="top-nav">
+        <section>
+            <button type="button" class="btn-menu" onclick="" style="display: none;"><i class="fa-solid fa-bars"></i></button>
+            <div class="menu">
+                <a href="/" class="item">Home</a>
+                {% if current_user.is_authenticated %}
+                {% if current_user.is_subscribe == 2 %}
+                <a href="{{ url_for('lecture.lecture_lists') }}" class="item">Lecture</a>
+                {% else %}
+                <a href="#" onclick="alert('구독자 전용 페이지입니다')" class="item">Lecture</a>
+                {% endif %}
+                <a href="{{ url_for('exam.exam_lists') }}" class="item">Exam</a>
+                <a href="{{ url_for('quiz.quiz_lists') }}" class="item">Quiz</a>
+                {% else %}
+                <a href="#" onclick="alert('회원가입 후 이용하실 수 있습니다')" class="item">Lecture</a>
+                <a href="#" onclick="alert('회원가입 후 이용하실 수 있습니다')" class="item">Exam</a>
+                <a href="#" onclick="alert('회원가입 후 이용하실 수 있습니다')" class="item">Quiz</a>
+                {% endif %}
+                <a href="{{ url_for('board.board_lists') }}" class="item">Board</a>
+            </div>
+        </section>
+    
+        <section>
+            {% if current_user.is_authenticated %}
+            <a href="{{ url_for('member.mypage') }}">{{ current_user.name }} 님</a>
+            <div style="width: 2px; height: 20px; margin: 0 15px; background-color: #FFF"></div>
+            <a onclick="MemberLogout();"><i class="fa-solid fa-right-from-bracket fa-lg"></i>Logout</a>
+            {% else %}
+            <a onclick="ShowLoginForm();"><i class="fa-solid fa-right-to-bracket fa-lg"></i>Login</a>
+            {% endif %}
+        </section>
+    </nav>
+</div>
+
+{% include "member/login.html" %}
+
+{% include "member/register.html" %}
+
+{# 구독자 #}
+{% if current_user.is_authenticated %}
+    {% if current_user.is_subscribe == 2 %}
+    <button type="button" id ="chatbotButton" class="chatbot__redirect-button" onclick="ShowChatbot()" >
+        <img src="{{ url_for('static', filename='img/chatbot_icon.png') }}" alt="챗봇 아이콘" class="chatbot__icon" />
+    </button>
+
+    <div id="chatbotPopup" class="chatbot_popup hidden">
+        <iframe class="chatbot_iframe" src="{{ url_for('chatbot.index') }}"></iframe>
+    </div>
+    {# 미구독자 #}
+    {% else %}
+    <button class="chatbot__redirect-button" onclick="alert('구독자만 이용가능합니다')" target="_blank">
+        <img src="{{ url_for('static', filename='img/chatbot_icon.png') }}" alt="챗봇 아이콘" class="chatbot__icon" />
+    </button>
+    {% endif %}
+{% endif %}

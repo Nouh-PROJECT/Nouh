@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block title %}자유게시판{% endblock %}
+
+{% block content %}
+{% include "nav.html" %}
+
+<style>
+    #board-lists > .content { width: 800px; }
+    #board-lists > .content > .table > .row > .cell:nth-child(1) { flex: 1; padding: 0 5px; }
+    #board-lists > .content > .table > .row > .cell:nth-child(2) { width: 120px; text-align: center; }
+    #board-lists > .content > .table > .row > .cell:nth-child(3) { width: 120px; text-align: center }
+    
+    #board-lists > .button-area { justify-content: end; }
+    #board-lists > .content > .pagination { display: flex; justify-content: center; margin-top: 10px; }
+    #board-lists > .content > .pagination > * { margin-right: 5px; }
+    #board-lists > .content > .pagination > :last-child { margin-right: 0; }
+</style>
+
+<main id="form-template">
+    <div id="board-lists" class="frame">
+        <div class="title">자유게시판</div>
+
+        <div class="content">
+            <form class="search-area">
+                <div>
+                    <select name="sortBy">
+                        <option value="DESC">최신순</option>
+                        <option value="ASC">오래된순</option>
+                    </select>
+                </div>
+                <div>
+                    <select name="searchBy">
+                        <option value="0">제목+내용</option>
+                        <option value="1">제목</option>
+                        <option value="2">내용</option>
+                    </select>
+                    <input type="search" name="keyword" />
+                    <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+            </form>
+
+            <div class="table">
+                <div class="row head">
+                    <div class="cell">제목</div>
+                    <div class="cell">작성자</div>
+                    <div class="cell">작성일자</div>
+                </div>
+                {% if posts | length == 0 %}
+                <div class="row">
+                    <div class="cell" style="width: 100%; text-align: center;">데이터가 없습니다.</div>
+                </div>
+                {% else %}
+                {% for post in posts %}
+                <div class="row">
+                    <div class="cell"><a href="{{ url_for('board.board_view', idx=post.id) }}">{{ post.title }}</a></div>
+                    <div class="cell">{{ post.writer }}</div>
+                    <div class="cell">{{ post.created_at }}</div>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="pagination">
+                {% for p in range(start_page, end_page + 1) %}
+                {% if p == page %}
+                <strong>{{ p }}</strong>
+                {% else %}
+                <a href="{{ url_for('board.board_lists', page=p) }}">{{ p }}</a>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="button-area">
+            {% if current_user.is_authenticated %}
+            <button type="button" onclick=location.href="{{ url_for('board.board_write') }}">글쓰기</button>
+            {% endif %}
+        </div>
+    </div>
+</main>
+
+{% endblock %}
