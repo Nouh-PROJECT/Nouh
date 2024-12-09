@@ -265,15 +265,15 @@ function ShowChatbot() {
 
 // Lecture
 function LectureCreate() {
-    const subject = document.querySelector("select[name=subject").value;
+    const subject = document.querySelector("select[name=subject]").value;
     const title = document.querySelector("input[name=title]").value;
-    const decription = document.querySelector("textarea[name=description").innerText;
+    const description = document.querySelector("textarea[name=description]").value;
     const file = document.querySelector("input[name=file]").files[0];
 
     const formData = new FormData();
     formData.append("subject", subject);
     formData.append("title", title);
-    formData.append("description", decription);
+    formData.append("description", description);
     formData.append("file", file);
 
     fetch("/lecture/create", { method: "POST", body: formData })

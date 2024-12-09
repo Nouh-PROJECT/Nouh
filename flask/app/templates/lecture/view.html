@@ -21,9 +21,17 @@
                 <div style="width: 100%; line-height: 40px; background-color: #424D83; font-size: 18px; font-weight: bold; color: #FFF; text-align: center;">{{ lecture.title }}</div>
             </div>
 
+            <div>
+                <div>내용</div>
+                {% autoescape false %}
+                <div>{{ lecture.description }}</div>
+                {% endautoescape %}
+            </div>
+            
             <div style="border: none">
                 <iframe src="{{ url_for('lecture.lecture_play_video', filename=lecture.e_filename) }}" oncontextmenu="return false;" style="min-width: 800px; min-height: 600px; border: 1px solid #CCC; user-select: none;"></iframe>
             </div>
+
         </div>
 
         <div class="button-area">
