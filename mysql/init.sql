@@ -84,3 +84,7 @@ INSERT INTO subjects VALUES (NULL, "클라우드기반 시스템 운영/구축 �
 INSERT INTO subjects VALUES (NULL, "클라우드기반 취약점 진단 및 대응 실무");
 INSERT INTO subjects VALUES (NULL, "데이터 3법과 개인정보보호");
 INSERT INTO subjects VALUES (NULL, "클라우드 보안 컨설팅 실무");
+
+INSERT INTO users VALUES(NULL, "admin", "admin", "scrypt:32768:8:1$Ic3GW1AsnymTg1Yt$ada232df6d5181958eea0b9d6920496b218672ce4bc42532f0944b38a26e094f85f48f062ab0e5a89ee201b62c73ac0b4f5627e185ec88b4ef815663f592c7de", "admin@admin.com", "");
+INSERT INTO admin VALUES(1);
+INSERT INTO subscribe VALUES(1, 2, NULL);
