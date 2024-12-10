@@ -47,7 +47,7 @@ def lecture_lists():
 
 
     count_query = f"SELECT COUNT(*) num FROM lectures"
-    query = r"SELECT s.name AS subject, l.id, l.title, l.description, l.e_filename FROM lectures l LEFT JOIN subjects s ON l.id=s.id "
+    query = r"SELECT s.name AS subject, l.id, l.title, l.description, l.e_filename FROM lectures l LEFT JOIN subjects s ON l.s_id=s.id "
     if search_by == 0:
         condition = f" WHERE l.title LIKE %s OR l.description LIKE %s ORDER BY 1 {sort_by}"
         params = (f"%{keyword}%", f"%{keyword}%")
@@ -93,7 +93,7 @@ def lecture_view(idx: int):
 
     filepath = os.path.join(os.getcwd(), "app", "uploads", filename)
 
-    query = r"SELECT s.name AS subject, l.id, l.title, l.description, l.e_filename FROM lectures l LEFT JOIN subjects s ON l.id=s.id WHERE l.id=%s"
+    query = r"SELECT s.name AS subject, l.id, l.title, l.description, l.e_filename FROM lectures l LEFT JOIN subjects s ON l.s_id=s.id WHERE l.id=%s"
     lecture = rows[0] if (rows:=execute_query(query, (idx,))) else []
     if not lecture:
         return redirect(url_for("lecture.lecture_list"))
@@ -140,7 +140,7 @@ def lecture_create():
             e_filename = f"{''.join(secrets.choice(chars) for _ in range(20))}.{o_filename.rsplit('.', 1)[1]}"
             save_path = os.path.join(os.getcwd(), "app", "uploads", e_filename)
             file.save(save_path)
-        except:
+        except Exception as e:
             return jsonify({"status": "F", "message": "강의 추가 실패"})
         if not (execute_query(r"INSERT INTO lectures VALUES (NULL, %s, %s, %s, %s, %s)", (subject, title, description, o_filename, e_filename))):
             return jsonify({"status": "F", "message": "강의 추가 실패"})
